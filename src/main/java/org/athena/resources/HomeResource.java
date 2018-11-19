@@ -1,7 +1,7 @@
-package org.athena.api;
+package org.athena.resources;
 
-import org.athena.entity.User;
-import org.athena.jdbi.UserRepository;
+import org.athena.api.User;
+import org.athena.db.UserRepository;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -13,11 +13,11 @@ import java.util.Map;
 
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON)
-public class HomeResources {
+public class HomeResource {
 
     private UserRepository userRepository;
 
-    public HomeResources(UserRepository userRepository) {
+    public HomeResource(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

@@ -1,9 +1,7 @@
-package org.athena.jdbi;
+package org.athena.db;
 
-import org.athena.entity.User;
-import org.athena.entity.mapper.UserMapper;
+import org.athena.api.User;
 import org.jdbi.v3.core.transaction.TransactionIsolationLevel;
-import org.jdbi.v3.sqlobject.config.RegisterRowMapper;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 import org.jdbi.v3.sqlobject.transaction.Transaction;
@@ -20,7 +18,6 @@ public interface UserRepository {
     void updateUser();
 
     @SqlQuery("SELECT id, username, password FROM users")
-    @RegisterRowMapper(UserMapper.class)
     List<User> findAll();
 
     @Transaction(TransactionIsolationLevel.READ_COMMITTED)

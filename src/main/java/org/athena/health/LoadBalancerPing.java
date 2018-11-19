@@ -1,11 +1,11 @@
-package org.athena.healthcheck;
+package org.athena.health;
 
 import com.codahale.metrics.health.HealthCheck;
 
 public class LoadBalancerPing extends HealthCheck {
 
     @Override
-    protected Result check() throws Exception {
+    protected Result check() {
 
         return Result.healthy();
 

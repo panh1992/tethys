@@ -4,12 +4,14 @@ import io.dropwizard.forms.MultiPartBundle;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import org.athena.api.HomeResources;
+import org.athena.resources.HomeResource;
 import org.athena.config.AthenaCors;
 import org.athena.config.Configuration;
-import org.athena.healthcheck.LoadBalancerPing;
-import org.athena.jdbi.UserRepository;
+import org.athena.health.LoadBalancerPing;
+import org.athena.db.UserRepository;
 import org.jdbi.v3.core.Jdbi;
+import org.jdbi.v3.jodatime2.JodaTimePlugin;
+import org.jdbi.v3.jpa.JpaPlugin;
 
 public class Application extends io.dropwizard.Application<Configuration> {
 
@@ -37,7 +39,10 @@ public class Application extends io.dropwizard.Application<Configuration> {
 
         Jdbi jdbi = jdbiFactory.build(environment, configuration.getDatabase(), "postgres");
 
-        environment.jersey().register(new HomeResources(jdbi.onDemand(UserRepository.class)));
+        jdbi.installPlugin(new JodaTimePlugin());
+        jdbi.installPlugin(new JpaPlugin());
+
+        environment.jersey().register(new HomeResource(jdbi.onDemand(UserRepository.class)));
 
     }
 
