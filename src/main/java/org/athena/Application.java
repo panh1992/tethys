@@ -2,13 +2,12 @@ package org.athena;
 
 import io.dropwizard.forms.MultiPartBundle;
 import io.dropwizard.jdbi3.JdbiFactory;
+import io.dropwizard.jdbi3.bundles.JdbiExceptionsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import org.athena.resources.HomeResource;
-import org.athena.config.AthenaCors;
 import org.athena.config.Configuration;
-import org.athena.health.LoadBalancerPing;
 import org.athena.db.UserRepository;
+import org.athena.resources.HomeResource;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.jodatime2.JodaTimePlugin;
 import org.jdbi.v3.jpa.JpaPlugin;
@@ -25,15 +24,12 @@ public class Application extends io.dropwizard.Application<Configuration> {
     public void initialize(Bootstrap<Configuration> bootstrap) {
 
         bootstrap.addBundle(new MultiPartBundle());
+        bootstrap.addBundle(new JdbiExceptionsBundle());
 
     }
 
     @Override
     public void run(Configuration configuration, Environment environment) {
-
-        new AthenaCors().allowRequestsFromAnywhere(environment.servlets());
-
-        environment.healthChecks().register("ping", new LoadBalancerPing());
 
         JdbiFactory jdbiFactory = new JdbiFactory();
 
