@@ -40,8 +40,6 @@ dependencies {
     compile group: 'com.github.toastshaman', name: 'dropwizard-auth-jwt', version: '1.1.2-0'
     // https://mvnrepository.com/artifact/org.postgresql/postgresql
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
-    // https://mvnrepository.com/artifact/hikari-cp/hikari-cp
-    compile group: 'hikari-cp', name: 'hikari-cp', version: '2.6.0'
 
 }
 

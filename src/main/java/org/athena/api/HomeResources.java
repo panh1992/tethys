@@ -26,25 +26,4 @@ public class HomeResources {
         throw new IOException("asdfg");
     }
 
-    @GET
-    @Path("/test")
-    public Map<String, Object> test() {
-        Map<String, Object> map = Maps.newHashMap();
-        map.put("修改前", "sdfghjk");
-
-        try {
-            userRepository.begin();
-
-            userRepository.updateUser();
-
-            System.out.println(userRepository.findName());
-
-            throw new IOException("afsdgdgh");
-        } catch (IOException e) {
-            e.printStackTrace();
-            userRepository.rollback();
-        }
-        return map;
-    }
-
 }
