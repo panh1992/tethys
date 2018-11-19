@@ -1,7 +1,6 @@
 package org.athena.api;
 
 import com.google.common.collect.Maps;
-import com.google.inject.Inject;
 import org.athena.jdbi.UserRepository;
 
 import javax.ws.rs.GET;
@@ -15,8 +14,11 @@ import java.util.Map;
 @Produces(MediaType.APPLICATION_JSON)
 public class HomeResources {
 
-    @Inject
     private UserRepository userRepository;
+
+    public HomeResources(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @GET
     public Map<String, Object> index() throws IOException {
