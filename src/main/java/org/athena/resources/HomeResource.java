@@ -1,7 +1,8 @@
 package org.athena.resources;
 
+import com.google.common.collect.Maps;
 import org.athena.api.User;
-import org.athena.db.UserRepository;
+import org.athena.business.UserBusiness;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -15,10 +16,10 @@ import java.util.Map;
 @Produces(MediaType.APPLICATION_JSON)
 public class HomeResource {
 
-    private UserRepository userRepository;
+    private UserBusiness userBusiness;
 
-    public HomeResource(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public HomeResource(UserBusiness userBusiness) {
+        this.userBusiness = userBusiness;
     }
 
     /**
@@ -26,14 +27,16 @@ public class HomeResource {
      */
     @GET
     public Map<String, Object> index() throws IOException {
-        userRepository.testUser();
-        throw new IOException("asdfg");
+        userBusiness.testUser();
+        Map<String, Object> result = Maps.newHashMap();
+        result.put("test", "test");
+        return result;
     }
 
     @GET
     @Path("/list")
     public List<User> findAll() {
-        return userRepository.findAll();
+        return userBusiness.findAll();
     }
 
 }

@@ -5,6 +5,7 @@ import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.jdbi3.bundles.JdbiExceptionsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.athena.business.UserBusiness;
 import org.athena.config.Configuration;
 import org.athena.db.UserRepository;
 import org.athena.resources.HomeResource;
@@ -38,7 +39,9 @@ public class Application extends io.dropwizard.Application<Configuration> {
         jdbi.installPlugin(new JodaTimePlugin());
         jdbi.installPlugin(new JpaPlugin());
 
-        environment.jersey().register(new HomeResource(jdbi.onDemand(UserRepository.class)));
+        HomeResource homeResource = new HomeResource(new UserBusiness(jdbi.onDemand(UserRepository.class)));
+
+        environment.jersey().register(homeResource);
 
     }
 
