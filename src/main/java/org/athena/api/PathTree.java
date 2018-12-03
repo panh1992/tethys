@@ -1,6 +1,8 @@
 package org.athena.api;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +14,8 @@ import javax.persistence.Table;
  */
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
 @Table(name = "path_tree")
 public class PathTree {
 

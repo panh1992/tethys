@@ -9,8 +9,8 @@ import org.athena.business.UserBusiness;
 import org.athena.config.Configuration;
 import org.athena.db.UserRepository;
 import org.athena.resources.HomeResource;
+import org.athena.utils.plugin.InstantPlugin;
 import org.jdbi.v3.core.Jdbi;
-import org.jdbi.v3.jodatime2.JodaTimePlugin;
 import org.jdbi.v3.jpa.JpaPlugin;
 
 public class Application extends io.dropwizard.Application<Configuration> {
@@ -36,7 +36,7 @@ public class Application extends io.dropwizard.Application<Configuration> {
 
         Jdbi jdbi = jdbiFactory.build(environment, configuration.getDatabase(), "postgres");
 
-        jdbi.installPlugin(new JodaTimePlugin());
+        jdbi.installPlugin(new InstantPlugin());
         jdbi.installPlugin(new JpaPlugin());
 
         HomeResource homeResource = new HomeResource(new UserBusiness(jdbi.onDemand(UserRepository.class)));

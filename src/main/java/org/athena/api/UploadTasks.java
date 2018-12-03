@@ -1,6 +1,8 @@
 package org.athena.api;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +15,8 @@ import java.time.Instant;
  */
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
 @Table(name = "upload_tasks")
 public class UploadTasks {
 
