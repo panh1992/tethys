@@ -1,5 +1,6 @@
 package org.athena.api;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ import java.time.Instant;
 @Entity
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "upload_tasks")
 public class UploadTasks {
 

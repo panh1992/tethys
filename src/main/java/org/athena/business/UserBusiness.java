@@ -2,9 +2,12 @@ package org.athena.business;
 
 import org.athena.api.User;
 import org.athena.db.UserRepository;
+import org.athena.dto.UserDTO;
+import org.athena.utils.CryptoUtils;
 
-import java.io.IOException;
+import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserBusiness {
 
@@ -14,12 +17,20 @@ public class UserBusiness {
         this.userRepository = userRepository;
     }
 
-    public void testUser() throws IOException {
-        userRepository.testUser();
+    public void register(UserDTO userDTO) {
+
+
+        User user = User.builder().id(CryptoUtils.getUUID()).userName(userDTO.getUserName()).email(userDTO.getEmail())
+                .mobile(userDTO.getMobile()).passWord(CryptoUtils.hashpw(userDTO.getPassWord()))
+                .createTime(Instant.now()).build();
+        userRepository.save(user);
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<UserDTO> findAll() {
+        return userRepository.findAll().stream().map(user -> UserDTO.builder().userId(user.getId())
+                .userName(user.getUserName()).email(user.getEmail()).mobile(user.getMobile())
+                .passWord(CryptoUtils.hashpw(user.getPassWord())).createTime(user.getCreateTime()).build())
+                .collect(Collectors.toList());
     }
 
 }

@@ -3,6 +3,7 @@ package org.athena.resources;
 import com.google.common.collect.Maps;
 import org.athena.api.User;
 import org.athena.business.UserBusiness;
+import org.athena.dto.UserDTO;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -11,8 +12,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON)
@@ -27,8 +31,8 @@ public class HomeResource {
 
     @POST
     @Path("register")
-    public Map<String, Object> register() throws IOException {
-        userBusiness.testUser();
+    public Map<String, Object> register(UserDTO userDTO) {
+        userBusiness.register(userDTO);
         Map<String, Object> result = Maps.newHashMap();
         result.put("test", "test");
         return result;
@@ -36,7 +40,7 @@ public class HomeResource {
 
     @GET
     @Path("/list")
-    public List<User> findAll() {
+    public List<UserDTO> findAll() {
         return userBusiness.findAll();
     }
 

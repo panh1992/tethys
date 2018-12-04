@@ -1,5 +1,6 @@
 package org.athena.api;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ import java.time.Instant;
 @Entity
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 public class User {
 
@@ -30,13 +32,13 @@ public class User {
     /**
      * 用户名称
      */
-    @Column(name = "username", length = 64)
+    @Column(name = "user_name", length = 64)
     private String userName;
 
     /**
      * 用户昵称
      */
-    @Column(name = "nickname", length = 64)
+    @Column(name = "nick_name", length = 64)
     private String nickName;
 
     /**
