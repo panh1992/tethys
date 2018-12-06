@@ -5,9 +5,12 @@ import java.util.UUID;
 /**
  * 通用加密工具
  */
-public class CryptoUtils {
+public final class CryptoUtil {
 
     private static final String SALT = BCrypt.gensalt(12);
+
+    private CryptoUtil() {
+    }
 
     /**
      * 获取 uuid 字符串
@@ -20,7 +23,8 @@ public class CryptoUtils {
 
     /**
      * 使用 BCrypt 加密
-     * @param candidate  明文
+     *
+     * @param candidate 明文
      */
     public static String hashpw(String candidate) {
 
@@ -30,6 +34,7 @@ public class CryptoUtils {
 
     /**
      * 验证 BCrypt 密码正确性
+     *
      * @param candidate 明文
      * @param hashed    密文
      */

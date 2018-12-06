@@ -1,4 +1,4 @@
-package org.athena.utils.plugin;
+package org.athena.config.plugin;
 
 import org.jdbi.v3.core.mapper.ColumnMapper;
 import org.jdbi.v3.core.statement.StatementContext;

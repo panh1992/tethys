@@ -1,7 +1,6 @@
 package org.athena.resources;
 
 import com.google.common.collect.Maps;
-import org.athena.api.User;
 import org.athena.business.UserBusiness;
 import org.athena.dto.UserDTO;
 
@@ -11,12 +10,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.io.IOException;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON)
@@ -42,6 +37,12 @@ public class HomeResource {
     @Path("/list")
     public List<UserDTO> findAll() {
         return userBusiness.findAll();
+    }
+
+    @GET
+    @Path("/test")
+    public Integer test() {
+        return userBusiness.test();
     }
 
 }

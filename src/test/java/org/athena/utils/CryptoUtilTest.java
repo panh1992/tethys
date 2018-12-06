@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class CryptoUtilsTest {
+public class CryptoUtilTest {
 
     @Test
     public void getUUID() throws InterruptedException {
@@ -14,7 +14,7 @@ public class CryptoUtilsTest {
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
         for (int i = 0; i < 1000; i++) {
-            executor.execute(() -> System.out.println(Thread.currentThread().getName() + ": \t" + CryptoUtils.getUUID()));
+            executor.execute(() -> System.out.println(Thread.currentThread().getName() + ": \t" + CryptoUtil.getUUID()));
         }
 
         executor.shutdown();

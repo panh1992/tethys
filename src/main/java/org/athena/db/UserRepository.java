@@ -1,13 +1,13 @@
 package org.athena.db;
 
 import org.athena.api.User;
+import org.athena.exceptions.EntityAlreadyExists;
 import org.jdbi.v3.core.transaction.TransactionIsolationLevel;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 import org.jdbi.v3.sqlobject.transaction.Transaction;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface UserRepository {
@@ -23,11 +23,11 @@ public interface UserRepository {
     List<User> findAll();
 
     @Transaction(TransactionIsolationLevel.READ_COMMITTED)
-    default void testUser() throws IOException {
+    default void testUser() {
 
         updateUser();
 
-        throw new IOException("woof");
+        throw EntityAlreadyExists.build("woof");
     }
 
 }
