@@ -9,7 +9,7 @@ token本身具有时效性，在超时之后需要重新登录获取新的token�
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;token将作为header里面的 Authorization 字段的值随着请求传输到服务端用于身份认证。
 
 ## 公共请求头
-Athena API是基于HTTP协议的REST风格接口，它支持一组可以在所有API请求中使用的公共请求头（是否必选请仔细阅读相关说明。），其详细定义如下：
+Athena API是基于HTTP协议的REST风格接口，它支持一组可以在所有API请求中使用的公共请求头，其详细定义如下：
 
 | Header名称       |   类型      |         说明        |
 | --------------- |:----------:| ------------------:|
