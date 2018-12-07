@@ -1,5 +1,6 @@
 package org.athena.resources;
 
+import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Maps;
 import org.athena.business.UserBusiness;
 import org.athena.dto.UserDTO;
@@ -27,6 +28,7 @@ public class HomeResource {
     /**
      * 用户注册
      */
+    @Timed
     @POST
     @Path("register")
     public Map<String, Object> register(UserDTO userDTO) {
@@ -36,12 +38,14 @@ public class HomeResource {
         return result;
     }
 
+    @Timed
     @GET
     @Path("/list")
     public List<UserDTO> findAll() {
         return userBusiness.findAll();
     }
 
+    @Timed
     @GET
     @Path("/test")
     public Integer test() {

@@ -120,6 +120,68 @@
                     <failOnViolation>true</failOnViolation>
                     <failsOnError>true</failsOnError>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>checkstyle</id>
+                        <phase>validate</phase><!-- 要绑定到的生命周期的阶段 -->
+                        <goals>
+                            <goal>checkstyle</goal><!-- 要绑定的插件的目标 -->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <sourceEncoding>UTF-8</sourceEncoding>
+                    <minimumTokens>4</minimumTokens>
+                    <maxAllowedViolations>6</maxAllowedViolations>
+                    <failOnViolation>true</failOnViolation>
+                    <printFailingErrors>true</printFailingErrors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>pmd</id>
+                        <phase>validate</phase><!-- 要绑定到的生命周期的阶段 -->
+                        <goals>
+                            <goal>pmd</goal><!-- 要绑定的插件的目标 -->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.5</version>
+                <dependencies>
+                    <!-- https://mvnrepository.com/artifact/org.dom4j/dom4j -->
+                    <dependency>
+                        <groupId>org.dom4j</groupId>
+                        <artifactId>dom4j</artifactId>
+                        <version>2.1.1</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <sourceEncoding>UTF-8</sourceEncoding>
+                    <!-- 设置分析工作的等级，可以为 Min、Default 和 Max -->
+                    <effort>Low</effort>
+                    <!-- Low Medium High (Low最严格) -->
+                    <threshold>Medium</threshold>
+                    <failOnError>true</failOnError>
+                    <includeTests>true</includeTests>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>findbugs</id>
+                        <phase>package</phase><!-- 要绑定到的生命周期的阶段 -->
+                        <goals>
+                            <goal>check</goal><!-- 要绑定的插件的目标 -->
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
