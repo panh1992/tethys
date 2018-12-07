@@ -25,7 +25,8 @@ public class BusinessExceptionMapper implements ExceptionMapper<BusinessExceptio
         exceptions.mark();
         return Response.status(exception.getStatus())
                 .type(MediaType.APPLICATION_JSON_TYPE)
-                .entity(ErrorDTO.builder().code(exception.getCode()).message(exception.getMessage()).build())
+                .entity(ErrorDTO.builder().code(exception.getCode())
+                        .message(exception.getMessage()).build())
                 .build();
     }
 

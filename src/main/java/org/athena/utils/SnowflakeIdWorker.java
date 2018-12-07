@@ -58,7 +58,8 @@ public class SnowflakeIdWorker {
     /**
      * 时间截向左移22位(5+5+12)
      */
-    private static final long TIMESTAMP_LEFT_SHIFT = SEQUENCE_BITS + WORKER_ID_BITS + DATA_CENTER_ID_BITS;
+    private static final long TIMESTAMP_LEFT_SHIFT = SEQUENCE_BITS + WORKER_ID_BITS
+            + DATA_CENTER_ID_BITS;
 
     /**
      * 生成序列的掩码，这里为4095 (0b111111111111=0xfff=4095)
@@ -97,11 +98,13 @@ public class SnowflakeIdWorker {
     public SnowflakeIdWorker(long workerId, long dataCenterId) {
         if (workerId > MAX_WORKER_ID || workerId < 0) {
             throw new IllegalArgumentException(
-                    String.format("worker Id can't be greater than %d or less than 0", MAX_WORKER_ID));
+                    String.format("worker Id can't be greater than %d or less than 0",
+                            MAX_WORKER_ID));
         }
         if (dataCenterId > MAX_DATA_CENTER_ID || dataCenterId < 0) {
             throw new IllegalArgumentException(
-                    String.format("datacenter Id can't be greater than %d or less than 0", MAX_DATA_CENTER_ID));
+                    String.format("datacenter Id can't be greater than %d or less than 0",
+                            MAX_DATA_CENTER_ID));
         }
         this.workerId = workerId;
         this.dataCenterId = dataCenterId;
@@ -118,7 +121,8 @@ public class SnowflakeIdWorker {
         // 如果当前时间小于上一次ID生成的时间戳，说明系统时钟回退过这个时候应当抛出异常
         if (timestamp < lastTimestamp) {
             throw new RuntimeException(String.format(
-                    "Clock moved backwards.  Refusing to generate id for %d milliseconds", lastTimestamp - timestamp));
+                    "Clock moved backwards.  Refusing to generate id for %d milliseconds",
+                    lastTimestamp - timestamp));
         }
 
         // 如果是同一时间生成的，则进行毫秒内序列
@@ -129,9 +133,8 @@ public class SnowflakeIdWorker {
                 // 阻塞到下一个毫秒,获得新的时间戳
                 timestamp = tilNextMillis(lastTimestamp);
             }
-        }
-        // 时间戳改变，毫秒内序列重置
-        else {
+        } else {
+            // 时间戳改变，毫秒内序列重置
             sequence = 0L;
         }
 

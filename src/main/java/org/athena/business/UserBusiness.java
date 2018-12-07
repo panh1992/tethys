@@ -17,6 +17,9 @@ public class UserBusiness {
         this.userRepository = userRepository;
     }
 
+    /**
+     * 用户注册
+     */
     public void register(UserDTO userDTO) {
         User user = User.builder().id(CryptoUtil.getUUID()).userName(userDTO.getUserName()).email(userDTO.getEmail())
                 .mobile(userDTO.getMobile()).passWord(CryptoUtil.hashpw(userDTO.getPassWord()))
@@ -24,6 +27,9 @@ public class UserBusiness {
         userRepository.save(user);
     }
 
+    /**
+     * 查询所有用户
+     */
     public List<UserDTO> findAll() {
         return userRepository.findAll().stream().map(user -> UserDTO.builder().userId(user.getId())
                 .userName(user.getUserName()).email(user.getEmail()).mobile(user.getMobile())

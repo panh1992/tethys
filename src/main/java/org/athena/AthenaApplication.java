@@ -17,6 +17,10 @@ import org.jdbi.v3.jpa.JpaPlugin;
 
 public class AthenaApplication extends Application<AthenaConfiguration> {
 
+    /**
+     * Athena 程序启动类
+     * @param args  启动参数
+     */
     public static void main(String[] args) throws Exception {
 
         new AthenaApplication().run(args);

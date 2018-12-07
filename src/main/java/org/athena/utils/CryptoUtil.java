@@ -1,5 +1,7 @@
 package org.athena.utils;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.util.UUID;
 
 /**

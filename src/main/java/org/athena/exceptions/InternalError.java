@@ -19,7 +19,8 @@ public class InternalError extends BusinessException {
     }
 
     public static InternalError build(String message) {
-        return new InternalError(Response.Status.BAD_REQUEST, Response.Status.INTERNAL_SERVER_ERROR.getReasonPhrase(), message);
+        return new InternalError(Response.Status.BAD_REQUEST,
+                Response.Status.INTERNAL_SERVER_ERROR.getReasonPhrase(), message);
     }
 
 }

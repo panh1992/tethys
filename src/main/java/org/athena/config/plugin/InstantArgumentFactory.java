@@ -10,6 +10,9 @@ import java.sql.Types;
 
 public class InstantArgumentFactory extends AbstractArgumentFactory<Instant> {
 
+    /**
+     * 构造 InstantArgumentFactory 实例
+     */
     public InstantArgumentFactory() {
 
         super(Types.TIMESTAMP);

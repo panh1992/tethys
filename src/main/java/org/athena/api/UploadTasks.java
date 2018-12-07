@@ -51,7 +51,7 @@ public class UploadTasks {
      * 是否删除
      */
     @Column(name = "is_deleted")
-    private Boolean is_deleted;
+    private Boolean isDeleted;
 
     /**
      * 创建时间

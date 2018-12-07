@@ -22,6 +22,9 @@ public interface UserRepository {
     @SqlQuery("SELECT id, user_name, nick_name, password, email, mobile, profile, create_time FROM users")
     List<User> findAll();
 
+    /**
+     * 事务测试
+     */
     @Transaction(TransactionIsolationLevel.READ_COMMITTED)
     default void testUser() {
 

@@ -15,6 +15,9 @@ public final class EnvConfig {
     private EnvConfig() {
     }
 
+    /**
+     * 配置 Dropwizard application's environment
+     */
     public static void configuration(Environment environment) {
 
         // 暂时开启 CORS 跨域、 正式环境使用 nginx 配置

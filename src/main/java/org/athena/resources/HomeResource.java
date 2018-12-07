@@ -24,6 +24,9 @@ public class HomeResource {
         this.userBusiness = userBusiness;
     }
 
+    /**
+     * 用户注册
+     */
     @POST
     @Path("register")
     public Map<String, Object> register(UserDTO userDTO) {
