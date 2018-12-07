@@ -31,9 +31,9 @@ public class UserBusiness {
      * 查询所有用户
      */
     public List<UserDTO> findAll() {
-        return userRepository.findAll().stream().map(user -> UserDTO.builder().userId(user.getId())
+        return userRepository.findAll().parallelStream().map(user -> UserDTO.builder().userId(user.getId())
                 .userName(user.getUserName()).email(user.getEmail()).mobile(user.getMobile())
-                .passWord(CryptoUtil.hashpw(user.getPassWord())).createTime(user.getCreateTime()).build())
+                .passWord(user.getPassWord()).createTime(user.getCreateTime()).build())
                 .collect(Collectors.toList());
     }
 

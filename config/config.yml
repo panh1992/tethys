@@ -1,6 +1,8 @@
 defaultName: athena
 
 server:
+  minThreads: 20
+  maxThreads: 250
   applicationConnectors:
   - type: http
     port: 8080

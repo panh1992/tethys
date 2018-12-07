@@ -12,14 +12,15 @@ import java.util.List;
 
 public interface UserRepository {
 
-    @SqlUpdate("INSERT INTO users (id, user_name, nick_name, password, email, mobile, profile, create_time) VALUES "
+    @SqlUpdate("INSERT INTO users (id, username, nickname, password, email, mobile, profile, create_time) VALUES "
             + "(:id, :userName, :nickName, :passWord, :email, :mobile, :profile, :createTime)")
     void save(@BindBean User user);
 
     @SqlUpdate("UPDATE users SET username = 'asdfg'")
     void updateUser();
 
-    @SqlQuery("SELECT id, user_name, nick_name, password, email, mobile, profile, create_time FROM users")
+    @SqlQuery("SELECT id, username, nickname, password, email, mobile, profile, create_time FROM "
+            + "users ORDER BY create_time DESC")
     List<User> findAll();
 
     /**

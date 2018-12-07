@@ -2,18 +2,11 @@ package org.athena;
 
 import io.dropwizard.Application;
 import io.dropwizard.forms.MultiPartBundle;
-import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.jdbi3.bundles.JdbiExceptionsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import org.athena.business.UserBusiness;
 import org.athena.config.AthenaConfiguration;
 import org.athena.config.EnvConfig;
-import org.athena.config.plugin.InstantPlugin;
-import org.athena.db.UserRepository;
-import org.athena.resources.HomeResource;
-import org.jdbi.v3.core.Jdbi;
-import org.jdbi.v3.jpa.JpaPlugin;
 
 public class AthenaApplication extends Application<AthenaConfiguration> {
 
@@ -36,20 +29,13 @@ public class AthenaApplication extends Application<AthenaConfiguration> {
     }
 
     @Override
-    public void run(AthenaConfiguration athenaConfiguration, Environment environment) {
+    public void run(AthenaConfiguration configuration, Environment environment) {
 
-        EnvConfig.configuration(environment);
+        EnvConfig.registerFilter(environment);
 
-        JdbiFactory jdbiFactory = new JdbiFactory();
+        EnvConfig.registerResource(configuration, environment);
 
-        Jdbi jdbi = jdbiFactory.build(environment, athenaConfiguration.getDatabase(), "postgres");
-
-        jdbi.installPlugin(new InstantPlugin());
-        jdbi.installPlugin(new JpaPlugin());
-
-        HomeResource homeResource = new HomeResource(new UserBusiness(jdbi.onDemand(UserRepository.class)));
-
-        environment.jersey().register(homeResource);
+        EnvConfig.registerException(environment);
 
     }
 

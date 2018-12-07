@@ -68,8 +68,8 @@ public class Files {
     /**
      * 存储来源类型  upload   mount   system    task
      */
-    @Column(name = "source_type")
-    private Integer sourceType;
+    @Column(name = "source_type", length = 32)
+    private String sourceType;
 
     /**
      * 是否为目录

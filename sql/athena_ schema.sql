@@ -31,7 +31,7 @@ CREATE TABLE public.files (
     file_name character varying(255),
     file_size bigint,
     source_id character(32),
-    source_type integer,
+    source_type character(32),
     is_dir boolean,
     check_sum character varying(255),
     format character varying(32),

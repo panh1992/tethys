@@ -12,3 +12,5 @@
 ;  :   .'   \ |  ,   / |  | ,'    |   :    |   |/     ;  :   .'   \
 |  ,     .-./  ---`-'  `--''       \   \  /'---'      |  ,     .-./
  `--`---'                           `----'             `--`---'
+
+DROPWIZARD.VERSION=1.3.7, JDBI.VERSION=3.5.1, POSTGRESQL.DRIVER.VERSION=42.2.5

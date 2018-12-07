@@ -32,13 +32,13 @@ public class User {
     /**
      * 用户名称
      */
-    @Column(name = "user_name", length = 64)
+    @Column(name = "username", length = 64)
     private String userName;
 
     /**
      * 用户昵称
      */
-    @Column(name = "nick_name", length = 64)
+    @Column(name = "nickname", length = 64)
     private String nickName;
 
     /**
