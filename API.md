@@ -21,7 +21,7 @@ Athena API是基于HTTP协议的REST风格接口，它支持一组可以在所�
   包括HTTP的Status、Code和响应Body的具体错误细节。其中响应Body中的错误细节格式如下:
 
 | HTTP状态   |       错误码    |   描述           |
-| ----------|:--------------:|----------------:|
+| ----------|:--------------|----------------:|
 |  400 |    InvalidParameter | 请求参数错误      |
 |  401 |    AuthorizationFailed | 请求认证失败，不合法的 Token或 Token超时 |
 |  404 |    EntityNotExist | 请求获取的资源不存在 |
