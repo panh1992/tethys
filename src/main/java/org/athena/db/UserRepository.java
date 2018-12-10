@@ -3,6 +3,7 @@ package org.athena.db;
 import org.athena.api.User;
 import org.athena.exceptions.EntityAlreadyExists;
 import org.jdbi.v3.core.transaction.TransactionIsolationLevel;
+import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
@@ -12,16 +13,20 @@ import java.util.List;
 
 public interface UserRepository {
 
+    String COLUMN = "id, username, nickname, password, email, mobile, profile, create_time";
+
+    @SqlQuery("SELECT " + COLUMN + " FROM users ORDER BY create_time DESC")
+    List<User> findAll();
+
+    @SqlQuery("SELECT " + COLUMN + " FROM users WHERE username = :username")
+    User findByUserName(@Bind("username") String userName);
+
     @SqlUpdate("INSERT INTO users (id, username, nickname, password, email, mobile, profile, create_time) VALUES "
             + "(:id, :userName, :nickName, :passWord, :email, :mobile, :profile, :createTime)")
     void save(@BindBean User user);
 
     @SqlUpdate("UPDATE users SET username = 'asdfg'")
     void updateUser();
-
-    @SqlQuery("SELECT id, username, nickname, password, email, mobile, profile, create_time FROM "
-            + "users ORDER BY create_time DESC")
-    List<User> findAll();
 
     /**
      * 事务测试

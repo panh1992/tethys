@@ -7,7 +7,8 @@
 == 请求认证
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在首次登录时，会向调用方返回一个下发的token, 该token值将作为后续调用的身份认证。
-token本身具有时效性，在超时之后需要重新登录获取新的token。<br />
+token本身具有时效性，在超时之后需要重新登录获取新的token。
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;token将作为header里面的 Authorization 字段的值随着请求传输到服务端用于身份认证。
 
 == 公共请求头

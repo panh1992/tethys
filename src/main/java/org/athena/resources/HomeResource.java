@@ -1,8 +1,8 @@
 package org.athena.resources;
 
 import com.codahale.metrics.annotation.Timed;
-import com.google.common.collect.Maps;
 import org.athena.business.UserBusiness;
+import org.athena.dto.Response;
 import org.athena.dto.UserDTO;
 
 import javax.ws.rs.Consumes;
@@ -33,16 +33,25 @@ public class HomeResource {
     @Path("register")
     public Map<String, Object> register(UserDTO userDTO) {
         userBusiness.register(userDTO);
-        Map<String, Object> result = Maps.newHashMap();
-        result.put("test", "test");
-        return result;
+        return null;
+    }
+
+    /**
+     * 用户登录
+     */
+    @Timed
+    @POST
+    @Path("register")
+    public Response<String> login(UserDTO userDTO) {
+        userBusiness.login(userDTO);
+        return null;
     }
 
     @Timed
     @GET
     @Path("/list")
-    public List<UserDTO> findAll() {
-        return userBusiness.findAll();
+    public Response<List<UserDTO>> findAll() {
+        return Response.build(userBusiness.findAll());
     }
 
     @Timed

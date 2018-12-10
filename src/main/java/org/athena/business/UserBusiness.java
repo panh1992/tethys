@@ -3,10 +3,13 @@ package org.athena.business;
 import org.athena.api.User;
 import org.athena.db.UserRepository;
 import org.athena.dto.UserDTO;
+import org.athena.exceptions.EntityAlreadyExists;
+import org.athena.exceptions.EntityNotExist;
 import org.athena.utils.CryptoUtil;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class UserBusiness {
@@ -21,10 +24,24 @@ public class UserBusiness {
      * 用户注册
      */
     public void register(UserDTO userDTO) {
+        User checkUser = userRepository.findByUserName(userDTO.getUserName());
+        if (Objects.isNull(checkUser)) {
+            throw EntityAlreadyExists.build("用户名已存在");
+        }
         User user = User.builder().id(CryptoUtil.getUUID()).userName(userDTO.getUserName()).email(userDTO.getEmail())
                 .mobile(userDTO.getMobile()).passWord(CryptoUtil.hashpw(userDTO.getPassWord()))
                 .createTime(Instant.now()).build();
         userRepository.save(user);
+    }
+
+    /**
+     * 用户登录
+     */
+    public void login(UserDTO userDTO) {
+        User user = userRepository.findByUserName(userDTO.getUserName());
+        if (Objects.isNull(user) || CryptoUtil.checkpw(userDTO.getPassWord(), user.getPassWord())) {
+            throw EntityNotExist.build("用户名或密码错误");
+        }
     }
 
     /**
@@ -41,5 +58,4 @@ public class UserBusiness {
         userRepository.testUser();
         return 1234;
     }
-
 }
