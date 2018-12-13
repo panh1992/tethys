@@ -12,13 +12,10 @@ import org.jose4j.lang.JoseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
- * jwt 授权认证，工具类
+ * jwt 工具类
  */
-public class JWTUtil {
+public final class JWTUtil {
 
     private static Logger logger = LoggerFactory.getLogger(JWTUtil.class);
 
@@ -26,6 +23,10 @@ public class JWTUtil {
      * 生成一个RSA密钥对，用于JWT的签名和验证
      */
     private static RsaJsonWebKey rsaJsonWebKey;
+
+    private static final String ISSUER = "athena";
+
+    private static final String AUDIENCE = "web";
 
     static {
         try {
@@ -36,72 +37,51 @@ public class JWTUtil {
         }
     }
 
-    public static String buidToken() throws JoseException {
-        // Create the Claims, which will be the content of the JWT
-        JwtClaims claims = new JwtClaims();
-        claims.setIssuer("Issuer");  // who creates the token and signs it
-        claims.setAudience("Audience"); // to whom the token is intended to be sent
-        claims.setExpirationTimeMinutesInTheFuture(10); // time when the token will expire (10 minutes from now)
-        claims.setGeneratedJwtId(); // a unique identifier for the token
-        claims.setIssuedAtToNow();  // when the token was issued/created (now)
-        claims.setNotBeforeMinutesInThePast(2); // time before which the token is not yet valid (2 minutes ago)
-        claims.setSubject("subject"); // the subject/principal is whom the token is about
-        claims.setClaim("email", "mail@example.com"); // additional claims/attributes about the subject can be added
-        List<String> groups = Arrays.asList("group-one", "other-group", "group-three");
-        claims.setStringListClaim("groups", groups); // multi-valued claims work too and will end up as a JSON array
+    private JWTUtil() {
+    }
 
-        // A JWT is a JWS and/or a JWE with JSON claims as the payload.
-        // In this example it is a JWS so we create a JsonWebSignature object.
+    /**
+     * 创建 jwt token
+     *
+     * @param subject 令牌主题
+     * @param minutes 有效分钟数
+     */
+    public static String createToken(String subject, long minutes) throws JoseException {
+        JwtClaims claims = new JwtClaims();
+        claims.setIssuer(ISSUER);  // 令牌的创建者
+        claims.setAudience(AUDIENCE); // 要将令牌发送给谁
+        claims.setExpirationTimeMinutesInTheFuture(minutes); // 令牌到期的时间 从现在起 分钟数
+        claims.setGeneratedJwtId(); // 用于令牌的唯一标识符
+        claims.setIssuedAtToNow();  // 发出/创建令牌时（现在）
+        claims.setNotBeforeMinutesInThePast(2); // 令牌尚未生效的时间（2分钟前）
+        claims.setSubject(subject); // 主题/委托人是令牌的对象
+
         JsonWebSignature jws = new JsonWebSignature();
-        // The payload of the JWS is JSON content of the JWT Claims
         jws.setPayload(claims.toJson());
-        // The JWT is signed using the private key
         jws.setKey(rsaJsonWebKey.getPrivateKey());
-        // Set the Key ID (kid) header because it's just the polite thing to do.
-        // We only have one key in this example but a using a Key ID helps
-        // facilitate a smooth key rollover process
         jws.setKeyIdHeaderValue(rsaJsonWebKey.getKeyId());
-        // Set the signature algorithm on the JWT/JWS that will integrity protect the claims
         jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.RSA_USING_SHA512);
-        // Sign the JWS and produce the compact serialization or the complete JWT/JWS
-        // representation, which is a string consisting of three dot ('.') separated
-        // base64url-encoded parts in the form Header.Payload.Signature
-        // If you wanted to encrypt it, you can simply set this jwt as the payload
-        // of a JsonWebEncryption object and set the cty (Content Type) header to "jwt".
         return jws.getCompactSerialization();
     }
 
-    public static void main(String[] args) throws JoseException {
-
-
-        // Use JwtConsumerBuilder to construct an appropriate JwtConsumer, which will
-        // be used to validate and process the JWT.
-        // The specific validation requirements for a JWT are context dependent, however,
-        // it typically advisable to require a (reasonable) expiration time, a trusted issuer, and
-        // and audience that identifies your system as the intended recipient.
-        // If the JWT is encrypted too, you need only provide a decryption key or
-        // decryption key resolver to the builder.
+    /**
+     * 验证 jwt token 的有效性
+     */
+    public static JwtClaims validation(String jwtToken) throws InvalidJwtException {
         JwtConsumer jwtConsumer = new JwtConsumerBuilder()
-                .setRequireExpirationTime() // the JWT must have an expiration time
-                .setMaxFutureValidityInMinutes(300) // but the  expiration time can't be too crazy
-                .setAllowedClockSkewInSeconds(30) // allow some leeway in validating time based claims to account for clock skew
-                .setRequireSubject() // the JWT must have a subject claim
-                .setExpectedIssuer("Issuer") // whom the JWT needs to have been issued by
-                .setExpectedAudience("Audience") // to whom the JWT is intended for
-                .setVerificationKey(rsaJsonWebKey.getKey()) // verify the signature with the public key
-                .build(); // create the JwtConsumer instance
+                .setRequireExpirationTime() // JWT必须有一个到期时间
+                .setMaxFutureValidityInMinutes(300) // 但到期时间不能太疯狂
+                .setAllowedClockSkewInSeconds(30) // 允许一些余地来验证基于时间的索赔，以解决时钟偏差问题
+                .setRequireSubject() // 必须有一个主题声明
+                .setExpectedIssuer("Issuer") // 需要由谁发出
+                .setExpectedAudience("Audience") // 目标对象
+                .setVerificationKey(rsaJsonWebKey.getKey()) // 使用公钥验证签名
+                .build();
 
-        try {
-            //  Validate the JWT and process it to the Claims
-            JwtClaims jwtClaims = jwtConsumer.processToClaims(jwt);
-            System.out.println("JWT validation succeeded! " + jwtClaims);
-        } catch (InvalidJwtException e) {
-            // InvalidJwtException will be thrown, if the JWT failed processing or validation in anyway.
-            // Hopefully with meaningful explanations(s) about what went wrong.
-            System.out.println("Invalid JWT! " + e);
-        }
-
+        //  验证JWT并将其处理为声明
+        JwtClaims jwtClaims = jwtConsumer.processToClaims(jwtToken);
+        logger.debug("JWT validation succeeded! {}", jwtClaims);
+        return jwtClaims;
     }
-
 
 }
