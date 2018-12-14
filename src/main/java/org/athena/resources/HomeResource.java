@@ -12,7 +12,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
-import java.util.Map;
 
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON)
@@ -31,9 +30,9 @@ public class HomeResource {
     @Timed
     @POST
     @Path("register")
-    public Map<String, Object> register(UserDTO userDTO) {
+    public Response register(UserDTO userDTO) {
         userBusiness.register(userDTO);
-        return null;
+        return Response.build();
     }
 
     /**
@@ -41,22 +40,21 @@ public class HomeResource {
      */
     @Timed
     @POST
-    @Path("register")
+    @Path("login")
     public Response<String> login(UserDTO userDTO) {
-        userBusiness.login(userDTO);
-        return null;
+        return Response.build(userBusiness.login(userDTO), "登录成功");
     }
 
     @Timed
     @GET
-    @Path("/list")
+    @Path("list")
     public Response<List<UserDTO>> findAll() {
         return Response.build(userBusiness.findAll());
     }
 
     @Timed
     @GET
-    @Path("/test")
+    @Path("test")
     public Integer test() {
         return userBusiness.test();
     }

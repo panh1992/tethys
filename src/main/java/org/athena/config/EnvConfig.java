@@ -5,6 +5,7 @@ import io.dropwizard.setup.Environment;
 import org.athena.business.UserBusiness;
 import org.athena.config.plugin.InstantPlugin;
 import org.athena.db.UserRepository;
+import org.athena.filters.JWTAuthorizationFilter;
 import org.athena.resources.HomeResource;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.jdbi.v3.core.Jdbi;
@@ -29,6 +30,8 @@ public final class EnvConfig {
 
         // 暂时开启 CORS 跨域、 正式环境使用 nginx 配置
         addCors(environment);
+
+        addAuthorization(environment);
 
     }
 
@@ -69,6 +72,16 @@ public final class EnvConfig {
         cors.setInitParameter("allowedMethods", "OPTIONS,GET,PUT,PATCH,POST,DELETE,HEAD");
 
         cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+    }
+
+    /**
+     * 添加 授权认证 过滤器
+     */
+    private static void addAuthorization(Environment environment) {
+        final FilterRegistration.Dynamic authorization =
+                environment.servlets().addFilter("Authorization", JWTAuthorizationFilter.class);
+
+        authorization.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/list");
     }
 
 }

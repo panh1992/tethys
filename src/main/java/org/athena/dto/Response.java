@@ -16,6 +16,15 @@ public class Response<T> {
     private String message;
 
     /**
+     * 创建成功响应结果
+     */
+    public static <T> Response<T> build() {
+        Response<T> response = new Response<>();
+        response.setMessage("success");
+        return response;
+    }
+
+    /**
      * 根据返回数据创建响应结果
      *
      * @param data 返回数据
@@ -23,7 +32,7 @@ public class Response<T> {
     public static <T> Response<T> build(T data) {
         Response<T> response = new Response<>();
         response.setData(data);
-        response.setMessage("success");
+        response.setMessage("操作成功");
         return response;
     }
 
@@ -42,7 +51,8 @@ public class Response<T> {
 
     /**
      * 根据返回 错误代码、结果、描述 创建响应结果
-     * @param code     错误代码
+     *
+     * @param code    错误代码
      * @param data    返回数据
      * @param message 描述信息
      */

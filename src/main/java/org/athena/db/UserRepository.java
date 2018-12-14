@@ -10,6 +10,7 @@ import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 import org.jdbi.v3.sqlobject.transaction.Transaction;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository {
 
@@ -19,7 +20,7 @@ public interface UserRepository {
     List<User> findAll();
 
     @SqlQuery("SELECT " + COLUMN + " FROM users WHERE username = :username")
-    User findByUserName(@Bind("username") String userName);
+    Optional<User> findByUserName(@Bind("username") String userName);
 
     @SqlUpdate("INSERT INTO users (id, username, nickname, password, email, mobile, profile, create_time) VALUES "
             + "(:id, :userName, :nickName, :passWord, :email, :mobile, :profile, :createTime)")
