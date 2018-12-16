@@ -32,7 +32,7 @@ public class JWTAuthorizationFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
-
+        logger.info("JWTAuthorizationFilter 开始");
     }
 
     @Override
@@ -64,7 +64,7 @@ public class JWTAuthorizationFilter implements Filter {
 
     @Override
     public void destroy() {
-
+        logger.info("JWTAuthorizationFilter 销毁");
     }
 
 }

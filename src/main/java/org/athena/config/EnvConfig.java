@@ -45,12 +45,12 @@ public final class EnvConfig {
     public static void registerResource(AthenaConfiguration configuration, Environment environment) {
 
         JdbiFactory jdbiFactory = new JdbiFactory();
-        Jdbi jdbi = jdbiFactory.build(environment, configuration.getDatabase(), "postgres");
+        final Jdbi jdbi = jdbiFactory.build(environment, configuration.getDatabase(), "postgres");
         jdbi.installPlugin(new InstantPlugin());
         jdbi.installPlugin(new JpaPlugin());
 
-        UserRepository userRepository = jdbi.onDemand(UserRepository.class);
-        FileRepository fileRepository = jdbi.onDemand(FileRepository.class);
+        final UserRepository userRepository = jdbi.onDemand(UserRepository.class);
+        final FileRepository fileRepository = jdbi.onDemand(FileRepository.class);
 
         UserBusiness userBusiness = new UserBusiness(userRepository);
         FileBusiness fileBusiness = new FileBusiness(fileRepository);
