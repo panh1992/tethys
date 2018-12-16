@@ -29,8 +29,14 @@ public class Page<T> {
      */
     private long total;
 
-    @Deprecated
-    public Page(List<T> content, int page, int size, long total) {
+    /**
+     * 创建分页响应
+     * @param content 存储集合
+     * @param page  页码
+     * @param size  每页数量
+     * @param total 总记录数
+     */
+    private Page(List<T> content, int page, int size, long total) {
         this.content = content;
         this.page = page;
         this.size = size;

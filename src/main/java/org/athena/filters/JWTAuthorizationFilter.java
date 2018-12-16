@@ -56,7 +56,7 @@ public class JWTAuthorizationFilter implements Filter {
             response.setStatus(Response.Status.UNAUTHORIZED.getStatusCode());
             response.setCharacterEncoding(StandardCharsets.UTF_8.displayName());
             response.setContentType("application/json;charset=UTF-8");
-            try(PrintWriter out = response.getWriter()) {
+            try (PrintWriter out = response.getWriter()) {
                 out.println(objectMapper.writeValueAsString(errorDTO));
             }
         }
