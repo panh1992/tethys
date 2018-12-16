@@ -1,11 +1,15 @@
 package org.athena.config;
 
 import io.dropwizard.jdbi3.JdbiFactory;
+import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.setup.Environment;
+import org.athena.business.FileBusiness;
 import org.athena.business.UserBusiness;
 import org.athena.config.plugin.InstantPlugin;
+import org.athena.db.FileRepository;
 import org.athena.db.UserRepository;
 import org.athena.filters.JWTAuthorizationFilter;
+import org.athena.resources.FileResource;
 import org.athena.resources.HomeResource;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.jdbi.v3.core.Jdbi;
@@ -45,9 +49,18 @@ public final class EnvConfig {
         jdbi.installPlugin(new InstantPlugin());
         jdbi.installPlugin(new JpaPlugin());
 
-        HomeResource homeResource = new HomeResource(new UserBusiness(jdbi.onDemand(UserRepository.class)));
+        UserRepository userRepository = jdbi.onDemand(UserRepository.class);
+        FileRepository fileRepository = jdbi.onDemand(FileRepository.class);
 
-        environment.jersey().register(homeResource);
+        UserBusiness userBusiness = new UserBusiness(userRepository);
+        FileBusiness fileBusiness = new FileBusiness(fileRepository);
+
+        HomeResource homeResource = new HomeResource(userBusiness);
+        FileResource fileResource = new FileResource(fileBusiness);
+
+        JerseyEnvironment jerseyEnvironment = environment.jersey();
+        jerseyEnvironment.register(homeResource);
+        jerseyEnvironment.register(fileResource);
 
     }
 

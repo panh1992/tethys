@@ -20,7 +20,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "files")
-public class Files {
+public class AthenaFile {
 
     /**
      * 文件主键
