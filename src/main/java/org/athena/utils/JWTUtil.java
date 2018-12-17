@@ -67,14 +67,14 @@ public final class JWTUtil {
     /**
      * 验证 jwt token 的有效性
      */
-    public static JwtClaims validation(String jwtToken) throws InvalidJwtException {
+    public static JwtClaims validation(String jwtToken, int minutes) throws InvalidJwtException {
         JwtConsumer jwtConsumer = new JwtConsumerBuilder()
                 .setRequireExpirationTime() // JWT必须有一个到期时间
-                .setMaxFutureValidityInMinutes(300) // 但到期时间不能太疯狂
+                .setMaxFutureValidityInMinutes(minutes) // 但到期时间不能太疯狂
                 .setAllowedClockSkewInSeconds(30) // 允许一些余地来验证基于时间的索赔，以解决时钟偏差问题
                 .setRequireSubject() // 必须有一个主题声明
-                .setExpectedIssuer("Issuer") // 需要由谁发出
-                .setExpectedAudience("Audience") // 目标对象
+                .setExpectedIssuer(ISSUER) // 需要由谁发出
+                .setExpectedAudience(AUDIENCE) // 目标对象
                 .setVerificationKey(rsaJsonWebKey.getKey()) // 使用公钥验证签名
                 .build();
 

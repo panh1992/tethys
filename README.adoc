@@ -1,3 +1,8 @@
 = athena
 
 image:https://img.shields.io/travis/com/panh1992/athena.svg[link="https://github.com/panh1992/athena"]
+image:https://img.shields.io/github/languages/code-size/panh1992/athena.svg[link="https://github.com/panh1992/athena.git"]
+image:https://img.shields.io/github/last-commit/panh1992/athena.svg[link="https://github.com/panh1992/athena.git"]
+image:https://img.shields.io/github/languages/count/panh1992/athena.svg[link="https://github.com/panh1992/athena.git"]
+image:https://img.shields.io/github/languages/top/panh1992/athena.svg[link="https://github.com/panh1992/athena.git"]
+image:https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg[link="https://github.com/panh1992/athena.git"]

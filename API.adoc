@@ -28,7 +28,7 @@ token本身具有时效性，在超时之后需要重新登录获取新的token�
 
 [cols="<,<,>"]
 |===
-|HTTP状态 |错误码 |描述 
+|HTTP状态码 |错误码 |描述
 
 |400 |InvalidParameter |请求参数错误 
 |401 |AuthorizationFailed |请求认证失败，不合法的 Token或 Token超时 
@@ -36,3 +36,4 @@ token本身具有时效性，在超时之后需要重新登录获取新的token�
 |409 |EntityAlreadyExists |请求创建的资源已存在 
 |500 |InternalServerError |服务器内部错误 
 |===
+

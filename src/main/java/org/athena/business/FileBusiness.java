@@ -2,6 +2,8 @@ package org.athena.business;
 
 import org.athena.api.AthenaFile;
 import org.athena.db.FileRepository;
+import org.athena.dto.FileDTO;
+import org.athena.dto.Page;
 
 import java.util.List;
 
@@ -16,8 +18,9 @@ public class FileBusiness {
         this.fileRepository = fileRepository;
     }
 
-    public List<AthenaFile> findAll() {
-        return fileRepository.findAll();
+    public Page<FileDTO> findAll(Integer page, Integer size) {
+        List<AthenaFile> files = fileRepository.findAll();
+        return null;
     }
 
 }

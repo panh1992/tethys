@@ -1,27 +1,32 @@
 package org.athena.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
 
 import java.util.List;
 
 /**
  * 分页实体
  */
+@Getter
 public class Page<T> {
 
     /**
      * 携带数据集合
      */
+    @JsonProperty("content")
     private List<T> content;
 
     /**
      * 页码
      */
+    @JsonProperty("page")
     private int page;
 
     /**
      * 每页条数
      */
+    @JsonProperty("size")
     private int size;
 
     /**
@@ -45,21 +50,6 @@ public class Page<T> {
 
     public static <T> Page<T> of(List<T> content, int page, int size, long total) {
         return new Page(content, page, size, total);
-    }
-
-    @JsonProperty("content")
-    public List<T> getContent() {
-        return content;
-    }
-
-    @JsonProperty("page")
-    public int getPage() {
-        return page;
-    }
-
-    @JsonProperty("size")
-    public int getSize() {
-        return size;
     }
 
     /**

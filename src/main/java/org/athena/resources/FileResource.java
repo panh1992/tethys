@@ -1,16 +1,17 @@
 package org.athena.resources;
 
 import com.codahale.metrics.annotation.Timed;
-import org.athena.api.AthenaFile;
 import org.athena.business.FileBusiness;
+import org.athena.dto.FileDTO;
+import org.athena.dto.Page;
 import org.athena.dto.Response;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 /**
  * 文件资源 处理文件元数据
@@ -28,8 +29,8 @@ public class FileResource {
 
     @Timed
     @GET
-    public Response<List<AthenaFile>> findAll() {
-        return Response.build(fileBusiness.findAll());
+    public Response<Page<FileDTO>> findAll(@QueryParam("page") Integer page, @QueryParam("size") Integer size) {
+        return Response.build(fileBusiness.findAll(page, size));
     }
 
 }

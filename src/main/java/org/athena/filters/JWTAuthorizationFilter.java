@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.athena.dto.ErrorDTO;
 import org.athena.utils.Constant;
 import org.athena.utils.JWTUtil;
+import org.athena.utils.SystemContext;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.jwt.consumer.InvalidJwtException;
@@ -42,8 +43,10 @@ public class JWTAuthorizationFilter implements Filter {
         String authorizationToken = request.getHeader(Constant.AUTHORIZATION_HEADER);
         JwtClaims claims;
         try {
-            claims = JWTUtil.validation(authorizationToken);
-            logger.info("登录用户id: {}", claims.getSubject());
+            claims = JWTUtil.validation(authorizationToken, Constant.AUTHORIZATION_DURATION);
+            String userId = claims.getSubject();
+            SystemContext.setUserId(userId);
+            logger.info("登录用户id: {}", userId);
             filterChain.doFilter(servletRequest, servletResponse);
         } catch (InvalidJwtException | MalformedClaimException e) {
             logger.error("认证信息解析失败, Authorization token: {}, Exception Message: {}",
@@ -59,6 +62,8 @@ public class JWTAuthorizationFilter implements Filter {
             try (PrintWriter out = response.getWriter()) {
                 out.println(objectMapper.writeValueAsString(errorDTO));
             }
+        } finally {
+            SystemContext.removeUserId();
         }
     }
 
