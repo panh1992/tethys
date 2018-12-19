@@ -7,12 +7,14 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.athena.config.AthenaConfiguration;
 import org.athena.config.EnvConfig;
+import org.athena.utils.SystemContext;
 
 public class AthenaApplication extends Application<AthenaConfiguration> {
 
     /**
      * Athena 程序启动类
-     * @param args  启动参数
+     *
+     * @param args 启动参数
      */
     public static void main(String[] args) throws Exception {
 
@@ -25,6 +27,7 @@ public class AthenaApplication extends Application<AthenaConfiguration> {
 
         bootstrap.addBundle(new MultiPartBundle());
         bootstrap.addBundle(new JdbiExceptionsBundle());
+        bootstrap.setObjectMapper(SystemContext.getObjectMapper());
 
     }
 
