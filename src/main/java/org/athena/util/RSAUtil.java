@@ -56,6 +56,16 @@ public final class RSAUtil {
     }
 
     /**
+     * 根据私钥字符串 获取PrivateKey
+     *
+     * @param privateKey 私钥字符串
+     */
+    public static PrivateKey getPrivateKey(String privateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        return KeyFactory.getInstance(KEY_ALGORITHM)
+                .generatePrivate(new PKCS8EncodedKeySpec(CommonUtil.convertBytes(privateKey)));
+    }
+
+    /**
      * 取得公钥
      *
      * @param keyPair 密钥对
@@ -72,17 +82,7 @@ public final class RSAUtil {
      */
     public static PublicKey getPublicKey(String publicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
         return KeyFactory.getInstance(KEY_ALGORITHM)
-                .generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(publicKey)));
-    }
-
-    /**
-     * 根据私钥字符串 获取PrivateKey
-     *
-     * @param privateKey 私钥字符串
-     */
-    public static PrivateKey getPrivateKey(String privateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        return KeyFactory.getInstance(KEY_ALGORITHM)
-                .generatePrivate(new PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKey)));
+                .generatePublic(new X509EncodedKeySpec(CommonUtil.convertBytes(publicKey)));
     }
 
     /**
@@ -93,16 +93,17 @@ public final class RSAUtil {
      * @return 加密数据
      */
     public static String encryptByPublicKey(String data, String publicKey) throws NoSuchAlgorithmException,
-            InvalidKeySpecException, NoSuchPaddingException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+            InvalidKeySpecException, NoSuchPaddingException, InvalidKeyException,
+            BadPaddingException, IllegalBlockSizeException {
         //实例化密钥工厂
         KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
         //初始化公钥
         //密钥材料转换
-        X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(publicKey));
+        X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(CommonUtil.convertBytes(publicKey));
         //数据加密
         Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
         cipher.init(Cipher.ENCRYPT_MODE, keyFactory.generatePublic(x509KeySpec));
-        return Base64.getEncoder().encodeToString(cipher.doFinal(Base64.getDecoder().decode(data)));
+        return Base64.getEncoder().encodeToString(cipher.doFinal(CommonUtil.convertBytes(data)));
     }
 
     /**
@@ -113,14 +114,15 @@ public final class RSAUtil {
      * @return 解密数据
      */
     public static String decryptByPrivateKey(String data, String privateKey) throws NoSuchAlgorithmException,
-            NoSuchPaddingException, InvalidKeySpecException, BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
+            NoSuchPaddingException, InvalidKeySpecException, BadPaddingException,
+            IllegalBlockSizeException, InvalidKeyException {
         //取得私钥
-        PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKey));
+        PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(CommonUtil.convertBytes(privateKey));
         KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
         //数据解密
         Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
         cipher.init(Cipher.DECRYPT_MODE, keyFactory.generatePrivate(pkcs8KeySpec));
-        return Base64.getEncoder().encodeToString(cipher.doFinal(Base64.getDecoder().decode(data)));
+        return Base64.getEncoder().encodeToString(cipher.doFinal(CommonUtil.convertBytes(data)));
     }
 
     /**
@@ -131,14 +133,15 @@ public final class RSAUtil {
      * @return 加密数据
      */
     public static String encryptByPrivateKey(String data, String privateKey) throws InvalidKeySpecException,
-            NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException, BadPaddingException, IllegalBlockSizeException {
+            NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException,
+            BadPaddingException, IllegalBlockSizeException {
         //取得私钥
-        PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKey));
+        PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(CommonUtil.convertBytes(privateKey));
         KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
         //数据加密
         Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
         cipher.init(Cipher.ENCRYPT_MODE, keyFactory.generatePrivate(pkcs8KeySpec));
-        return Base64.getEncoder().encodeToString(cipher.doFinal(Base64.getDecoder().decode(data)));
+        return Base64.getEncoder().encodeToString(cipher.doFinal(CommonUtil.convertBytes(data)));
     }
 
     /**
@@ -149,16 +152,19 @@ public final class RSAUtil {
      * @return 解密数据
      */
     public static String decryptByPublicKey(String data, String publicKey) throws NoSuchAlgorithmException,
-            NoSuchPaddingException, InvalidKeySpecException, BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
+            NoSuchPaddingException, InvalidKeySpecException, BadPaddingException,
+            IllegalBlockSizeException, InvalidKeyException {
 
         //实例化密钥工厂
         KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
         //初始化公钥
-        X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(publicKey));
+        X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(CommonUtil.convertBytes(publicKey));
         //数据解密
         Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
         cipher.init(Cipher.DECRYPT_MODE, keyFactory.generatePublic(x509KeySpec));
-        return Base64.getEncoder().encodeToString(cipher.doFinal(Base64.getDecoder().decode(data)));
+        return Base64.getEncoder().encodeToString(cipher.doFinal(CommonUtil.convertBytes(data)));
     }
+
+
 
 }

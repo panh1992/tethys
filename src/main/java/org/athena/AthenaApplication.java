@@ -7,7 +7,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.athena.config.AthenaConfiguration;
 import org.athena.config.EnvConfig;
-import org.athena.util.SystemContext;
+import org.athena.util.CommonUtil;
 
 public class AthenaApplication extends Application<AthenaConfiguration> {
 
@@ -27,7 +27,7 @@ public class AthenaApplication extends Application<AthenaConfiguration> {
 
         bootstrap.addBundle(new MultiPartBundle());
         bootstrap.addBundle(new JdbiExceptionsBundle());
-        bootstrap.setObjectMapper(SystemContext.getObjectMapper());
+        bootstrap.setObjectMapper(CommonUtil.getObjectMapper());
 
     }
 

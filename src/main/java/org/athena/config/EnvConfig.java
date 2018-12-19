@@ -82,7 +82,7 @@ public final class EnvConfig {
 
         cors.setInitParameter("allowedOrigins", "*");
         cors.setInitParameter("allowedHeaders", "X-Requested-With,Content-Type,Accept,Origin");
-        cors.setInitParameter("allowedMethods", "OPTIONS,GET,PUT,PATCH,POST,DELETE,HEAD");
+        cors.setInitParameter("allowedMethods", "OPTIONS, GET, PUT, PATCH, POST, DELETE, HEAD");
 
         cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
     }

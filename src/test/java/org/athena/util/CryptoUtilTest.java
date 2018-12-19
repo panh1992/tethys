@@ -2,6 +2,7 @@ package org.athena.util;
 
 import org.junit.Test;
 
+import java.security.KeyPair;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
