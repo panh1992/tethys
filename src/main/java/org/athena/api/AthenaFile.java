@@ -75,7 +75,7 @@ public class AthenaFile {
      * 是否为目录
      */
     @Column(name = "is_dir")
-    private Boolean isDir;
+    private Boolean dir;
 
     /**
      * 文件的校验码

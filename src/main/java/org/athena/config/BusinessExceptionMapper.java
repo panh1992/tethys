@@ -3,8 +3,8 @@ package org.athena.config;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import org.athena.dto.ErrorDTO;
-import org.athena.exceptions.BusinessException;
-import org.athena.exceptions.InternalServerError;
+import org.athena.exception.BusinessException;
+import org.athena.exception.InternalServerError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,4 +1,4 @@
-package org.athena.resources;
+package org.athena.resource;
 
 import com.codahale.metrics.annotation.Timed;
 import org.athena.business.UserBusiness;

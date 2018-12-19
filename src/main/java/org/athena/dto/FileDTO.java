@@ -1,11 +1,7 @@
 package org.athena.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Builder;
 import lombok.Data;
-import org.athena.utils.jackson.InstantDeserializer;
-import org.athena.utils.jackson.InstantSerializer;
 
 import java.time.Instant;
 
@@ -66,15 +62,11 @@ public class FileDTO {
     /**
      * 创建时间
      */
-    @JsonSerialize(using = InstantSerializer.class)
-    @JsonDeserialize(using = InstantDeserializer.class)
     private Instant createTime;
 
     /**
      * 修改时间
      */
-    @JsonSerialize(using = InstantSerializer.class)
-    @JsonDeserialize(using = InstantDeserializer.class)
     private Instant modifyTime;
 
     /**

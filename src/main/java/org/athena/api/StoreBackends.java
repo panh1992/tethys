@@ -69,7 +69,7 @@ public class StoreBackends {
      * 是否激活
      */
     @Column(name = "is_active")
-    private Integer isActive;
+    private Integer active;
 
     /**
      * 存储后端的访问认证方式  empty   userPassword    accessIdKey accessToken

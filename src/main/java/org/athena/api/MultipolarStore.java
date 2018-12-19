@@ -51,7 +51,7 @@ public class MultipolarStore {
      * 是否是当前激活层级
      */
     @Column(name = "is_active")
-    private Boolean isActive;
+    private Boolean active;
     /**
      * 实际存储路径
      */

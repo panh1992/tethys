@@ -1,4 +1,4 @@
-package org.athena.utils;
+package org.athena.util;
 
 import org.junit.Test;
 

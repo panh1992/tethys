@@ -1,10 +1,10 @@
-package org.athena.filters;
+package org.athena.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.athena.dto.ErrorDTO;
-import org.athena.utils.Constant;
-import org.athena.utils.JWTUtil;
-import org.athena.utils.SystemContext;
+import org.athena.util.Constant;
+import org.athena.util.JWTUtil;
+import org.athena.util.SystemContext;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.jwt.consumer.InvalidJwtException;

@@ -7,7 +7,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.athena.config.AthenaConfiguration;
 import org.athena.config.EnvConfig;
-import org.athena.utils.SystemContext;
+import org.athena.util.SystemContext;
 
 public class AthenaApplication extends Application<AthenaConfiguration> {
 

@@ -1,4 +1,4 @@
-package org.athena.utils;
+package org.athena.util;
 
 /**
  * 文件工具类

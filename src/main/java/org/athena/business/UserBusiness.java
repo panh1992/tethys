@@ -3,12 +3,12 @@ package org.athena.business;
 import org.athena.api.User;
 import org.athena.db.UserRepository;
 import org.athena.dto.UserDTO;
-import org.athena.exceptions.EntityAlreadyExists;
-import org.athena.exceptions.EntityNotExist;
-import org.athena.exceptions.InternalServerError;
-import org.athena.utils.Constant;
-import org.athena.utils.CryptoUtil;
-import org.athena.utils.JWTUtil;
+import org.athena.exception.EntityAlreadyExistsException;
+import org.athena.exception.EntityNotExistException;
+import org.athena.exception.InternalServerError;
+import org.athena.util.Constant;
+import org.athena.util.CryptoUtil;
+import org.athena.util.JWTUtil;
 import org.jose4j.lang.JoseException;
 
 import java.time.Instant;
@@ -30,7 +30,7 @@ public class UserBusiness {
     public void register(UserDTO userDTO) {
         Optional<User> checkUser = userRepository.findByUserName(userDTO.getUserName());
         if (checkUser.isPresent()) {
-            throw EntityAlreadyExists.build("用户名已存在");
+            throw EntityAlreadyExistsException.build("用户名已存在");
         }
         User user = User.builder().id(CryptoUtil.getUUID()).userName(userDTO.getUserName()).email(userDTO.getEmail())
                 .mobile(userDTO.getMobile()).passWord(CryptoUtil.hashpw(userDTO.getPassWord()))
@@ -44,7 +44,7 @@ public class UserBusiness {
     public String login(UserDTO userDTO) {
         Optional<User> userOptional = userRepository.findByUserName(userDTO.getUserName());
         if (!userOptional.isPresent() || !CryptoUtil.checkpw(userDTO.getPassWord(), userOptional.get().getPassWord())) {
-            throw EntityNotExist.build("用户名或密码错误");
+            throw EntityNotExistException.build("用户名或密码错误");
         }
         try {
             return JWTUtil.createToken(userOptional.get().getId(), Constant.AUTHORIZATION_DURATION);
