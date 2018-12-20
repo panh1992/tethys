@@ -20,7 +20,6 @@
         <jbcrypt.version>0.4</jbcrypt.version>
         <jaxb-api.version>2.4.0-b180830.0359</jaxb-api.version>
         <lombok.version>1.18.4</lombok.version>
-        <junit.version>4.12</junit.version>
         <maven.checkstyle.version>3.0.0</maven.checkstyle.version>
     </properties>
 
@@ -37,18 +36,12 @@
     </dependencyManagement>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/junit/junit -->
+        <!-- https://mvnrepository.com/artifact/io.dropwizard/dropwizard-testing -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-testing</artifactId>
+            <version>${dropwizard.version}</version>
             <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.bitbucket.b_c/jose4j -->
-        <dependency>
-            <groupId>org.bitbucket.b_c</groupId>
-            <artifactId>jose4j</artifactId>
-            <version>${jose4j.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/io.dropwizard/dropwizard-core -->
         <dependency>
@@ -87,6 +80,12 @@
             <groupId>org.jdbi</groupId>
             <artifactId>jdbi3-jpa</artifactId>
             <version>${jdbi3.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.bitbucket.b_c/jose4j -->
+        <dependency>
+            <groupId>org.bitbucket.b_c</groupId>
+            <artifactId>jose4j</artifactId>
+            <version>${jose4j.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.mindrot/jbcrypt -->
         <dependency>
