@@ -1,5 +1,7 @@
 package org.athena.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.UUID;
@@ -7,12 +9,10 @@ import java.util.UUID;
 /**
  * 通用加密工具
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CryptoUtil {
 
     private static final String SALT = BCrypt.gensalt(12);
-
-    private CryptoUtil() {
-    }
 
     /**
      * 获取 uuid 字符串

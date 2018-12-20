@@ -1,14 +1,15 @@
 package org.athena.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * 系统上下文
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SystemContext {
 
     private static final ThreadLocal<String> USER_ID_LOCAL = new ThreadLocal<>();
-
-    private SystemContext() {
-    }
 
     /**
      * 获取当前用户id

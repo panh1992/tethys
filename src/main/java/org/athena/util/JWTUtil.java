@@ -1,5 +1,7 @@
 package org.athena.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
@@ -18,6 +20,7 @@ import java.security.spec.InvalidKeySpecException;
 /**
  * jwt 工具类
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class JWTUtil {
 
     private static Logger logger = LoggerFactory.getLogger(JWTUtil.class);
@@ -66,9 +69,6 @@ public final class JWTUtil {
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             logger.error("获取 JWT 公钥 私钥 异常: {}", e.getMessage());
         }
-    }
-
-    private JWTUtil() {
     }
 
     /**

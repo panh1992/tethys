@@ -5,6 +5,7 @@ import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.athena.config.redis.RedisConfig;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -22,5 +23,10 @@ public class AthenaConfiguration extends Configuration {
     @NotNull
     @JsonProperty
     private DataSourceFactory database = new DataSourceFactory();
+
+    @Valid
+    @NotNull
+    @JsonProperty
+    private RedisConfig redis = new RedisConfig();
 
 }

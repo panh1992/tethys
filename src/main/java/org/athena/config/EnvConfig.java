@@ -6,6 +6,7 @@ import io.dropwizard.setup.Environment;
 import org.athena.business.FileBusiness;
 import org.athena.business.UserBusiness;
 import org.athena.config.plugin.InstantPlugin;
+import org.athena.config.redis.RedisManaged;
 import org.athena.db.FileRepository;
 import org.athena.db.UserRepository;
 import org.athena.filter.JWTAuthorizationFilter;
@@ -26,6 +27,16 @@ public final class EnvConfig {
 
     private EnvConfig() {
     }
+
+    /**
+     * 注册 Manage
+     */
+    public static void registerManage(AthenaConfiguration configuration, Environment environment) {
+
+        environment.lifecycle().manage(new RedisManaged(configuration.getRedis()));
+
+    }
+
 
     /**
      * 注册过滤器

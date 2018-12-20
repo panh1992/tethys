@@ -34,6 +34,8 @@ public class AthenaApplication extends Application<AthenaConfiguration> {
     @Override
     public void run(AthenaConfiguration configuration, Environment environment) {
 
+        EnvConfig.registerManage(configuration, environment);
+
         EnvConfig.registerFilter(environment);
 
         EnvConfig.registerResource(configuration, environment);

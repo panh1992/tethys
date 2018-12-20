@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import io.dropwizard.jackson.Jackson;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -13,10 +15,8 @@ import java.util.TimeZone;
 /**
  * 通用帮助类
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CommonUtil {
-
-    private CommonUtil() {
-    }
 
     /**
      * 获取系统 jackson 配置的 ObjectMapper 信息
