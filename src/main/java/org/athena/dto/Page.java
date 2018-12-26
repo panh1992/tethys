@@ -36,10 +36,11 @@ public class Page<T> {
 
     /**
      * 创建分页响应
+     *
      * @param content 存储集合
-     * @param page  页码
-     * @param size  每页数量
-     * @param total 总记录数
+     * @param page    页码
+     * @param size    每页数量
+     * @param total   总记录数
      */
     private Page(List<T> content, int page, int size, long total) {
         this.content = content;

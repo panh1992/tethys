@@ -7,6 +7,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -122,7 +123,7 @@ public final class RSAUtil {
         //数据解密
         Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
         cipher.init(Cipher.DECRYPT_MODE, keyFactory.generatePrivate(pkcs8KeySpec));
-        return Base64.getEncoder().encodeToString(cipher.doFinal(CommonUtil.convertBytes(data)));
+        return new String(cipher.doFinal(Base64.getDecoder().decode(data)), StandardCharsets.UTF_8);
     }
 
     /**
@@ -162,7 +163,7 @@ public final class RSAUtil {
         //数据解密
         Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
         cipher.init(Cipher.DECRYPT_MODE, keyFactory.generatePublic(x509KeySpec));
-        return Base64.getEncoder().encodeToString(cipher.doFinal(CommonUtil.convertBytes(data)));
+        return new String(cipher.doFinal(Base64.getDecoder().decode(data)), StandardCharsets.UTF_8);
     }
 
 }

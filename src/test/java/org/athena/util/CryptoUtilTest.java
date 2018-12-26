@@ -23,4 +23,22 @@ public class CryptoUtilTest {
 
     }
 
+    @Test
+    public void testRSA() throws Exception {
+        String str = "RSA 加密 测试数据 ～·`！@#¥%……&*（）!@#$%^&*(()。。";
+
+        KeyPair keyPair = RSAUtil.initKeyPar();
+        String privateKey = RSAUtil.getPrivateKey(keyPair);
+        String publicKey = RSAUtil.getPublicKey(keyPair);
+
+        String privateMi = RSAUtil.encryptByPrivateKey(str, privateKey);
+        System.out.println("私钥加密：\t" + privateMi);
+        System.out.println("公钥解密：\t" + RSAUtil.decryptByPublicKey(privateMi, publicKey));
+
+        String publicMi = RSAUtil.encryptByPublicKey(str, publicKey);
+        System.out.println("公钥加密：\t" + publicMi);
+        System.out.println("私钥解密：\t" + RSAUtil.decryptByPrivateKey(publicMi, privateKey));
+
+    }
+
 }
