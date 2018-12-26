@@ -29,7 +29,9 @@ public class CryptoUtilTest {
 
         KeyPair keyPair = RSAUtil.initKeyPar();
         String privateKey = RSAUtil.getPrivateKey(keyPair);
+        System.out.println("RSA 私钥：\t" + privateKey);
         String publicKey = RSAUtil.getPublicKey(keyPair);
+        System.out.println("RSA 公钥：\t" + publicKey);
 
         String privateMi = RSAUtil.encryptByPrivateKey(str, privateKey);
         System.out.println("私钥加密：\t" + privateMi);
