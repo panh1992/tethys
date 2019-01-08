@@ -1,4 +1,4 @@
-package org.athena.util;
+package org.athena.util.crypto;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import java.util.UUID;
  * 通用加密工具
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class CryptoUtil {
+public final class CommonUtil {
 
     private static final String SALT = BCrypt.gensalt(12);
 

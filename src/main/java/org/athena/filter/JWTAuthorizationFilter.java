@@ -52,8 +52,7 @@ public class JWTAuthorizationFilter implements Filter {
             logger.error("认证信息解析失败, Authorization token: {}, Exception Message: {}",
                     authorizationToken, e.getMessage());
             ErrorDTO errorDTO = ErrorDTO.builder().code(Response.Status.UNAUTHORIZED.toString())
-                    .message(Response.Status.UNAUTHORIZED.toString())
-                    .build();
+                    .message(Response.Status.UNAUTHORIZED.toString()).build();
             ObjectMapper objectMapper = new ObjectMapper();
             HttpServletResponse response = (HttpServletResponse) servletResponse;
             response.setStatus(Response.Status.UNAUTHORIZED.getStatusCode());

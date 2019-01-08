@@ -14,12 +14,12 @@ import java.util.Optional;
 
 public interface UserRepository {
 
-    String COLUMN = "id, username, nickname, password, email, mobile, profile, create_time";
-
-    @SqlQuery("SELECT " + COLUMN + " FROM users ORDER BY create_time DESC")
+    @SqlQuery("SELECT id, username, nickname, password, email, mobile, profile, create_time FROM users "
+            + "ORDER BY create_time DESC")
     List<User> findAll();
 
-    @SqlQuery("SELECT " + COLUMN + " FROM users WHERE username = :username")
+    @SqlQuery("SELECT id, username, nickname, password, email, mobile, profile, create_time FROM users "
+            + "WHERE username = :username")
     Optional<User> findByUserName(@Bind("username") String userName);
 
     @SqlUpdate("INSERT INTO users (id, username, nickname, password, email, mobile, profile, create_time) VALUES "
@@ -32,7 +32,7 @@ public interface UserRepository {
     /**
      * 事务测试
      */
-    @Transaction(TransactionIsolationLevel.READ_COMMITTED)
+    @Transaction(TransactionIsolationLevel.READ_UNCOMMITTED)
     default void testUser() {
 
         updateUser();
