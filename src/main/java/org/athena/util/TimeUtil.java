@@ -25,4 +25,16 @@ public final class TimeUtil {
         return localDateTime.format(DATE_TIME_FORMATTER);
     }
 
+    /**
+     * 判断时间是否在有效期内
+     *
+     * @param currentTime 验证时间
+     * @param startTime   有效期开始时间
+     * @param endTime     有效期结束时间
+     */
+    public static boolean validityPeriod(LocalDateTime currentTime, LocalDateTime startTime, LocalDateTime endTime) {
+        return (currentTime.isAfter(startTime) || currentTime.isEqual(startTime))
+                && (currentTime.isBefore(endTime) || currentTime.isEqual(endTime));
+    }
+
 }

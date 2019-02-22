@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.security.KeyPair;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -15,10 +16,16 @@ public class CryptoUtilTest {
 
     @Test
     public void time() {
-        LocalDateTime time1 = TimeUtil.parseLocalDateTime("2017-07-02 23:59:59");
-        LocalDateTime time2 = TimeUtil.parseLocalDateTime("2017-07-03 00:00:00");
-        System.out.println(time1.isAfter(time2));
-        System.out.println(time1.isBefore(time2));
+        System.out.println(LocalDateTime.now());
+        System.out.println(LocalDateTime.now().plusYears(1));
+        LocalDateTime startTime = TimeUtil.parseLocalDateTime("1992-07-02 23:59:59");
+        LocalDateTime endTime = TimeUtil.parseLocalDateTime("2093-02-03 00:00:00");
+        System.out.println(startTime.isAfter(endTime));
+        System.out.println(startTime.isBefore(endTime));
+        System.out.println(Period.between(endTime.toLocalDate(), startTime.toLocalDate()));
+
+        LocalDateTime now = TimeUtil.parseLocalDateTime("1992-07-02 23:59:59");
+        System.out.println("当前时间是否在有效期内：" + TimeUtil.validityPeriod(now, startTime, endTime));
     }
 
     @Test

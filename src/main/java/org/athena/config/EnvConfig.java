@@ -37,7 +37,6 @@ public final class EnvConfig {
 
     }
 
-
     /**
      * 注册过滤器
      */
@@ -88,14 +87,17 @@ public final class EnvConfig {
      * 添加 cors 跨域 过滤器
      */
     private static void addCors(Environment environment) {
+
         final FilterRegistration.Dynamic cors =
                 environment.servlets().addFilter("CORS", CrossOriginFilter.class);
 
-        cors.setInitParameter("allowedOrigins", "*");
-        cors.setInitParameter("allowedHeaders", "X-Requested-With,Content-Type,Accept,Origin");
-        cors.setInitParameter("allowedMethods", "OPTIONS, GET, PUT, PATCH, POST, DELETE, HEAD");
+        cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
+        cors.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "DNT, User-Agent, X-Requested-With, "
+                + "If-Modified-Since, Cache-Control, Content-Type, Range, Authorization");
+        cors.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "OPTIONS, GET, PUT, PATCH, POST, DELETE, HEAD");
 
         cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+
     }
 
     /**
