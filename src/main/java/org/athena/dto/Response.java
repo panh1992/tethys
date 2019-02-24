@@ -20,7 +20,7 @@ public class Response<T> {
      */
     public static <T> Response<T> build() {
         Response<T> response = new Response<>();
-        response.setMessage("success");
+        response.setMessage("操作成功");
         return response;
     }
 
