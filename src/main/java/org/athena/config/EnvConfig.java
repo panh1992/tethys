@@ -8,7 +8,6 @@ import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.setup.Environment;
 import org.athena.business.FileBusiness;
 import org.athena.business.UserBusiness;
-import org.athena.config.authenticate.AthenaDynamicFeature;
 import org.athena.config.authenticate.AuthUser;
 import org.athena.config.authenticate.JWTAuthorizationFilter;
 import org.athena.config.authenticate.UnAuthorizedResourceHandler;
@@ -19,6 +18,7 @@ import org.athena.db.UserRepository;
 import org.athena.resource.FileResource;
 import org.athena.resource.HomeResource;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.jpa.JpaPlugin;
 
@@ -113,7 +113,7 @@ public final class EnvConfig {
         JWTAuthorizationFilter jwtAuthorizationFilter = new JWTAuthorizationFilter(userRepository);
 
         environment.jersey().register(new AuthDynamicFeature(jwtAuthorizationFilter));
-        environment.jersey().register(AthenaDynamicFeature.class);
+        environment.jersey().register(RolesAllowedDynamicFeature.class);
         environment.jersey().register(new AuthValueFactoryProvider.Binder(AuthUser.class));
 
         environment.jersey().register(unauthorizedHandler);

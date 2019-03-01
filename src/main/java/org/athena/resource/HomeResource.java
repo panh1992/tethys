@@ -8,6 +8,7 @@ import org.athena.dto.Response;
 import org.athena.dto.UserDTO;
 
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -52,6 +53,7 @@ public class HomeResource {
     @GET
     @Path("list")
     @PermitAll
+    @RolesAllowed("admin")
     public Response<List<UserDTO>> findAll(@Auth AuthUser user) {
         System.out.println("用户ID：" + user.getUserId() + "; 用户姓名：" + user.getName());
         return Response.build(userBusiness.findAll());
