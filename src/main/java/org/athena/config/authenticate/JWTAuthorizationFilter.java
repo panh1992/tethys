@@ -4,8 +4,6 @@ import io.dropwizard.auth.UnauthorizedHandler;
 import org.athena.db.UserRepository;
 
 import javax.annotation.Nullable;
-import javax.annotation.Priority;
-import javax.ws.rs.Priorities;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -17,12 +15,11 @@ import java.util.Optional;
 /**
  * jwt 认证过滤器
  */
-@Priority(Priorities.AUTHENTICATION)
 public class JWTAuthorizationFilter implements ContainerRequestFilter {
 
     private static final String PREFIX = "";
 
-    private static final String REALM = "admin";
+    private static final String REALM = "JWT";
 
     private JWTAuthenticator authenticator;
 
