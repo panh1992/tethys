@@ -1,27 +1,18 @@
 package org.athena.config;
 
-import io.dropwizard.auth.AuthDynamicFeature;
-import io.dropwizard.auth.AuthFilter;
-import io.dropwizard.auth.AuthValueFactoryProvider;
-import io.dropwizard.auth.UnauthorizedHandler;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.setup.Environment;
 import org.athena.business.FileBusiness;
 import org.athena.business.UserBusiness;
-import org.athena.config.authenticate.AuthUser;
-import org.athena.config.authenticate.JWTAuthenticator;
-import org.athena.config.authenticate.JWTAuthorizationFilter;
-import org.athena.config.authenticate.UnAuthorizedResourceHandler;
-import org.athena.config.authenticate.UserAuthorizer;
 import org.athena.config.plugin.InstantPlugin;
 import org.athena.config.redis.RedisManaged;
 import org.athena.db.FileRepository;
 import org.athena.db.UserRepository;
+import org.athena.filter.JWTAuthorizationFilter;
 import org.athena.resource.FileResource;
 import org.athena.resource.HomeResource;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
-import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.jpa.JpaPlugin;
 
@@ -54,6 +45,8 @@ public final class EnvConfig {
         // 暂时开启 CORS 跨域、 正式环境使用 nginx 配置
         addCors(environment);
 
+        addAuthorization(environment);
+
     }
 
     /**
@@ -78,8 +71,6 @@ public final class EnvConfig {
         JerseyEnvironment jerseyEnvironment = environment.jersey();
         jerseyEnvironment.register(homeResource);
         jerseyEnvironment.register(fileResource);
-
-        registerAuthRelated(environment, userRepository);
 
     }
 
@@ -109,21 +100,14 @@ public final class EnvConfig {
 
     }
 
-    private static void registerAuthRelated(Environment environment, UserRepository userRepository) {
+    /**
+     * 添加 授权认证 过滤器
+     */
+    private static void addAuthorization(Environment environment) {
+        final FilterRegistration.Dynamic authorization =
+                environment.servlets().addFilter("Authorization", JWTAuthorizationFilter.class);
 
-        UnauthorizedHandler unauthorizedHandler = new UnAuthorizedResourceHandler();
-
-        AuthFilter jwtAuthorizationFilter = new JWTAuthorizationFilter.Builder<AuthUser>()
-                .setAuthenticator(new JWTAuthenticator(userRepository))
-                .setAuthorizer(new UserAuthorizer()).setUnauthorizedHandler(unauthorizedHandler)
-                .buildAuthFilter();
-
-        environment.jersey().register(new AuthDynamicFeature(jwtAuthorizationFilter));
-        environment.jersey().register(RolesAllowedDynamicFeature.class);
-        environment.jersey().register(new AuthValueFactoryProvider.Binder(AuthUser.class));
-
-        environment.jersey().register(unauthorizedHandler);
-
+        authorization.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/list");
     }
 
 }

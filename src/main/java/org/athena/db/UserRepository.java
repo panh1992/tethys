@@ -22,10 +22,6 @@ public interface UserRepository {
             + "WHERE username = :username")
     Optional<User> findByUserName(@Bind("username") String userName);
 
-    @SqlQuery("SELECT id, username, nickname, password, email, mobile, profile, create_time FROM users "
-            + "WHERE id = :id")
-    Optional<User> findById(@Bind("id") String userId);
-
     @SqlUpdate("INSERT INTO users (id, username, nickname, password, email, mobile, profile, create_time) VALUES "
             + "(:id, :userName, :nickName, :passWord, :email, :mobile, :profile, :createTime)")
     void save(@BindBean User user);
