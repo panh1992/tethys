@@ -5,6 +5,7 @@ import org.athena.business.UserBusiness;
 import org.athena.dto.Response;
 import org.athena.dto.UserDTO;
 
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -48,6 +49,7 @@ public class HomeResource {
     @Timed
     @GET
     @Path("list")
+    @PermitAll
     public Response<List<UserDTO>> findAll() {
         return Response.build(userBusiness.findAll());
     }
