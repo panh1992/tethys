@@ -1,7 +1,9 @@
 package org.athena.resource;
 
 import com.codahale.metrics.annotation.Timed;
+import io.dropwizard.auth.Auth;
 import org.athena.business.UserBusiness;
+import org.athena.config.authenticate.AuthUser;
 import org.athena.dto.Response;
 import org.athena.dto.UserDTO;
 
@@ -50,7 +52,8 @@ public class HomeResource {
     @GET
     @Path("list")
     @PermitAll
-    public Response<List<UserDTO>> findAll() {
+    public Response<List<UserDTO>> findAll(@Auth AuthUser user) {
+        System.out.println("用户ID：" + user.getUserId() + "; 用户姓名：" + user.getName());
         return Response.build(userBusiness.findAll());
     }
 

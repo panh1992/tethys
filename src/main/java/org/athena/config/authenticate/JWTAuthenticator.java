@@ -5,7 +5,6 @@ import org.athena.api.User;
 import org.athena.db.UserRepository;
 import org.athena.util.Constant;
 import org.athena.util.JWTUtil;
-import org.athena.util.SystemContext;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.jwt.consumer.InvalidJwtException;
@@ -32,7 +31,6 @@ public class JWTAuthenticator implements Authenticator<JWTCredentials, AuthUser>
             JwtClaims claims = JWTUtil.validation(credentials.getJwtToken(), Constant.AUTHORIZATION_DURATION);
             userId = claims.getSubject();
             logger.info("登录用户id: {}", userId);
-            SystemContext.setUserId(userId);
         } catch (InvalidJwtException | MalformedClaimException e) {
             logger.info("登录失败 Authorization Token: {}", credentials.getJwtToken());
             return Optional.empty();

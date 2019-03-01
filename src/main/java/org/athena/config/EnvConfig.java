@@ -1,7 +1,6 @@
 package org.athena.config;
 
 import io.dropwizard.auth.AuthDynamicFeature;
-import io.dropwizard.auth.AuthFilter;
 import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.UnauthorizedHandler;
 import io.dropwizard.jdbi3.JdbiFactory;
@@ -9,11 +8,10 @@ import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.setup.Environment;
 import org.athena.business.FileBusiness;
 import org.athena.business.UserBusiness;
+import org.athena.config.authenticate.AthenaDynamicFeature;
 import org.athena.config.authenticate.AuthUser;
-import org.athena.config.authenticate.JWTAuthenticator;
 import org.athena.config.authenticate.JWTAuthorizationFilter;
 import org.athena.config.authenticate.UnAuthorizedResourceHandler;
-import org.athena.config.authenticate.UserAuthorizer;
 import org.athena.config.plugin.InstantPlugin;
 import org.athena.config.redis.RedisManaged;
 import org.athena.db.FileRepository;
@@ -21,7 +19,6 @@ import org.athena.db.UserRepository;
 import org.athena.resource.FileResource;
 import org.athena.resource.HomeResource;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
-import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.jpa.JpaPlugin;
 
@@ -113,13 +110,10 @@ public final class EnvConfig {
 
         UnauthorizedHandler unauthorizedHandler = new UnAuthorizedResourceHandler();
 
-        AuthFilter jwtAuthorizationFilter = new JWTAuthorizationFilter.Builder<AuthUser>()
-                .setAuthenticator(new JWTAuthenticator(userRepository))
-                .setAuthorizer(new UserAuthorizer()).setUnauthorizedHandler(unauthorizedHandler)
-                .buildAuthFilter();
+        JWTAuthorizationFilter jwtAuthorizationFilter = new JWTAuthorizationFilter(userRepository);
 
         environment.jersey().register(new AuthDynamicFeature(jwtAuthorizationFilter));
-        environment.jersey().register(RolesAllowedDynamicFeature.class);
+        environment.jersey().register(AthenaDynamicFeature.class);
         environment.jersey().register(new AuthValueFactoryProvider.Binder(AuthUser.class));
 
         environment.jersey().register(unauthorizedHandler);
