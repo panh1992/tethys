@@ -20,7 +20,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path("/")
-@Api(tags = "A HomeResource", description = "未鉴权接口, 系统用户 注册、登录 等接口")
+@Api(tags = "A")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class HomeResource {

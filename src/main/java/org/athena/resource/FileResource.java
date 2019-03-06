@@ -22,7 +22,7 @@ import javax.ws.rs.core.MediaType;
 @Path("/files")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Api(tags = "B FileResource", description = "文件元数据操作接口")
+@Api(tags = "B")
 public class FileResource {
 
     private FileBusiness fileBusiness;

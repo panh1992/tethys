@@ -23,9 +23,11 @@ logging:
   # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
   level: INFO
   # Logger-specific levels.
-  # loggers:
+  loggers:
     # Overrides the level of com.example.dw.Thing and sets it to DEBUG.
     # "com.example.dw.Thing": DEBUG
+    "org.reflections":
+      level: OFF
 
 database:
   # the name of your JDBC driver
