@@ -10,6 +10,14 @@ server:
   - type: http
     port: 8081
 
+swagger:
+  resourcePackage: org.athena.resource
+  title: Athena API
+  version: 1.0
+  enabled: true
+  schemes:
+    - http
+
 # Logging settings.
 logging:
   # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.

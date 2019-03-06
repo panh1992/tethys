@@ -2,13 +2,13 @@ package org.athena.business;
 
 import org.athena.api.User;
 import org.athena.db.UserRepository;
-import org.athena.dto.UserDTO;
+import org.athena.dto.resp.UserResp;
 import org.athena.exception.EntityAlreadyExistsException;
 import org.athena.exception.EntityNotExistException;
 import org.athena.exception.InternalServerError;
 import org.athena.util.Constant;
-import org.athena.util.crypto.CommonUtil;
 import org.athena.util.JWTUtil;
+import org.athena.util.crypto.CommonUtil;
 import org.jose4j.lang.JoseException;
 
 import java.time.Instant;
@@ -25,25 +25,31 @@ public class UserBusiness {
     }
 
     /**
-     * 用户注册
+     * 注册用户
+     *
+     * @param userName 用户名
+     * @param password 密码
      */
-    public void register(UserDTO userDTO) {
-        Optional<User> checkUser = userRepository.findByUserName(userDTO.getUserName());
+    public void register(String userName, String password) {
+        Optional<User> checkUser = userRepository.findByUserName(userName);
         if (checkUser.isPresent()) {
             throw EntityAlreadyExistsException.build("用户名已存在");
         }
-        User user = User.builder().id(CommonUtil.getUUID()).userName(userDTO.getUserName()).email(userDTO.getEmail())
-                .mobile(userDTO.getMobile()).passWord(CommonUtil.hashpw(userDTO.getPassWord()))
+        User user = User.builder().id(CommonUtil.getUUID()).userName(userName).passWord(CommonUtil.hashpw(password))
                 .createTime(Instant.now()).build();
         userRepository.save(user);
     }
 
     /**
      * 用户登录
+     *
+     * @param userName 用户名
+     * @param passWord 密码
+     * @return jwt Token
      */
-    public String login(UserDTO userDTO) {
-        Optional<User> userOptional = userRepository.findByUserName(userDTO.getUserName());
-        if (!userOptional.isPresent() || !CommonUtil.checkpw(userDTO.getPassWord(), userOptional.get().getPassWord())) {
+    public String login(String userName, String passWord) {
+        Optional<User> userOptional = userRepository.findByUserName(userName);
+        if (!userOptional.isPresent() || !CommonUtil.checkpw(passWord, userOptional.get().getPassWord())) {
             throw EntityNotExistException.build("用户名或密码错误");
         }
         try {
@@ -56,8 +62,8 @@ public class UserBusiness {
     /**
      * 查询所有用户
      */
-    public List<UserDTO> findAll() {
-        return userRepository.findAll().parallelStream().map(user -> UserDTO.builder().userId(user.getId())
+    public List<UserResp> findAll() {
+        return userRepository.findAll().parallelStream().map(user -> UserResp.builder().userId(user.getId())
                 .userName(user.getUserName()).email(user.getEmail()).mobile(user.getMobile())
                 .passWord(user.getPassWord()).createTime(user.getCreateTime()).build())
                 .collect(Collectors.toList());

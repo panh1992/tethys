@@ -5,6 +5,8 @@ import io.dropwizard.forms.MultiPartBundle;
 import io.dropwizard.jdbi3.bundles.JdbiExceptionsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.federecio.dropwizard.swagger.SwaggerBundle;
+import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 import org.athena.config.AthenaConfiguration;
 import org.athena.config.EnvConfig;
 import org.athena.util.CommonUtil;
@@ -27,6 +29,12 @@ public class AthenaApplication extends Application<AthenaConfiguration> {
 
         bootstrap.addBundle(new MultiPartBundle());
         bootstrap.addBundle(new JdbiExceptionsBundle());
+        bootstrap.addBundle(new SwaggerBundle<AthenaConfiguration>() {
+            @Override
+            protected SwaggerBundleConfiguration getSwaggerBundleConfiguration(AthenaConfiguration configuration) {
+                return configuration.getSwaggerBundleConfiguration();
+            }
+        });
         bootstrap.setObjectMapper(CommonUtil.getObjectMapper());
 
     }

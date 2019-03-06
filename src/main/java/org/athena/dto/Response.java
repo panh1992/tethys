@@ -1,18 +1,24 @@
 package org.athena.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
+@ApiModel(description = "统一响应数据实体")
 public class Response<T> {
 
     @JsonProperty("code")
+    @ApiModelProperty("编码")
     private String code = "SUCCESS";
 
     @JsonProperty("data")
+    @ApiModelProperty("响应数据")
     private T data;
 
     @JsonProperty("message")
+    @ApiModelProperty("描述信息")
     private String message;
 
     /**
