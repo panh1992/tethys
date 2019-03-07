@@ -6,6 +6,7 @@ import io.dropwizard.setup.Environment;
 import org.athena.business.FileBusiness;
 import org.athena.business.UserBusiness;
 import org.athena.config.plugin.InstantPlugin;
+import org.athena.config.quartz.SchedulerManaged;
 import org.athena.config.redis.RedisManaged;
 import org.athena.db.FileRepository;
 import org.athena.db.UserRepository;
@@ -15,6 +16,7 @@ import org.athena.resource.HomeResource;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.jpa.JpaPlugin;
+import org.quartz.SchedulerException;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
@@ -31,9 +33,12 @@ public final class EnvConfig {
     /**
      * 注册 Manage
      */
-    public static void registerManage(AthenaConfiguration configuration, Environment environment) {
+    public static void registerManage(AthenaConfiguration configuration, Environment environment)
+            throws SchedulerException {
 
         environment.lifecycle().manage(new RedisManaged(configuration.getRedis()));
+
+        environment.lifecycle().manage(new SchedulerManaged());
 
     }
 

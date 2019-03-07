@@ -1,7 +1,6 @@
 package org.athena.config.redis;
 
 import io.dropwizard.lifecycle.Managed;
-import org.athena.util.JWTUtil;
 import org.athena.util.RedisUtil;
 import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
@@ -9,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 public class RedisManaged implements Managed {
 
-    private static Logger logger = LoggerFactory.getLogger(JWTUtil.class);
+    private static Logger logger = LoggerFactory.getLogger(RedisManaged.class);
 
     private RedissonClient redissonClient;
 

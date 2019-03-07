@@ -40,7 +40,7 @@ public class AthenaApplication extends Application<AthenaConfiguration> {
     }
 
     @Override
-    public void run(AthenaConfiguration configuration, Environment environment) {
+    public void run(AthenaConfiguration configuration, Environment environment) throws Exception {
 
         EnvConfig.registerManage(configuration, environment);
 
