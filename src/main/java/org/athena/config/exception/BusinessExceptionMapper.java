@@ -1,4 +1,4 @@
-package org.athena.config;
+package org.athena.config.exception;
 
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
@@ -13,15 +13,15 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 
 /**
- * 参数错误异常映射
+ * 业务异常处理器
  */
-public class BusinessExceptionMapper implements ExceptionMapper<BusinessException> {
+public final class BusinessExceptionMapper implements ExceptionMapper<BusinessException> {
 
     private static Logger logger = LoggerFactory.getLogger(BusinessExceptionMapper.class);
 
     private final Meter exceptions;
 
-    BusinessExceptionMapper(MetricRegistry metrics) {
+    public BusinessExceptionMapper(MetricRegistry metrics) {
         exceptions = metrics.meter(MetricRegistry.name(getClass(), "business exceptions"));
     }
 

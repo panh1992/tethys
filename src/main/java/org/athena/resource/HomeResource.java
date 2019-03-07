@@ -11,6 +11,7 @@ import org.athena.dto.params.LoginParams;
 import org.athena.dto.params.RegisterParams;
 import org.athena.dto.resp.UserResp;
 
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -41,7 +42,7 @@ public class HomeResource {
     @ApiResponses({
             @ApiResponse(code = 200, message = "注册成功")
     })
-    public Response register(RegisterParams params) {
+    public Response register(@Valid RegisterParams params) {
         userBusiness.register(params.getUserName(), params.getPassWord());
         return Response.build();
     }

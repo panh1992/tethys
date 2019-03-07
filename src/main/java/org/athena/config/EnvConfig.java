@@ -5,6 +5,8 @@ import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.setup.Environment;
 import org.athena.business.FileBusiness;
 import org.athena.business.UserBusiness;
+import org.athena.config.exception.BusinessExceptionMapper;
+import org.athena.config.exception.ValidationExceptionMapper;
 import org.athena.config.plugin.InstantPlugin;
 import org.athena.config.quartz.SchedulerManaged;
 import org.athena.config.redis.RedisManaged;
@@ -85,6 +87,8 @@ public final class EnvConfig {
     public static void registerException(Environment environment) {
 
         environment.jersey().register(new BusinessExceptionMapper(environment.metrics()));
+
+        environment.jersey().register(new ValidationExceptionMapper());
 
     }
 

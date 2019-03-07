@@ -14,6 +14,10 @@ public class InvalidParameterException extends BusinessException {
         super(status, code, message);
     }
 
+    public static InvalidParameterException build() {
+        return new InvalidParameterException(Response.Status.BAD_REQUEST, "InvalidParameterException", "参数验证失败");
+    }
+
     public static InvalidParameterException build(String message) {
         return new InvalidParameterException(Response.Status.BAD_REQUEST, "InvalidParameterException", message);
     }
