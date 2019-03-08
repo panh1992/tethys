@@ -1,7 +1,7 @@
 package org.athena.config.redis;
 
 import io.dropwizard.lifecycle.Managed;
-import org.athena.util.RedisUtil;
+import org.athena.common.util.RedisUtil;
 import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

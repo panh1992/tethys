@@ -1,4 +1,4 @@
-package org.athena.dto.resp;
+package org.athena.common.resp;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

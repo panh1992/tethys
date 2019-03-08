@@ -1,4 +1,4 @@
-package org.athena.exception;
+package org.athena.common.exception;
 
 import lombok.Getter;
 

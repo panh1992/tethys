@@ -1,4 +1,4 @@
-package org.athena.dto;
+package org.athena.common.resp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;

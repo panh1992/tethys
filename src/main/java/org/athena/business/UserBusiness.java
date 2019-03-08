@@ -1,14 +1,14 @@
 package org.athena.business;
 
 import org.athena.api.User;
+import org.athena.common.exception.EntityAlreadyExistsException;
+import org.athena.common.exception.EntityNotExistException;
+import org.athena.common.exception.InternalServerError;
+import org.athena.common.resp.UserResp;
+import org.athena.common.util.Constant;
+import org.athena.common.util.JWTUtil;
+import org.athena.common.util.crypto.CommonUtil;
 import org.athena.db.UserRepository;
-import org.athena.dto.resp.UserResp;
-import org.athena.exception.EntityAlreadyExistsException;
-import org.athena.exception.EntityNotExistException;
-import org.athena.exception.InternalServerError;
-import org.athena.util.Constant;
-import org.athena.util.JWTUtil;
-import org.athena.util.crypto.CommonUtil;
 import org.jose4j.lang.JoseException;
 
 import java.time.Instant;

@@ -7,9 +7,9 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.federecio.dropwizard.swagger.SwaggerBundle;
 import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
+import org.athena.common.util.CommonUtil;
 import org.athena.config.AthenaConfiguration;
 import org.athena.config.EnvConfig;
-import org.athena.util.CommonUtil;
 
 public class AthenaApplication extends Application<AthenaConfiguration> {
 

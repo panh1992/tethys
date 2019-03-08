@@ -3,7 +3,7 @@ package org.athena.config.exception;
 import com.google.common.collect.Maps;
 import io.dropwizard.jersey.validation.ConstraintMessage;
 import io.dropwizard.jersey.validation.JerseyViolationException;
-import org.athena.dto.ErrorDTO;
+import org.athena.common.resp.ErrorResp;
 import org.glassfish.jersey.server.model.Invocable;
 
 import javax.validation.ConstraintViolation;
@@ -37,7 +37,7 @@ public final class ValidationExceptionMapper implements ExceptionMapper<JerseyVi
         }
 
         return Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE)
-                .entity(ErrorDTO.builder().code("InvalidParameterException").data(errorResult)
+                .entity(ErrorResp.builder().code("InvalidParameterException").data(errorResult)
                         .message("参数验证失败").build()).build();
 
     }

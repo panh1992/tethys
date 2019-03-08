@@ -1,8 +1,8 @@
-package org.athena.util;
+package org.athena.common.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.athena.util.crypto.RSAUtil;
+import org.athena.common.util.crypto.RSAUtil;
 import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;

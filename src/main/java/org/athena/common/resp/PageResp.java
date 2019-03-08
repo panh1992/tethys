@@ -1,4 +1,4 @@
-package org.athena.dto;
+package org.athena.common.resp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Getter
 @ApiModel(description = "分页实体")
-public class PageInfo<T> {
+public class PageResp<T> {
 
     @ApiModelProperty("携带数据集合")
     private List<T> content;
@@ -37,15 +37,15 @@ public class PageInfo<T> {
      * @param size    每页数量
      * @param total   总记录数
      */
-    private PageInfo(List<T> content, int page, int size, long total) {
+    private PageResp(List<T> content, int page, int size, long total) {
         this.content = content;
         this.page = page;
         this.size = size;
         this.totalElements = total;
     }
 
-    public static <T> PageInfo<T> of(List<T> content, int page, int size, long total) {
-        return new PageInfo(content, page, size, total);
+    public static <T> PageResp<T> of(List<T> content, int page, int size, long total) {
+        return new PageResp(content, page, size, total);
     }
 
     @ApiModelProperty("总页数")

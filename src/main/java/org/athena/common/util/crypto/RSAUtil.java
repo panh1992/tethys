@@ -1,8 +1,8 @@
-package org.athena.util.crypto;
+package org.athena.common.util.crypto;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.athena.util.CommonUtil;
+import org.athena.common.util.CommonUtil;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;

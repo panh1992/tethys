@@ -2,9 +2,9 @@ package org.athena.config.exception;
 
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
-import org.athena.dto.ErrorDTO;
-import org.athena.exception.BusinessException;
-import org.athena.exception.InternalServerError;
+import org.athena.common.exception.BusinessException;
+import org.athena.common.exception.InternalServerError;
+import org.athena.common.resp.ErrorResp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,13 +30,13 @@ public final class BusinessExceptionMapper implements ExceptionMapper<BusinessEx
         exceptions.mark();
         logger.info("BusinessException type:{} status {} code:{} message:{}", exception.getClass().getName(),
                 exception.getStatus(), exception.getCode(), exception.getMessage());
-        ErrorDTO errorDTO = ErrorDTO.builder().code(exception.getCode())
+        ErrorResp errorResp = ErrorResp.builder().code(exception.getCode())
                 .message(exception instanceof InternalServerError
                         ? Response.Status.INTERNAL_SERVER_ERROR.getReasonPhrase() : exception.getMessage())
                 .build();
         return Response.status(exception.getStatus())
                 .type(MediaType.APPLICATION_JSON_TYPE)
-                .entity(errorDTO)
+                .entity(errorResp)
                 .build();
     }
 

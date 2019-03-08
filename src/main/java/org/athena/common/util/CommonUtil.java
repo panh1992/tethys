@@ -1,4 +1,4 @@
-package org.athena.util;
+package org.athena.common.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;

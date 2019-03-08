@@ -1,4 +1,4 @@
-package org.athena.util;
+package org.athena.common.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

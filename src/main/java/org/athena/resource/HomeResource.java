@@ -6,10 +6,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.athena.business.UserBusiness;
-import org.athena.dto.Response;
-import org.athena.dto.params.LoginParams;
-import org.athena.dto.params.RegisterParams;
-import org.athena.dto.resp.UserResp;
+import org.athena.common.params.LoginParams;
+import org.athena.common.params.RegisterParams;
+import org.athena.common.resp.Response;
+import org.athena.common.resp.UserResp;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;

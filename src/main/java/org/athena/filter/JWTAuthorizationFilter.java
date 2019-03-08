@@ -1,10 +1,10 @@
 package org.athena.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.athena.dto.ErrorDTO;
-import org.athena.util.Constant;
-import org.athena.util.JWTUtil;
-import org.athena.util.SystemContext;
+import org.athena.common.resp.ErrorResp;
+import org.athena.common.util.Constant;
+import org.athena.common.util.JWTUtil;
+import org.athena.common.util.SystemContext;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.jwt.consumer.InvalidJwtException;
@@ -51,7 +51,7 @@ public class JWTAuthorizationFilter implements Filter {
         } catch (InvalidJwtException | MalformedClaimException e) {
             logger.error("认证信息解析失败, Authorization token: {}, Exception Message: {}",
                     authorizationToken, e.getMessage());
-            ErrorDTO errorDTO = ErrorDTO.builder().code(Response.Status.UNAUTHORIZED.toString())
+            ErrorResp errorResp = ErrorResp.builder().code(Response.Status.UNAUTHORIZED.toString())
                     .message(Response.Status.UNAUTHORIZED.toString()).build();
             ObjectMapper objectMapper = new ObjectMapper();
             HttpServletResponse response = (HttpServletResponse) servletResponse;
@@ -59,7 +59,7 @@ public class JWTAuthorizationFilter implements Filter {
             response.setCharacterEncoding(StandardCharsets.UTF_8.displayName());
             response.setContentType("application/json;charset=UTF-8");
             try (PrintWriter out = response.getWriter()) {
-                out.println(objectMapper.writeValueAsString(errorDTO));
+                out.println(objectMapper.writeValueAsString(errorResp));
             }
         } finally {
             SystemContext.removeUserId();

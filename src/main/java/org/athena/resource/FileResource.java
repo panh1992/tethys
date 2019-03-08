@@ -5,9 +5,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.athena.business.FileBusiness;
-import org.athena.dto.PageInfo;
-import org.athena.dto.Response;
-import org.athena.dto.resp.FileResp;
+import org.athena.common.resp.FileResp;
+import org.athena.common.resp.PageResp;
+import org.athena.common.resp.Response;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -34,7 +34,7 @@ public class FileResource {
     @Timed
     @GET
     @ApiOperation(value = "文件列表", notes = "获取文件列表信息")
-    public Response<PageInfo<FileResp>> findAll(
+    public Response<PageResp<FileResp>> findAll(
             @ApiParam(value = "分页页码", defaultValue = "0", required = true) @QueryParam("page") Integer page,
             @ApiParam(value = "每页数量", defaultValue = "20", required = true) @QueryParam("size") Integer size) {
         return Response.build(fileBusiness.findAll(page, size));
