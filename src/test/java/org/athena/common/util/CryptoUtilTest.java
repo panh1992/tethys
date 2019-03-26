@@ -7,8 +7,6 @@ import org.junit.Test;
 
 import java.security.KeyPair;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -28,22 +26,6 @@ public class CryptoUtilTest {
         double n = nowDays * 1D / days;
         System.out.println("乙亥年已过百分比 " + (n * 100) + "%");
 
-    }
-
-    @Test
-    public void time() {
-        System.out.println(LocalDateTime.now());
-        System.out.println(LocalDateTime.now().plusYears(1));
-        LocalDateTime startTime = TimeUtil.parseLocalDateTime("1992-07-02 23:59:59");
-        LocalDateTime endTime = TimeUtil.parseLocalDateTime("2093-02-03 00:00:00");
-        System.out.println(startTime.isAfter(endTime));
-        System.out.println(startTime.isBefore(endTime));
-        System.out.println(Period.between(endTime.toLocalDate(), startTime.toLocalDate()));
-
-        System.out.println(TimeUtil.parseLocalDateTime("1990-01-01 00:00:00").plusYears(1));
-
-        LocalDateTime now = TimeUtil.parseLocalDateTime("1992-07-02 23:59:59");
-        System.out.println("当前时间是否在有效期内：" + TimeUtil.validityPeriod(now, startTime, endTime));
     }
 
     @Test

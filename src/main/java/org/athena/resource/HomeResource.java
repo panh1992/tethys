@@ -69,11 +69,4 @@ public class HomeResource {
         return Response.build(userBusiness.findAll());
     }
 
-    @Timed
-    @GET
-    @Path("test")
-    public Integer test() {
-        return userBusiness.test();
-    }
-
 }

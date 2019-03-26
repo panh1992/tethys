@@ -50,8 +50,7 @@ public final class TimeUtil {
      * @param endTime     有效期结束时间
      */
     public static boolean validityPeriod(LocalDateTime currentTime, LocalDateTime startTime, LocalDateTime endTime) {
-        return (currentTime.isAfter(startTime) || currentTime.isEqual(startTime))
-                && (currentTime.isBefore(endTime) || currentTime.isEqual(endTime));
+        return startTime.isBefore(currentTime) && currentTime.isBefore(endTime);
     }
 
 }

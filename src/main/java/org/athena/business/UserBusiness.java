@@ -69,8 +69,4 @@ public class UserBusiness {
                 .collect(Collectors.toList());
     }
 
-    public Integer test() {
-        userRepository.testUser();
-        return 1234;
-    }
 }

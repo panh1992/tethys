@@ -1,12 +1,13 @@
 package org.athena.common.storage;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * 存储工厂 用来初始化存储实例
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class StorageFactory {
-
-    private StorageFactory() {
-    }
 
     /**
      * 根据存储类型获取对应存储实例
