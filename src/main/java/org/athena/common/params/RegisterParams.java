@@ -19,7 +19,7 @@ public class RegisterParams {
 
     @NotNull(message = "用户名不允许为空")
     @Pattern(regexp = "^[a-zA-Z0-9_-]{4,16}$", message = "用户名为 4～16 个英文字母和数字组合")
-    @ApiModelProperty(name = "userName", value = "用户名称")
+    @ApiModelProperty(name = "userName", value = "用户名称", required = true)
     private String userName;
 
     @Pattern(regexp = "^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z0-9]{2,6}$",
@@ -35,7 +35,7 @@ public class RegisterParams {
     @NotNull(message = "密码不允许为空")
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,30}$",
             message = "密码为8～30位，字母、数字、特称字符组合")
-    @ApiModelProperty(name = "passWord", value = "用户密码")
+    @ApiModelProperty(name = "passWord", value = "用户密码", required = true)
     private String passWord;
 
 }

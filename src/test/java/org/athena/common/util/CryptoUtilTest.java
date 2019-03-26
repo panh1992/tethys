@@ -6,6 +6,7 @@ import org.jose4j.jwt.JwtClaims;
 import org.junit.Test;
 
 import java.security.KeyPair;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.concurrent.ExecutorService;
@@ -13,6 +14,21 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class CryptoUtilTest {
+
+    @Test
+    public void timeTest() {
+        LocalDate startDate = TimeUtil.parseLocalDate("2019-01-01");
+        LocalDate endDate = TimeUtil.parseLocalDate("2020-01-01");
+
+        long days = endDate.toEpochDay() - startDate.toEpochDay();
+        long nowDays = LocalDate.now().toEpochDay() - startDate.toEpochDay();
+
+        System.out.println("乙亥年一共 " + days + " 天");
+        System.out.println("乙亥年已过 " + nowDays + " 天");
+        double n = nowDays * 1D / days;
+        System.out.println("乙亥年已过百分比 " + (n * 100) + "%");
+
+    }
 
     @Test
     public void time() {
@@ -23,6 +39,8 @@ public class CryptoUtilTest {
         System.out.println(startTime.isAfter(endTime));
         System.out.println(startTime.isBefore(endTime));
         System.out.println(Period.between(endTime.toLocalDate(), startTime.toLocalDate()));
+
+        System.out.println(TimeUtil.parseLocalDateTime("1990-01-01 00:00:00").plusYears(1));
 
         LocalDateTime now = TimeUtil.parseLocalDateTime("1992-07-02 23:59:59");
         System.out.println("当前时间是否在有效期内：" + TimeUtil.validityPeriod(now, startTime, endTime));
