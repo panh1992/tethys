@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class TimeUtilTest {
@@ -61,7 +62,17 @@ public class TimeUtilTest {
 
         LocalDateTime endTime = TimeUtil.parseLocalDateTime("2093-02-03 00:00:00");
 
-        assertTrue(TimeUtil.validityPeriod(LocalDateTime.now(), startTime, endTime));
+        LocalDateTime time = TimeUtil.parseLocalDateTime("2015-07-02 18:03:20");
+
+        assertTrue(TimeUtil.validityPeriod(time, startTime, endTime));
+
+        time = TimeUtil.parseLocalDateTime("1992-07-02 23:59:59");
+
+        assertFalse(TimeUtil.validityPeriod(time, startTime, endTime));
+
+        time = TimeUtil.parseLocalDateTime("2093-02-03 00:00:00");
+
+        assertFalse(TimeUtil.validityPeriod(time, startTime, endTime));
 
     }
 

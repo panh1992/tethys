@@ -182,9 +182,16 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <systemPropertyVariables>
-                        <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
-                    </systemPropertyVariables>
+                    <excludes>
+                        <exclude>**/tasks/**/*</exclude>
+                        <exclude>**/config/**/*</exclude>
+                        <exclude>**/api/**/*</exclude>
+                        <exclude>**/db/**/*</exclude>
+                        <exclude>**/filter/**/*</exclude>
+                        <exclude>**/common/exception/**/*</exclude>
+                        <exclude>**/common/params/**/*</exclude>
+                        <exclude>**/common/resp/**/*</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
