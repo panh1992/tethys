@@ -232,11 +232,10 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>${checkstyle.version}</version>
                 <dependencies>
-                    <!-- https://mvnrepository.com/artifact/com.puppycrawl.tools/checkstyle -->
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
                         <artifactId>checkstyle</artifactId>
-                        <version>8.14</version>
+                        <version>8.18</version>
                     </dependency>
                 </dependencies>
                 <configuration>
