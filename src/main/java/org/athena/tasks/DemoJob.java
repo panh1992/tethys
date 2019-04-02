@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 
-@Scheduled(cron = "9/10 * * * * ? *")
+@Scheduled(cron = "59/59 * * * * ? *")
 @DisallowConcurrentExecution
 public class DemoJob implements Job {
 

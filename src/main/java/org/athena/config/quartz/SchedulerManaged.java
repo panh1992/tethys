@@ -14,6 +14,10 @@ import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Objects;
+import java.util.Properties;
 import java.util.Set;
 
 public class SchedulerManaged implements Managed {
@@ -22,8 +26,11 @@ public class SchedulerManaged implements Managed {
 
     private Scheduler scheduler;
 
-    public SchedulerManaged() throws SchedulerException {
-        StdSchedulerFactory stdSchedulerFactory = new StdSchedulerFactory();
+    public SchedulerManaged() throws SchedulerException, IOException {
+        Properties properties = new Properties();
+        properties.load(Objects.requireNonNull(this.getClass().getClassLoader()
+                .getResourceAsStream("quartz.properties")));
+        StdSchedulerFactory stdSchedulerFactory = new StdSchedulerFactory(properties);
         this.scheduler = stdSchedulerFactory.getScheduler();
     }
 

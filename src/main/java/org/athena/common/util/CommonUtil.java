@@ -9,8 +9,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
 
 /**
  * 通用帮助类
@@ -28,9 +26,6 @@ public final class CommonUtil {
         // 禁用空对象转换json校验
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        // 设置时间格式
-        mapper.setDateFormat(new SimpleDateFormat(Constant.DATE_TIME_FORMAT));
-        mapper.setTimeZone(TimeZone.getTimeZone(Constant.TIME_ZONE));
         return mapper;
     }
 

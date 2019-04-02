@@ -23,7 +23,7 @@ public final class AESUtil {
 
     private static final String KEY_ALGORITHM = "AES";
 
-    private static final String DEFAULT_CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding"; //默认的加密算法
+    private static final String DEFAULT_CIPHER_ALGORITHM = "AES/GCM/NoPadding"; //默认的加密算法
 
     /**
      * AES 加密操作

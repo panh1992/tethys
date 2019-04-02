@@ -22,6 +22,7 @@ import org.quartz.SchedulerException;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
+import java.io.IOException;
 import java.util.EnumSet;
 
 /**
@@ -36,7 +37,7 @@ public final class EnvConfig {
      * 注册 Manage
      */
     public static void registerManage(AthenaConfiguration configuration, Environment environment)
-            throws SchedulerException {
+            throws SchedulerException, IOException {
 
         environment.lifecycle().manage(new RedisManaged(configuration.getRedis()));
 
