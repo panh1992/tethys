@@ -14,7 +14,6 @@ import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Properties;
@@ -26,6 +25,9 @@ public class SchedulerManaged implements Managed {
 
     private Scheduler scheduler;
 
+    /**
+     * 构造任务管理器
+     */
     public SchedulerManaged() throws SchedulerException, IOException {
         Properties properties = new Properties();
         properties.load(Objects.requireNonNull(this.getClass().getClassLoader()
@@ -44,11 +46,13 @@ public class SchedulerManaged implements Managed {
         Set<Class<? extends Job>> jobTasks = reflections.getSubTypesOf(Job.class);
 
         for (Class<? extends Job> task : jobTasks) {
-            JobDetail jobDetail = JobBuilder.newJob(task).build();
             Scheduled scheduled = task.getAnnotation(Scheduled.class);
-            CronTrigger cronTrigger = TriggerBuilder.newTrigger().startNow()
-                    .withSchedule(CronScheduleBuilder.cronSchedule(scheduled.cron())).build();
-            scheduler.scheduleJob(jobDetail, cronTrigger);
+            JobDetail jobDetail = JobBuilder.newJob(task).withIdentity(scheduled.jobName()).build();
+            CronTrigger cronTrigger = TriggerBuilder.newTrigger().forJob(jobDetail).withIdentity(scheduled.jobName())
+                    .withSchedule(CronScheduleBuilder.cronSchedule(scheduled.cron())).startNow().build();
+            if (!scheduler.checkExists(cronTrigger.getKey())) {
+                scheduler.scheduleJob(jobDetail, cronTrigger);
+            }
         }
 
         this.scheduler.start();

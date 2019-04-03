@@ -16,4 +16,9 @@ public @interface Scheduled {
      */
     String cron();
 
+    /**
+     * 指定调度任务的作业名称
+     */
+    String jobName();
+
 }
