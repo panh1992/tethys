@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 
-@Scheduled(cron = "1/8 * * * * ? *", jobName = "演示任务")
+@Scheduled(cron = "0 0 1/1 * * ? ", jobName = "演示任务")
 @DisallowConcurrentExecution
 public class DemoJob implements Job {
 
