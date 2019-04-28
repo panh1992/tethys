@@ -1,0 +1,16 @@
+{
+  "Version": "1",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "oss:ListObjects",
+        "oss:GetObject"
+      ],
+      "Resource": [
+        "acs:oss:*:*:ram-test",
+        "acs:oss:*:*:ram-test/*"
+      ]
+    }
+  ]
+}

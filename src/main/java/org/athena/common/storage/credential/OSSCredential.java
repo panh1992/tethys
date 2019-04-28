@@ -1,4 +1,4 @@
-package org.athena.common.storage;
+package org.athena.common.storage.credential;
 
 import lombok.Builder;
 import lombok.Data;
@@ -6,6 +6,8 @@ import lombok.Data;
 @Data
 @Builder
 public class OSSCredential implements Credential {
+
+    private String type;
 
     private String endpoint;
 

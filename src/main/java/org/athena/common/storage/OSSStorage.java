@@ -5,9 +5,19 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSBuilder;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.common.comm.Protocol;
+import com.aliyun.oss.model.AppendObjectRequest;
+import com.aliyun.oss.model.DownloadFileRequest;
+import com.aliyun.oss.model.DownloadFileResult;
+import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.UploadFileRequest;
 import com.aliyun.oss.model.UploadFileResult;
+import org.athena.common.storage.credential.Credential;
+import org.athena.common.storage.credential.OSSCredential;
 import org.athena.common.storage.exception.StorageException;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
 
 /**
  * 阿里云 oss 存储
@@ -16,7 +26,10 @@ public class OSSStorage implements Storage {
 
     // 默认分块大小 100KB
     private static final long PART_SIZE = 1024 * 100L;
+
+    // 上传默认任务数
     private static final int TASK_NUM = Runtime.getRuntime().availableProcessors() * 2;
+
     private OSS oss;
 
     /**
@@ -44,7 +57,7 @@ public class OSSStorage implements Storage {
         // 设置是否支持将自定义域名作为Endpoint，默认支持。
         config.setSupportCname(true);
         // 设置是否开启二级域名的访问方式，默认不开启。
-        config.setSLDEnabled(true);
+        config.setSLDEnabled(false);
         // 设置连接OSS所使用的协议（HTTP/HTTPS），默认为HTTP。
         config.setProtocol(Protocol.HTTPS);
 
@@ -54,24 +67,61 @@ public class OSSStorage implements Storage {
                 credential.getAccessKeySecret(), config);
     }
 
-    /**
-     * 将本地文件路径上传到 oss 存储上
-     *
-     * @param filePath  文件路径
-     * @param container 存储空间
-     * @param key       存储key
-     * @return 存储文件的etg
-     */
+    @Override
     public String upload(String filePath, String container, String key) {
         UploadFileRequest request = new UploadFileRequest(container, key, filePath, PART_SIZE, TASK_NUM);
         UploadFileResult result;
+        String etg;
         try {
-            result = oss.uploadFile(request);
+            result = this.oss.uploadFile(request);
+            etg = result.getMultipartUploadResult().getETag();
         } catch (Throwable throwable) {
             throw new StorageException(throwable.getMessage());
+        } finally {
+            this.oss.shutdown();
         }
-        oss.shutdown();
-        return result.getMultipartUploadResult().getETag();
+        return etg;
+    }
+
+    @Override
+    public String upload(InputStream inputStream, String container, String key) {
+        AppendObjectRequest appendObjectRequest = new AppendObjectRequest(container, key, inputStream)
+                .withPosition(0L);
+        this.oss.appendObject(appendObjectRequest);
+        OSSObject object = this.oss.getObject(container, key);
+        String etg;
+        try {
+            object.getObjectContent().close();
+            etg = object.getObjectMetadata().getETag();
+        } catch (IOException ex) {
+            throw new StorageException(ex.getMessage());
+        } finally {
+            this.oss.shutdown();
+        }
+        return etg;
+    }
+
+    @Override
+    public void download(String filePath, String container, String key) {
+        DownloadFileRequest request = new DownloadFileRequest(container, key, filePath, PART_SIZE, TASK_NUM, Boolean.TRUE);
+        try {
+            this.oss.downloadFile(request);
+        } catch (Throwable throwable) {
+            throw new StorageException(throwable.getMessage());
+        } finally {
+            this.oss.shutdown();
+        }
+    }
+
+    @Override
+    public InputStream download(String container, String key) {
+        OSSObject object = this.oss.getObject(container, key);
+        return object.getObjectContent();
+    }
+
+    @Override
+    public void close() {
+        this.oss.shutdown();
     }
 
 }

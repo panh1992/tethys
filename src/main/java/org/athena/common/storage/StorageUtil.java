@@ -1,12 +1,11 @@
-package org.athena.common.util;
+package org.athena.common.storage;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-/**
- * 文件工具类
- */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class FileUtil {
+public class StorageUtil {
+
+
 
 }

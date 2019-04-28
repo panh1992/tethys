@@ -2,6 +2,7 @@ package org.athena.common.storage;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.athena.common.storage.credential.Credential;
 
 /**
  * 存储工厂 用来初始化存储实例
@@ -12,16 +13,15 @@ public final class StorageFactory {
     /**
      * 根据存储类型获取对应存储实例
      *
-     * @param type 存储类型
+     * @param credential 认证参数
      * @return 存储实例
      */
-    public static Storage build(String type, Credential credential) {
+    public static Storage build(Credential credential) {
         Storage storage = null;
-        if ("oss".equals(type)) {
+        if ("oss".equals(credential.getType())) {
             storage = new OSSStorage(credential);
         }
         return storage;
     }
-
 
 }

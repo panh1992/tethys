@@ -50,7 +50,7 @@ public class AthenaFile {
     /**
      * 文件名
      */
-    @Column(name = "file_name", length = 255)
+    @Column(name = "file_name")
     private String fileName;
 
     /**
@@ -80,7 +80,7 @@ public class AthenaFile {
     /**
      * 文件的校验码
      */
-    @Column(name = "check_sum", length = 255)
+    @Column(name = "check_sum")
     private String checkSum;
 
     /**
@@ -110,7 +110,7 @@ public class AthenaFile {
     /**
      * 描述信息
      */
-    @Column(name = "description", length = 255)
+    @Column(name = "description")
     private String description;
 
 }

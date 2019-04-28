@@ -92,13 +92,13 @@ public class StoreBackends {
     /**
      * 认证参数3
      */
-    @Column(name = "auth_params_3", length = 255)
+    @Column(name = "auth_params_3")
     private String authParams3;
 
     /**
      * 认证参数4
      */
-    @Column(name = "auth_params_4", length = 255)
+    @Column(name = "auth_params_4")
     private String authParams4;
 
     /**
@@ -116,7 +116,7 @@ public class StoreBackends {
     /**
      * 描述信息
      */
-    @Column(name = "description", length = 255)
+    @Column(name = "description")
     private String description;
 
 }
