@@ -27,7 +27,7 @@ public class UploadTasks {
      */
     @Id
     @Column(name = "id", length = 32)
-    private String id;
+    private Long id;
 
     /**
      * 存储空间

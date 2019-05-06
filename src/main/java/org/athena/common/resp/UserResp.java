@@ -1,5 +1,6 @@
 package org.athena.common.resp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -17,16 +18,13 @@ import java.time.Instant;
 public class UserResp {
 
     @ApiModelProperty("用户主键")
-    private String userId;
+    private Long userId;
 
     @ApiModelProperty("用户名称")
     private String userName;
 
     @ApiModelProperty("用户昵称")
     private String nickName;
-
-    @ApiModelProperty("用户密码")
-    private String passWord;
 
     @ApiModelProperty("邮箱")
     private String email;

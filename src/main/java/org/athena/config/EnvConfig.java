@@ -5,6 +5,7 @@ import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.setup.Environment;
 import org.athena.business.FileBusiness;
 import org.athena.business.UserBusiness;
+import org.athena.common.util.SnowflakeIdWorker;
 import org.athena.config.exception.BusinessExceptionMapper;
 import org.athena.config.exception.ValidationExceptionMapper;
 import org.athena.config.plugin.InstantPlugin;
@@ -70,11 +71,14 @@ public final class EnvConfig {
         final UserRepository userRepository = jdbi.onDemand(UserRepository.class);
         final FileRepository fileRepository = jdbi.onDemand(FileRepository.class);
 
-        UserBusiness userBusiness = new UserBusiness(userRepository);
-        FileBusiness fileBusiness = new FileBusiness(fileRepository);
+        final SnowflakeIdWorker idWorker = new SnowflakeIdWorker(configuration.getSnowflake().getWorkerId(),
+                configuration.getSnowflake().getDataCenterId());
 
-        HomeResource homeResource = new HomeResource(userBusiness);
-        FileResource fileResource = new FileResource(fileBusiness);
+        final UserBusiness userBusiness = new UserBusiness(idWorker, userRepository);
+        final FileBusiness fileBusiness = new FileBusiness(fileRepository);
+
+        final HomeResource homeResource = new HomeResource(userBusiness);
+        final FileResource fileResource = new FileResource(fileBusiness);
 
         JerseyEnvironment jerseyEnvironment = environment.jersey();
         jerseyEnvironment.register(homeResource);
@@ -117,7 +121,7 @@ public final class EnvConfig {
         final FilterRegistration.Dynamic authorization =
                 environment.servlets().addFilter("Authorization", JWTAuthorizationFilter.class);
 
-        authorization.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/list");
+        authorization.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/test");
     }
 
 }

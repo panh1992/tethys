@@ -10,6 +10,7 @@ import org.athena.common.resp.Response;
 import org.athena.common.resp.UserResp;
 import org.athena.common.util.Constant;
 import org.athena.common.util.JWTUtil;
+import org.athena.common.util.SnowflakeIdWorker;
 import org.athena.common.util.crypto.CommonUtil;
 import org.athena.db.UserRepository;
 import org.jose4j.jwt.JwtClaims;
@@ -35,9 +36,11 @@ public class HomeResourceTest {
 
     private static final UserRepository userRepository = mock(UserRepository.class);
 
+    private static final SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
+
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
-            .addResource(new HomeResource(new UserBusiness(userRepository)))
+            .addResource(new HomeResource(new UserBusiness(idWorker, userRepository)))
             .build();
 
     @Test
@@ -47,7 +50,7 @@ public class HomeResourceTest {
         RegisterParams params = RegisterParams.builder().userName(userName)
                 .passWord(password).build();
 
-        User user = User.builder().id(CommonUtil.getUUID()).userName(userName).passWord(CommonUtil.hashpw(password))
+        User user = User.builder().id(idWorker.nextId()).userName(userName).passWord(CommonUtil.hashpw(password))
                 .createTime(Instant.now()).build();
         when(userRepository.findByUserName(userName)).thenReturn(Optional.empty());
         doThrow(new RuntimeException()).when(userRepository).save(user);
@@ -62,7 +65,7 @@ public class HomeResourceTest {
     @Test
     public void login() {
         User user = new User();
-        user.setId("06b8491dd6ae41d0add7ca8de87475ad");
+        user.setId(idWorker.nextId());
         user.setUserName("panhong");
         user.setPassWord(CommonUtil.hashpw("123456"));
 

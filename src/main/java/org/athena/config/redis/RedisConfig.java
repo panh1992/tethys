@@ -1,6 +1,5 @@
 package org.athena.config.redis;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -18,7 +17,6 @@ public class RedisConfig {
 
     @Min(0)
     @Max(15)
-    @JsonProperty
     private int db = 0;
 
 }

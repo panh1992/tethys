@@ -7,6 +7,7 @@ import org.athena.common.exception.InternalServerError;
 import org.athena.common.resp.UserResp;
 import org.athena.common.util.Constant;
 import org.athena.common.util.JWTUtil;
+import org.athena.common.util.SnowflakeIdWorker;
 import org.athena.common.util.crypto.CommonUtil;
 import org.athena.db.UserRepository;
 import org.jose4j.lang.JoseException;
@@ -18,9 +19,12 @@ import java.util.stream.Collectors;
 
 public class UserBusiness {
 
+    private SnowflakeIdWorker idWorker;
+
     private UserRepository userRepository;
 
-    public UserBusiness(UserRepository userRepository) {
+    public UserBusiness(SnowflakeIdWorker idWorker, UserRepository userRepository) {
+        this.idWorker = idWorker;
         this.userRepository = userRepository;
     }
 
@@ -35,7 +39,7 @@ public class UserBusiness {
         if (checkUser.isPresent()) {
             throw EntityAlreadyExistsException.build("用户名已存在");
         }
-        User user = User.builder().id(CommonUtil.getUUID()).userName(userName).passWord(CommonUtil.hashpw(password))
+        User user = User.builder().id(idWorker.nextId()).userName(userName).passWord(CommonUtil.hashpw(password))
                 .createTime(Instant.now()).build();
         userRepository.save(user);
     }
@@ -53,7 +57,7 @@ public class UserBusiness {
             throw EntityNotExistException.build("用户名或密码错误");
         }
         try {
-            return JWTUtil.createToken(userOptional.get().getId(), Constant.AUTHORIZATION_DURATION);
+            return JWTUtil.createToken(userOptional.get().getId().toString(), Constant.AUTHORIZATION_DURATION);
         } catch (JoseException e) {
             throw InternalServerError.build("jwt token 创建失败");
         }
@@ -65,8 +69,7 @@ public class UserBusiness {
     public List<UserResp> findAll() {
         return userRepository.findAll().parallelStream().map(user -> UserResp.builder().userId(user.getId())
                 .userName(user.getUserName()).email(user.getEmail()).mobile(user.getMobile())
-                .passWord(user.getPassWord()).createTime(user.getCreateTime()).build())
-                .collect(Collectors.toList());
+                .createTime(user.getCreateTime()).build()).collect(Collectors.toList());
     }
 
 }

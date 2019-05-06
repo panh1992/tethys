@@ -26,7 +26,7 @@ public class PathTree {
      */
     @Id
     @Column(name = "id", length = 32)
-    private String id;
+    private Long id;
 
     /**
      * 祖先文件

@@ -32,7 +32,7 @@ public class AthenaApplication extends Application<AthenaConfiguration> {
         bootstrap.addBundle(new SwaggerBundle<AthenaConfiguration>() {
             @Override
             protected SwaggerBundleConfiguration getSwaggerBundleConfiguration(AthenaConfiguration configuration) {
-                return configuration.getSwaggerBundleConfiguration();
+                return configuration.getSwagger();
             }
         });
         bootstrap.setObjectMapper(CommonUtil.getObjectMapper());

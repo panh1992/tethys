@@ -27,7 +27,7 @@ public class MultipolarStore {
      */
     @Id
     @Column(name = "id", length = 32)
-    private String id;
+    private Long id;
 
     /**
      * 文件

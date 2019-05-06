@@ -7,17 +7,14 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.common.comm.Protocol;
 import com.aliyun.oss.model.AppendObjectRequest;
 import com.aliyun.oss.model.DownloadFileRequest;
-import com.aliyun.oss.model.DownloadFileResult;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.UploadFileRequest;
 import com.aliyun.oss.model.UploadFileResult;
 import org.athena.common.storage.credential.Credential;
-import org.athena.common.storage.credential.OSSCredential;
 import org.athena.common.storage.exception.StorageException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 
 /**
  * 阿里云 oss 存储
@@ -103,7 +100,8 @@ public class OSSStorage implements Storage {
 
     @Override
     public void download(String filePath, String container, String key) {
-        DownloadFileRequest request = new DownloadFileRequest(container, key, filePath, PART_SIZE, TASK_NUM, Boolean.TRUE);
+        DownloadFileRequest request = new DownloadFileRequest(container, key, filePath, PART_SIZE,
+                TASK_NUM, Boolean.TRUE);
         try {
             this.oss.downloadFile(request);
         } catch (Throwable throwable) {

@@ -15,21 +15,9 @@ public class StsServiceSample {
         String accessKeySecret = "<AccessKeySecret>";
         String roleSessionName = "athena";
         String roleArn = "<RoleArn>";
-        String policy = "{\n" +
-                "  \"Version\": \"1\",\n" +
-                "  \"Statement\": [\n" +
-                "    {\n" +
-                "      \"Effect\": \"Allow\",\n" +
-                "      \"Action\": [\n" +
-                "        \"oss:Get*\"\n" +
-                "      ],\n" +
-                "      \"Resource\": [\n" +
-                "        \"acs:oss:*:*:athena-stoage\"\n" +
-                "      ],\n" +
-                "      \"Condition\": {}\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
+        String policy = "{\n \"Version\": \"1\",\n \"Statement\": [\n {\n \"Effect\": \"Allow\",\n "
+                + "\"Action\": [\n \"oss:Get*\"\n ],\n \"Resource\": [\n \"acs:oss:*:*:athena-stoage\"\n ],\n"
+                + " \"Condition\": {}\n }\n ]\n }";
         try {
             // 添加endpoint（直接使用STS endpoint，前两个参数留空，无需添加region ID）
             DefaultProfile.addEndpoint("", "STS", endpoint);

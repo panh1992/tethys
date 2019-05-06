@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.dropwizard.jackson.Jackson;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 
 /**
  * 通用帮助类
@@ -26,6 +29,15 @@ public final class CommonUtil {
         // 禁用空对象转换json校验
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        SimpleModule longModule = new SimpleModule("long");
+        longModule.addSerializer(Long.class, ToStringSerializer.instance);
+
+        SimpleModule instantModule = new SimpleModule("instant");
+        instantModule.addSerializer(Instant.class, ToStringSerializer.instance);
+
+        mapper.registerModule(longModule);
+
         return mapper;
     }
 

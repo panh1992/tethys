@@ -27,7 +27,7 @@ public class StoreSpaces {
      */
     @Id
     @Column(name = "id", length = 32)
-    private String id;
+    private Long id;
 
     /**
      * 创建用户

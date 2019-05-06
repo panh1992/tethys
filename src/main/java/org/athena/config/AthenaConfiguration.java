@@ -20,17 +20,18 @@ public class AthenaConfiguration extends Configuration {
     @JsonProperty
     private String defaultName;
 
-    @JsonProperty("swagger")
-    private SwaggerBundleConfiguration swaggerBundleConfiguration;
+    private SwaggerBundleConfiguration swagger;
 
     @Valid
     @NotNull
-    @JsonProperty
+    private SnowflakeConfig snowflake;
+
+    @Valid
+    @NotNull
     private DataSourceFactory database = new DataSourceFactory();
 
     @Valid
     @NotNull
-    @JsonProperty
     private RedisConfig redis = new RedisConfig();
 
 }

@@ -3,16 +3,16 @@
 
  Source Server         : 本地postgres
  Source Server Type    : PostgreSQL
- Source Server Version : 110001
+ Source Server Version : 110002
  Source Host           : localhost:5432
  Source Catalog        : test
  Source Schema         : public
 
  Target Server Type    : PostgreSQL
- Target Server Version : 110001
+ Target Server Version : 110002
  File Encoding         : 65001
 
- Date: 02/04/2019 18:00:17
+ Date: 06/05/2019 18:06:40
 */
 
 
@@ -21,13 +21,13 @@
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."files";
 CREATE TABLE "public"."files" (
-  "id" char(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "store_id" char(32) COLLATE "pg_catalog"."default",
-  "creater_id" char(32) COLLATE "pg_catalog"."default",
+  "id" int8 NOT NULL,
+  "store_id" int8,
+  "creater_id" int8,
   "store_space" varchar(128) COLLATE "pg_catalog"."default",
   "file_name" varchar(255) COLLATE "pg_catalog"."default",
   "file_size" int8,
-  "source_id" char(32) COLLATE "pg_catalog"."default",
+  "source_id" int8,
   "source_type" varchar(32) COLLATE "pg_catalog"."default",
   "is_dir" bool,
   "check_sum" varchar(255) COLLATE "pg_catalog"."default",
@@ -60,8 +60,8 @@ COMMENT ON COLUMN "public"."files"."description" IS '描述信息';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."multipolar_store";
 CREATE TABLE "public"."multipolar_store" (
-  "id" int4 NOT NULL,
-  "file_id" char(32) COLLATE "pg_catalog"."default",
+  "id" int8 NOT NULL,
+  "file_id" int8,
   "status" int4,
   "level" int4,
   "is_active" bool,
@@ -88,9 +88,9 @@ COMMENT ON TABLE "public"."multipolar_store" IS '文件的多级存储';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."path_tree";
 CREATE TABLE "public"."path_tree" (
-  "id" char(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "ancestor_id" char(32) COLLATE "pg_catalog"."default",
-  "descendant_id" char(32) COLLATE "pg_catalog"."default",
+  "id" int8 NOT NULL,
+  "ancestor_id" int8,
+  "descendant_id" int8,
   "depth" bool
 )
 ;
@@ -105,7 +105,7 @@ COMMENT ON TABLE "public"."path_tree" IS '文件树形关系 （采用闭包表�
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."store_backends";
 CREATE TABLE "public"."store_backends" (
-  "id" char(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "id" int8 NOT NULL,
   "name" varchar(128) COLLATE "pg_catalog"."default",
   "protocol" varchar(128) COLLATE "pg_catalog"."default",
   "container" varchar(255) COLLATE "pg_catalog"."default",
@@ -147,8 +147,8 @@ COMMENT ON TABLE "public"."store_backends" IS '文件存储后端';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."store_spaces";
 CREATE TABLE "public"."store_spaces" (
-  "id" char(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "creater_id" char(32) COLLATE "pg_catalog"."default",
+  "id" int8 NOT NULL,
+  "creater_id" int8,
   "store_space" varchar(128) COLLATE "pg_catalog"."default",
   "store_size" int8,
   "is_deleted" bool,
@@ -173,9 +173,9 @@ COMMENT ON TABLE "public"."store_spaces" IS '数据存储空间';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."upload_tasks";
 CREATE TABLE "public"."upload_tasks" (
-  "id" char(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "store_id" char(32) COLLATE "pg_catalog"."default",
-  "creater_id" char(32) COLLATE "pg_catalog"."default",
+  "id" int8 NOT NULL,
+  "store_id" int8,
+  "creater_id" int8,
   "status" int4,
   "create_time" timestamptz(6),
   "modify_time" timestamptz(6),
@@ -199,7 +199,7 @@ COMMENT ON TABLE "public"."upload_tasks" IS '文件上传任务';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."users";
 CREATE TABLE "public"."users" (
-  "id" char(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "id" int8 NOT NULL,
   "password" varchar(128) COLLATE "pg_catalog"."default",
   "email" varchar(128) COLLATE "pg_catalog"."default",
   "mobile" varchar(32) COLLATE "pg_catalog"."default",
@@ -223,13 +223,13 @@ COMMENT ON COLUMN "public"."users"."nickname" IS '用户昵称';
 -- Indexes structure for table files
 -- ----------------------------
 CREATE INDEX "files_creater_id_idx" ON "public"."files" USING btree (
-  "creater_id" COLLATE "pg_catalog"."default" "pg_catalog"."bpchar_ops" ASC NULLS LAST
+  "creater_id" "pg_catalog"."int8_ops" ASC NULLS LAST
 );
 CREATE INDEX "files_source_id_idx" ON "public"."files" USING btree (
-  "source_id" COLLATE "pg_catalog"."default" "pg_catalog"."bpchar_ops" ASC NULLS LAST
+  "source_id" "pg_catalog"."int8_ops" ASC NULLS LAST
 );
 CREATE INDEX "files_store_id_idx" ON "public"."files" USING btree (
-  "store_id" COLLATE "pg_catalog"."default" "pg_catalog"."bpchar_ops" ASC NULLS LAST
+  "store_id" "pg_catalog"."int8_ops" ASC NULLS LAST
 );
 
 -- ----------------------------
@@ -241,7 +241,7 @@ ALTER TABLE "public"."files" ADD CONSTRAINT "files_pkey" PRIMARY KEY ("id");
 -- Indexes structure for table multipolar_store
 -- ----------------------------
 CREATE INDEX "multipolar_store_file_id_idx" ON "public"."multipolar_store" USING btree (
-  "file_id" COLLATE "pg_catalog"."default" "pg_catalog"."bpchar_ops" ASC NULLS LAST
+  "file_id" "pg_catalog"."int8_ops" ASC NULLS LAST
 );
 
 -- ----------------------------
@@ -253,10 +253,10 @@ ALTER TABLE "public"."multipolar_store" ADD CONSTRAINT "multipolar_store_pkey" P
 -- Indexes structure for table path_tree
 -- ----------------------------
 CREATE INDEX "path_tree_ancestor_id_idx" ON "public"."path_tree" USING btree (
-  "ancestor_id" COLLATE "pg_catalog"."default" "pg_catalog"."bpchar_ops" ASC NULLS LAST
+  "ancestor_id" "pg_catalog"."int8_ops" ASC NULLS LAST
 );
 CREATE INDEX "path_tree_descendant_id_idx" ON "public"."path_tree" USING btree (
-  "descendant_id" COLLATE "pg_catalog"."default" "pg_catalog"."bpchar_ops" ASC NULLS LAST
+  "descendant_id" "pg_catalog"."int8_ops" ASC NULLS LAST
 );
 
 -- ----------------------------
@@ -273,7 +273,7 @@ ALTER TABLE "public"."store_backends" ADD CONSTRAINT "store_backends_pkey" PRIMA
 -- Indexes structure for table store_spaces
 -- ----------------------------
 CREATE INDEX "store_spaces_creater_id_idx" ON "public"."store_spaces" USING btree (
-  "creater_id" COLLATE "pg_catalog"."default" "pg_catalog"."bpchar_ops" ASC NULLS LAST
+  "creater_id" "pg_catalog"."int8_ops" ASC NULLS LAST
 );
 
 -- ----------------------------
@@ -285,10 +285,10 @@ ALTER TABLE "public"."store_spaces" ADD CONSTRAINT "store_spaces_pkey" PRIMARY K
 -- Indexes structure for table upload_tasks
 -- ----------------------------
 CREATE INDEX "upload_tasks_creater_id_idx" ON "public"."upload_tasks" USING btree (
-  "creater_id" COLLATE "pg_catalog"."default" "pg_catalog"."bpchar_ops" ASC NULLS LAST
+  "creater_id" "pg_catalog"."int8_ops" ASC NULLS LAST
 );
 CREATE INDEX "upload_tasks_store_id_idx" ON "public"."upload_tasks" USING btree (
-  "store_id" COLLATE "pg_catalog"."default" "pg_catalog"."bpchar_ops" ASC NULLS LAST
+  "store_id" "pg_catalog"."int8_ops" ASC NULLS LAST
 );
 
 -- ----------------------------
