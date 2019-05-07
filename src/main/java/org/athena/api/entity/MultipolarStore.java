@@ -1,4 +1,4 @@
-package org.athena.api;
+package org.athena.api.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

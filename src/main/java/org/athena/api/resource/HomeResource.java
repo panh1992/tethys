@@ -1,15 +1,15 @@
-package org.athena.resource;
+package org.athena.api.resource;
 
 import com.codahale.metrics.annotation.Timed;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.athena.business.UserBusiness;
-import org.athena.common.params.LoginParams;
-import org.athena.common.params.RegisterParams;
+import org.athena.api.business.UserBusiness;
+import org.athena.api.params.LoginParams;
+import org.athena.api.params.RegisterParams;
 import org.athena.common.resp.Response;
-import org.athena.common.resp.UserResp;
+import org.athena.api.resp.UserResp;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;

@@ -1,4 +1,4 @@
-package org.athena.tasks;
+package org.athena.task;
 
 import org.athena.config.quartz.Scheduled;
 import org.quartz.DisallowConcurrentExecution;

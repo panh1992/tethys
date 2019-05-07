@@ -1,18 +1,18 @@
-package org.athena.resource;
+package org.athena.api.resource;
 
 import com.google.common.collect.Lists;
 import io.dropwizard.testing.junit.ResourceTestRule;
-import org.athena.api.User;
-import org.athena.business.UserBusiness;
-import org.athena.common.params.LoginParams;
-import org.athena.common.params.RegisterParams;
+import org.athena.api.entity.User;
+import org.athena.api.business.UserBusiness;
+import org.athena.api.params.LoginParams;
+import org.athena.api.params.RegisterParams;
 import org.athena.common.resp.Response;
-import org.athena.common.resp.UserResp;
+import org.athena.api.resp.UserResp;
 import org.athena.common.util.Constant;
 import org.athena.common.util.JWTUtil;
 import org.athena.common.util.SnowflakeIdWorker;
 import org.athena.common.util.crypto.CommonUtil;
-import org.athena.db.UserRepository;
+import org.athena.api.db.UserRepository;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.jwt.consumer.InvalidJwtException;

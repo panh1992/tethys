@@ -1,9 +1,8 @@
-package org.athena.business;
+package org.athena.api.business;
 
-import org.athena.api.AthenaFile;
-import org.athena.common.resp.FileResp;
-import org.athena.common.resp.PageResp;
-import org.athena.db.FileRepository;
+import org.athena.api.entity.AthenaFile;
+import org.athena.api.resp.FileResp;
+import org.athena.api.db.FileRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,10 +21,10 @@ public class FileBusiness {
     /**
      * 获取所有文件列表
      */
-    public PageResp<FileResp> findAll(Integer page, Integer size) {
+    public List<FileResp> findAll(Integer page, Integer size) {
         List<AthenaFile> files = fileRepository.findAll();
-        return PageResp.of(files.stream().map(x -> FileResp.builder().build())
-                .collect(Collectors.toList()), page, size, 120L);
+        return files.stream().map(x -> FileResp.builder().build())
+                .collect(Collectors.toList());
     }
 
 }

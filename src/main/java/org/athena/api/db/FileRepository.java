@@ -1,6 +1,6 @@
-package org.athena.db;
+package org.athena.api.db;
 
-import org.athena.api.AthenaFile;
+import org.athena.api.entity.AthenaFile;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 
 import java.util.List;

@@ -11,7 +11,7 @@ server:
     port: 8081
 
 swagger:
-  resourcePackage: org.athena.resource
+  resourcePackage: org.athena.api.resource
   title: Athena API
   version: 1.0
   enabled: true

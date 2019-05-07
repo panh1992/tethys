@@ -1,6 +1,6 @@
 package org.athena.common.resp;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -9,17 +9,18 @@ import lombok.Data;
 @ApiModel(description = "统一响应数据实体")
 public class Response<T> {
 
-    @JsonProperty("code")
     @ApiModelProperty("编码")
     private String code = "SUCCESS";
 
-    @JsonProperty("data")
     @ApiModelProperty("响应数据")
     private T data;
 
-    @JsonProperty("message")
     @ApiModelProperty("描述信息")
     private String message;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @ApiModelProperty("分页信息")
+    private PageResp page;
 
     /**
      * 创建成功响应结果

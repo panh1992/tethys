@@ -57,17 +57,17 @@ public class SchedulerManaged implements Managed {
 
         this.scheduler.start();
 
-        logger.info("Scheduler - Start...");
+        logger.info("Scheduler - Start completed");
     }
 
     @Override
     public void stop() throws Exception {
 
-        logger.info("Scheduler Shutdown initiated...");
+        logger.info("Scheduler - Shutdown initiated...");
 
         this.scheduler.shutdown();
 
-        logger.info("Scheduler Shutdown completed");
+        logger.info("Scheduler - Shutdown completed");
 
     }
 

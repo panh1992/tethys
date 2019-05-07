@@ -10,12 +10,14 @@ public class NettyManaged implements Managed {
 
     @Override
     public void start() throws Exception {
-        logger.debug("netty service start");
+        logger.info("Netty - Starting...");
+        logger.info("Netty - Start completed");
     }
 
     @Override
     public void stop() throws Exception {
-        logger.debug("netty service stop");
+        logger.info("Netty - Shutdown initiated...");
+        logger.info("Netty - Shutdown completed");
     }
 
 }

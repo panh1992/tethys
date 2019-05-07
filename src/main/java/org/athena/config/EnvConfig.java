@@ -3,19 +3,20 @@ package org.athena.config;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.setup.Environment;
-import org.athena.business.FileBusiness;
-import org.athena.business.UserBusiness;
+import org.athena.api.business.FileBusiness;
+import org.athena.api.business.UserBusiness;
 import org.athena.common.util.SnowflakeIdWorker;
 import org.athena.config.exception.BusinessExceptionMapper;
 import org.athena.config.exception.ValidationExceptionMapper;
+import org.athena.config.netty.NettyManaged;
 import org.athena.config.plugin.InstantPlugin;
 import org.athena.config.quartz.SchedulerManaged;
 import org.athena.config.redis.RedisManaged;
-import org.athena.db.FileRepository;
-import org.athena.db.UserRepository;
+import org.athena.api.db.FileRepository;
+import org.athena.api.db.UserRepository;
 import org.athena.filter.JWTAuthorizationFilter;
-import org.athena.resource.FileResource;
-import org.athena.resource.HomeResource;
+import org.athena.api.resource.FileResource;
+import org.athena.api.resource.HomeResource;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.jpa.JpaPlugin;
@@ -43,6 +44,8 @@ public final class EnvConfig {
         environment.lifecycle().manage(new RedisManaged(configuration.getRedis()));
 
         environment.lifecycle().manage(new SchedulerManaged());
+
+        environment.lifecycle().manage(new NettyManaged());
 
     }
 

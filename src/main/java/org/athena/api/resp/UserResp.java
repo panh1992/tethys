@@ -1,6 +1,7 @@
-package org.athena.common.resp;
+package org.athena.api.resp;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ import java.time.Instant;
 public class UserResp {
 
     @ApiModelProperty("用户主键")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long userId;
 
     @ApiModelProperty("用户名称")

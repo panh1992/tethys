@@ -1,6 +1,6 @@
-package org.athena.db;
+package org.athena.api.db;
 
-import org.athena.api.User;
+import org.athena.api.entity.User;
 import org.athena.common.exception.EntityAlreadyExistsException;
 import org.jdbi.v3.core.transaction.TransactionIsolationLevel;
 import org.jdbi.v3.sqlobject.customizer.Bind;

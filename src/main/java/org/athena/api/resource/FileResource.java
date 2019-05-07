@@ -1,12 +1,11 @@
-package org.athena.resource;
+package org.athena.api.resource;
 
 import com.codahale.metrics.annotation.Timed;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.athena.business.FileBusiness;
-import org.athena.common.resp.FileResp;
-import org.athena.common.resp.PageResp;
+import org.athena.api.business.FileBusiness;
+import org.athena.api.resp.FileResp;
 import org.athena.common.resp.Response;
 
 import javax.ws.rs.Consumes;
@@ -15,6 +14,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 /**
  * 文件资源 处理文件元数据
@@ -34,9 +34,9 @@ public class FileResource {
     @Timed
     @GET
     @ApiOperation(value = "文件列表", notes = "获取文件列表信息")
-    public Response<PageResp<FileResp>> findAll(
-            @ApiParam(value = "分页页码", defaultValue = "0", required = true) @QueryParam("page") Integer page,
-            @ApiParam(value = "每页数量", defaultValue = "20", required = true) @QueryParam("size") Integer size) {
+    public Response<List<FileResp>> findAll(
+            @ApiParam(value = "分页页码") @QueryParam("page") Integer page,
+            @ApiParam(value = "每页数量") @QueryParam("size") Integer size) {
         return Response.build(fileBusiness.findAll(page, size));
     }
 

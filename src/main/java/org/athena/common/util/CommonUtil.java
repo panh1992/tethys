@@ -5,10 +5,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.dropwizard.jackson.Jackson;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.athena.common.jackson.InstantDeserializer;
+import org.athena.common.jackson.InstantSerializer;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
@@ -30,13 +31,11 @@ public final class CommonUtil {
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        SimpleModule longModule = new SimpleModule("long");
-        longModule.addSerializer(Long.class, ToStringSerializer.instance);
-
         SimpleModule instantModule = new SimpleModule("instant");
-        instantModule.addSerializer(Instant.class, ToStringSerializer.instance);
+        instantModule.addSerializer(Instant.class, InstantSerializer.instance);
+        instantModule.addDeserializer(Instant.class, InstantDeserializer.instance);
 
-        mapper.registerModule(longModule);
+        mapper.registerModule(instantModule);
 
         return mapper;
     }

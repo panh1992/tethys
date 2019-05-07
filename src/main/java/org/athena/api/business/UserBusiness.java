@@ -1,15 +1,15 @@
-package org.athena.business;
+package org.athena.api.business;
 
-import org.athena.api.User;
+import org.athena.api.entity.User;
 import org.athena.common.exception.EntityAlreadyExistsException;
 import org.athena.common.exception.EntityNotExistException;
 import org.athena.common.exception.InternalServerError;
-import org.athena.common.resp.UserResp;
+import org.athena.api.resp.UserResp;
 import org.athena.common.util.Constant;
 import org.athena.common.util.JWTUtil;
 import org.athena.common.util.SnowflakeIdWorker;
 import org.athena.common.util.crypto.CommonUtil;
-import org.athena.db.UserRepository;
+import org.athena.api.db.UserRepository;
 import org.jose4j.lang.JoseException;
 
 import java.time.Instant;

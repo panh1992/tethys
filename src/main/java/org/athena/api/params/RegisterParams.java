@@ -1,4 +1,4 @@
-package org.athena.common.params;
+package org.athena.api.params;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
