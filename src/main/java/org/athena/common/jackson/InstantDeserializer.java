@@ -10,7 +10,7 @@ import java.time.Instant;
 
 public class InstantDeserializer extends JsonDeserializer<Instant> {
 
-    public static InstantDeserializer instance = new InstantDeserializer();
+    public static final InstantDeserializer INSTANCE = new InstantDeserializer();
 
     @Override
     public Instant deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException {

@@ -9,7 +9,7 @@ import java.time.Instant;
 
 public class InstantSerializer extends JsonSerializer<Instant> {
 
-    public static final InstantSerializer instance = new InstantSerializer();
+    public static final InstantSerializer INSTANCE = new InstantSerializer();
 
     @Override
     public void serialize(Instant instant, JsonGenerator generator, SerializerProvider serializers) throws IOException {

@@ -32,8 +32,8 @@ public final class CommonUtil {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         SimpleModule instantModule = new SimpleModule("instant");
-        instantModule.addSerializer(Instant.class, InstantSerializer.instance);
-        instantModule.addDeserializer(Instant.class, InstantDeserializer.instance);
+        instantModule.addSerializer(Instant.class, InstantSerializer.INSTANCE);
+        instantModule.addDeserializer(Instant.class, InstantDeserializer.INSTANCE);
 
         mapper.registerModule(instantModule);
 
