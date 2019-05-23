@@ -1,6 +1,8 @@
 package org.athena.api.resp;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -18,6 +20,7 @@ import java.time.Instant;
 public class FileResp {
 
     @ApiModelProperty("文件主键")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long fileId;
 
     @ApiModelProperty("文件所属存储空间名称")
