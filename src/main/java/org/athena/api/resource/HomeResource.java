@@ -58,7 +58,7 @@ public class HomeResource {
             @ApiResponse(code = 200, message = "登录成功"),
             @ApiResponse(code = 404, message = "用户名或密码错误")
     })
-    public Response<String> login(LoginParams params) {
+    public Response<String> login(@Valid LoginParams params) {
         return Response.build(userBusiness.login(params.getUserName(), params.getPassWord()), "登录成功");
     }
 

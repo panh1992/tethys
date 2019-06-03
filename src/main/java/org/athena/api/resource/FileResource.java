@@ -5,10 +5,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.athena.api.business.FileBusiness;
+import org.athena.api.params.CreateFileParams;
 import org.athena.api.resp.FileResp;
 import org.athena.common.resp.Response;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -40,6 +42,14 @@ public class FileResource {
             @ApiParam(value = "分页页码") @QueryParam("page") Integer page,
             @ApiParam(value = "每页数量") @QueryParam("size") Integer size) {
         return Response.build(fileBusiness.findAll(page, size));
+    }
+
+    @Timed
+    @GET
+    @ApiOperation(value = "新建文件", notes = "新建文件元数据信息")
+    public Response<List<FileResp>> create(@Valid CreateFileParams createFileParams) {
+        fileBusiness.createFile(createFileParams);
+        return Response.build();
     }
 
     @Timed
