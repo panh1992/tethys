@@ -43,6 +43,22 @@ public class CryptoUtilTest {
     }
 
     @Test
+    public void getSnowflakeId() throws InterruptedException {
+
+        SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
+
+        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
+        for (int i = 0; i < 500; i++) {
+            executor.execute(() -> System.out.println(Thread.currentThread().getName() + ": \t" + idWorker.nextId()));
+        }
+
+        executor.shutdown();
+        executor.awaitTermination(60L, TimeUnit.SECONDS);
+
+    }
+
+    @Test
     public void testRSA() throws Exception {
         String str = "RSA 加密 测试数据 ～·`！@#¥%……&*（）!@#$%^&*(()。。";
 
