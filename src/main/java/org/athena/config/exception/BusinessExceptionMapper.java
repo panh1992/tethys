@@ -28,7 +28,7 @@ public final class BusinessExceptionMapper implements ExceptionMapper<BusinessEx
     @Override
     public Response toResponse(BusinessException exception) {
         exceptions.mark();
-        logger.info("BusinessException type:{} status {} code:{} message:{}", exception.getClass().getName(),
+        logger.info("BusinessException type: {} status: {} code: {} message: {}", exception.getClass().getName(),
                 exception.getStatus(), exception.getCode(), exception.getMessage());
         ErrorResp errorResp = ErrorResp.builder().code(exception.getCode())
                 .message(exception instanceof InternalServerError

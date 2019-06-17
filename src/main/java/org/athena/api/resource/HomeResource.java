@@ -8,8 +8,8 @@ import io.swagger.annotations.ApiResponses;
 import org.athena.api.business.UserBusiness;
 import org.athena.api.params.LoginParams;
 import org.athena.api.params.RegisterParams;
-import org.athena.common.resp.Response;
 import org.athena.api.resp.UserResp;
+import org.athena.common.resp.Response;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;

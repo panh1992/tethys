@@ -15,11 +15,11 @@ public class SnowflakeConfig {
     @Min(0)
     @Max(31)
     @NotNull
-    private long workerId;
+    private long workerId = 0;
 
     @Min(0)
     @Max(31)
     @NotNull
-    private long dataCenterId;
+    private long dataCenterId = 0;
 
 }

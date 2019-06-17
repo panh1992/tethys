@@ -4,6 +4,8 @@ import com.codahale.metrics.annotation.Timed;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.athena.api.business.FileBusiness;
 import org.athena.api.params.CreateFileParams;
 import org.athena.api.resp.FileResp;
@@ -38,6 +40,9 @@ public class FileResource {
     @Timed
     @GET
     @ApiOperation(value = "文件列表", notes = "获取文件列表信息")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "获取文件列表成功")
+    })
     public Response<List<FileResp>> findAll(
             @ApiParam(value = "分页页码") @QueryParam("page") Integer page,
             @ApiParam(value = "每页数量") @QueryParam("size") Integer size) {
@@ -47,6 +52,9 @@ public class FileResource {
     @Timed
     @GET
     @ApiOperation(value = "新建文件", notes = "新建文件元数据信息")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "新建成功")
+    })
     public Response<List<FileResp>> create(@Valid CreateFileParams createFileParams) {
         fileBusiness.createFile(createFileParams);
         return Response.build();

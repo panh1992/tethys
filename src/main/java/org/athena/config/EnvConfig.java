@@ -5,6 +5,10 @@ import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.setup.Environment;
 import org.athena.api.business.FileBusiness;
 import org.athena.api.business.UserBusiness;
+import org.athena.api.db.FileRepository;
+import org.athena.api.db.UserRepository;
+import org.athena.api.resource.FileResource;
+import org.athena.api.resource.HomeResource;
 import org.athena.common.util.SnowflakeIdWorker;
 import org.athena.config.exception.BusinessExceptionMapper;
 import org.athena.config.exception.ValidationExceptionMapper;
@@ -12,11 +16,7 @@ import org.athena.config.netty.NettyManaged;
 import org.athena.config.plugin.InstantPlugin;
 import org.athena.config.quartz.SchedulerManaged;
 import org.athena.config.redis.RedisManaged;
-import org.athena.api.db.FileRepository;
-import org.athena.api.db.UserRepository;
 import org.athena.filter.JWTAuthorizationFilter;
-import org.athena.api.resource.FileResource;
-import org.athena.api.resource.HomeResource;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.jpa.JpaPlugin;
@@ -54,10 +54,26 @@ public final class EnvConfig {
      */
     public static void registerFilter(Environment environment) {
 
-        // 暂时开启 CORS 跨域、 正式环境使用 nginx 配置
-        addCors(environment);
+        final FilterRegistration.Dynamic authorization =
+                environment.servlets().addFilter("Authorization", JWTAuthorizationFilter.class);
 
-        addAuthorization(environment);
+        authorization.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/test");
+
+    }
+
+    /**
+     * 开启 CORS 跨域
+     */
+    public static void registerCors(Environment environment, CorsConfig cors) {
+
+        final FilterRegistration.Dynamic dynamic =
+                environment.servlets().addFilter("CORS", CrossOriginFilter.class);
+
+        dynamic.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, cors.getAllowedOrigins());
+        dynamic.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, cors.getAllowedHeaders());
+        dynamic.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, cors.getAllowedMethods());
+
+        dynamic.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, cors.getUrlPatterns());
 
     }
 
@@ -98,33 +114,6 @@ public final class EnvConfig {
 
         environment.jersey().register(new ValidationExceptionMapper());
 
-    }
-
-    /**
-     * 添加 cors 跨域 过滤器
-     */
-    private static void addCors(Environment environment) {
-
-        final FilterRegistration.Dynamic cors =
-                environment.servlets().addFilter("CORS", CrossOriginFilter.class);
-
-        cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
-        cors.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "DNT, User-Agent, X-Requested-With, "
-                + "If-Modified-Since, Cache-Control, Content-Type, Range, Authorization");
-        cors.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "OPTIONS, GET, PUT, PATCH, POST, DELETE, HEAD");
-
-        cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
-
-    }
-
-    /**
-     * 添加 授权认证 过滤器
-     */
-    private static void addAuthorization(Environment environment) {
-        final FilterRegistration.Dynamic authorization =
-                environment.servlets().addFilter("Authorization", JWTAuthorizationFilter.class);
-
-        authorization.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/test");
     }
 
 }

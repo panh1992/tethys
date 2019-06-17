@@ -22,6 +22,8 @@ public class AthenaConfiguration extends Configuration {
 
     private SwaggerBundleConfiguration swagger;
 
+    private CorsConfig cors;
+
     @Valid
     @NotNull
     private SnowflakeConfig snowflake;

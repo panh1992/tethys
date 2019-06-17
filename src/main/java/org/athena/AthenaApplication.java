@@ -11,6 +11,8 @@ import org.athena.common.util.CommonUtil;
 import org.athena.config.AthenaConfiguration;
 import org.athena.config.EnvConfig;
 
+import java.util.Objects;
+
 public class AthenaApplication extends Application<AthenaConfiguration> {
 
     /**
@@ -45,6 +47,10 @@ public class AthenaApplication extends Application<AthenaConfiguration> {
         EnvConfig.registerManage(configuration, environment);
 
         EnvConfig.registerFilter(environment);
+
+        if (Objects.nonNull(configuration.getCors())) {
+            EnvConfig.registerCors(environment, configuration.getCors());
+        }
 
         EnvConfig.registerResource(configuration, environment);
 
