@@ -2,17 +2,17 @@ package org.athena.api.resource;
 
 import com.google.common.collect.Lists;
 import io.dropwizard.testing.junit.ResourceTestRule;
-import org.athena.api.entity.User;
 import org.athena.api.business.UserBusiness;
+import org.athena.api.db.UserRepository;
+import org.athena.api.entity.User;
 import org.athena.api.params.LoginParams;
 import org.athena.api.params.RegisterParams;
-import org.athena.common.resp.Response;
 import org.athena.api.resp.UserResp;
+import org.athena.common.resp.Response;
 import org.athena.common.util.Constant;
 import org.athena.common.util.JWTUtil;
 import org.athena.common.util.SnowflakeIdWorker;
 import org.athena.common.util.crypto.CommonUtil;
-import org.athena.api.db.UserRepository;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.jwt.consumer.InvalidJwtException;
@@ -65,13 +65,14 @@ public class HomeResourceTest {
     @Test
     public void login() {
         User user = new User();
-        user.setId(idWorker.nextId());
+        long userId = idWorker.nextId();
+        user.setId(userId);
         user.setUserName("panhong");
-        user.setPassWord(CommonUtil.hashpw("123456"));
+        user.setPassWord(CommonUtil.hashpw("pan123456.."));
 
         when(userRepository.findByUserName(user.getUserName())).thenReturn(Optional.of(user));
 
-        LoginParams params = LoginParams.builder().userName("panhong").passWord("123456").build();
+        LoginParams params = LoginParams.builder().userName("panhong").passWord("pan123456..").build();
 
         Response<String> response = resources.target("/login").request()
                 .post(Entity.entity(params, MediaType.APPLICATION_JSON_TYPE), Response.class);
@@ -84,7 +85,7 @@ public class HomeResourceTest {
             e.printStackTrace();
         }
 
-        assertEquals(user.getId(), subject);
+        assertEquals(user.getId().toString(), subject);
 
     }
 

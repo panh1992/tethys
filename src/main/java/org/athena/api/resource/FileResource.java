@@ -50,7 +50,7 @@ public class FileResource {
     }
 
     @Timed
-    @GET
+    @POST
     @ApiOperation(value = "新建文件", notes = "新建文件元数据信息")
     @ApiResponses({
             @ApiResponse(code = 201, message = "新建成功")
@@ -62,6 +62,7 @@ public class FileResource {
 
     @Timed
     @POST
+    @Path("/upload")
     @ApiOperation(value = "文件列表", notes = "获取文件列表信息")
     public Response<List<FileResp>> upload(final FormDataMultiPart multiPart) {
         return null;

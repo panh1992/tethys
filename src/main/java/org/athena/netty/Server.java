@@ -13,14 +13,18 @@ public class Server {
 
     private int port;
 
-    private ServerBootstrap bootstrap;
-
+    /**
+     * 构建netty服务
+     *
+     * @param port 监听端口
+     */
     public Server(int port) {
         this.port = port;
-        this.bootstrap = new ServerBootstrap();
-
     }
 
+    /**
+     * netty 服务启动方法
+     */
     public void start() throws InterruptedException {
         EventLoopGroup boosGroup = new NioEventLoopGroup();
         try {

@@ -19,4 +19,11 @@ public class CorsConfig {
     @NotNull
     private String[] urlPatterns;
 
+    public String[] getUrlPatterns() {
+        return urlPatterns.clone();
+    }
+
+    public void setUrlPatterns(String[] urlPatterns) {
+        this.urlPatterns = urlPatterns.clone();
+    }
 }
