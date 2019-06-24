@@ -1,4 +1,4 @@
-package org.athena.config.netty;
+package org.athena.config.managed;
 
 import io.dropwizard.lifecycle.Managed;
 import org.slf4j.Logger;

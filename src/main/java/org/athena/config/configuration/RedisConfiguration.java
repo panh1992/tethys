@@ -1,4 +1,4 @@
-package org.athena.config.redis;
+package org.athena.config.configuration;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -7,7 +7,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 @Data
-public class RedisConfig {
+public class RedisConfiguration {
 
     @NotEmpty
     private String address;

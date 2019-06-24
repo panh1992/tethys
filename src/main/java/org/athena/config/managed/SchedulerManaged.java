@@ -1,6 +1,7 @@
-package org.athena.config.quartz;
+package org.athena.config.managed;
 
 import io.dropwizard.lifecycle.Managed;
+import org.athena.config.quartz.Scheduled;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
 import org.quartz.Job;

@@ -1,11 +1,11 @@
-package org.athena.config;
+package org.athena.config.configuration;
 
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 
 @Data
-public class CorsConfig {
+public class CorsConfiguration {
 
     @NotNull
     private String allowedOrigins;

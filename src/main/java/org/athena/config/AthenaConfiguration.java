@@ -6,7 +6,9 @@ import io.dropwizard.db.DataSourceFactory;
 import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.athena.config.redis.RedisConfig;
+import org.athena.config.configuration.CorsConfiguration;
+import org.athena.config.configuration.ElasticsearchConfiguration;
+import org.athena.config.configuration.RedisConfiguration;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -22,7 +24,7 @@ public class AthenaConfiguration extends Configuration {
 
     private SwaggerBundleConfiguration swagger;
 
-    private CorsConfig cors;
+    private CorsConfiguration cors;
 
     @Valid
     @NotNull
@@ -34,6 +36,10 @@ public class AthenaConfiguration extends Configuration {
 
     @Valid
     @NotNull
-    private RedisConfig redis = new RedisConfig();
+    private RedisConfiguration redis = new RedisConfiguration();
+
+    @Valid
+    @NotNull
+    private ElasticsearchConfiguration elasticsearch = new ElasticsearchConfiguration();
 
 }

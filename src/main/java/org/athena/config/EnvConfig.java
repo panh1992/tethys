@@ -10,12 +10,13 @@ import org.athena.api.db.UserRepository;
 import org.athena.api.resource.FileResource;
 import org.athena.api.resource.HomeResource;
 import org.athena.common.util.SnowflakeIdWorker;
+import org.athena.config.configuration.CorsConfiguration;
 import org.athena.config.exception.BusinessExceptionMapper;
 import org.athena.config.exception.ValidationExceptionMapper;
-import org.athena.config.netty.NettyManaged;
+import org.athena.config.managed.NettyManaged;
 import org.athena.config.plugin.InstantPlugin;
-import org.athena.config.quartz.SchedulerManaged;
-import org.athena.config.redis.RedisManaged;
+import org.athena.config.managed.SchedulerManaged;
+import org.athena.config.managed.RedisManaged;
 import org.athena.filter.JWTAuthorizationFilter;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.jdbi.v3.core.Jdbi;
@@ -64,7 +65,7 @@ public final class EnvConfig {
     /**
      * 开启 CORS 跨域
      */
-    public static void registerCors(Environment environment, CorsConfig cors) {
+    public static void registerCors(Environment environment, CorsConfiguration cors) {
 
         final FilterRegistration.Dynamic dynamic =
                 environment.servlets().addFilter("CORS", CrossOriginFilter.class);
