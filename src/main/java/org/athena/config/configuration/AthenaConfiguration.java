@@ -26,6 +26,10 @@ public class AthenaConfiguration extends Configuration {
 
     @Valid
     @NotNull
+    private RabbitmqConfiguration rabbitmq;
+
+    @Valid
+    @NotNull
     private SnowflakeConfig snowflake;
 
     @Valid

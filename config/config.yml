@@ -65,3 +65,9 @@ elasticsearch:
   hostname: localhost
   port: 9200
   scheme: http
+
+rabbitmq:
+  host: localhost
+  username: admin
+  password: 123456
+  virtualHost: /athena

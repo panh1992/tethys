@@ -2,7 +2,6 @@ package org.athena.common.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.redisson.Redisson;
 import org.redisson.api.RBucket;
 import org.redisson.api.RedissonClient;
@@ -11,7 +10,6 @@ import org.redisson.config.TransportMode;
 
 import java.util.concurrent.TimeUnit;
 
-@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class RedisUtil {
 

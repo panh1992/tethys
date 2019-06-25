@@ -22,7 +22,7 @@
         <postgresql.driver.version>42.2.5</postgresql.driver.version>
         <redisson.version>3.9.1</redisson.version>
         <elasticsearch.version>7.1.1</elasticsearch.version>
-        <rabbitmq.client.version>3.2.0.RELEASE</rabbitmq.client.version>
+        <rabbitmq.version>5.7.1</rabbitmq.version>
         <jose4j.version>0.6.4</jose4j.version>
         <jbcrypt.version>0.4</jbcrypt.version>
         <jaxb-api.version>2.4.0-b180830.0359</jaxb-api.version>
@@ -139,11 +139,11 @@
             <artifactId>elasticsearch-rest-high-level-client</artifactId>
             <version>${elasticsearch.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.rabbitmq/http-client -->
+        <!-- https://mvnrepository.com/artifact/com.rabbitmq/amqp-client -->
         <dependency>
             <groupId>com.rabbitmq</groupId>
-            <artifactId>http-client</artifactId>
-            <version>${rabbitmq.client.version}</version>
+            <artifactId>amqp-client</artifactId>
+            <version>${rabbitmq.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.jdbi/jdbi3-jpa -->
         <dependency>

@@ -3,9 +3,6 @@ package org.athena.config;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.setup.Environment;
-import org.athena.storage.business.FileBusiness;
-import org.athena.storage.db.FileRepository;
-import org.athena.storage.resource.FileResource;
 import org.athena.auth.business.UserBusiness;
 import org.athena.auth.db.UserRepository;
 import org.athena.auth.resource.HomeResource;
@@ -15,11 +12,15 @@ import org.athena.config.configuration.CorsConfiguration;
 import org.athena.config.exception.BusinessExceptionMapper;
 import org.athena.config.exception.ValidationExceptionMapper;
 import org.athena.config.managed.NettyManaged;
+import org.athena.config.managed.RabbitmqManaged;
 import org.athena.config.managed.RedisManaged;
 import org.athena.config.managed.SchedulerManaged;
 import org.athena.config.plugin.InstantPlugin;
 import org.athena.filter.JWTAuthorizationFilter;
 import org.athena.filter.ResourceFilter;
+import org.athena.storage.business.FileBusiness;
+import org.athena.storage.db.FileRepository;
+import org.athena.storage.resource.FileResource;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.jpa.JpaPlugin;
@@ -45,6 +46,8 @@ public final class EnvConfig {
             throws SchedulerException, IOException {
 
         environment.lifecycle().manage(new RedisManaged(configuration.getRedis()));
+
+        environment.lifecycle().manage(new RabbitmqManaged(configuration.getRabbitmq()));
 
         environment.lifecycle().manage(new SchedulerManaged());
 
