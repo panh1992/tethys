@@ -3,21 +3,23 @@ package org.athena.config;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.setup.Environment;
-import org.athena.api.business.FileBusiness;
-import org.athena.api.business.UserBusiness;
-import org.athena.api.db.FileRepository;
-import org.athena.api.db.UserRepository;
-import org.athena.api.resource.FileResource;
-import org.athena.api.resource.HomeResource;
+import org.athena.storage.business.FileBusiness;
+import org.athena.storage.db.FileRepository;
+import org.athena.storage.resource.FileResource;
+import org.athena.auth.business.UserBusiness;
+import org.athena.auth.db.UserRepository;
+import org.athena.auth.resource.HomeResource;
 import org.athena.common.util.SnowflakeIdWorker;
+import org.athena.config.configuration.AthenaConfiguration;
 import org.athena.config.configuration.CorsConfiguration;
 import org.athena.config.exception.BusinessExceptionMapper;
 import org.athena.config.exception.ValidationExceptionMapper;
 import org.athena.config.managed.NettyManaged;
-import org.athena.config.plugin.InstantPlugin;
-import org.athena.config.managed.SchedulerManaged;
 import org.athena.config.managed.RedisManaged;
+import org.athena.config.managed.SchedulerManaged;
+import org.athena.config.plugin.InstantPlugin;
 import org.athena.filter.JWTAuthorizationFilter;
+import org.athena.filter.ResourceFilter;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.jpa.JpaPlugin;
@@ -55,10 +57,11 @@ public final class EnvConfig {
      */
     public static void registerFilter(Environment environment) {
 
-        final FilterRegistration.Dynamic authorization =
-                environment.servlets().addFilter("Authorization", JWTAuthorizationFilter.class);
+        environment.servlets().addFilter("Authorization", JWTAuthorizationFilter.class)
+                .addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/list");
 
-        authorization.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/test");
+        environment.servlets().addFilter("Resource", ResourceFilter.class)
+                .addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/list");
 
     }
 

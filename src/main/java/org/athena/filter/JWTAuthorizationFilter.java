@@ -2,6 +2,7 @@ package org.athena.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.athena.common.resp.ErrorResp;
+import org.athena.common.util.CommonUtil;
 import org.athena.common.util.Constant;
 import org.athena.common.util.JWTUtil;
 import org.athena.common.util.SystemContext;
@@ -53,7 +54,7 @@ public class JWTAuthorizationFilter implements Filter {
                     authorizationToken, e.getMessage());
             ErrorResp errorResp = ErrorResp.builder().code(Response.Status.UNAUTHORIZED.toString())
                     .message(Response.Status.UNAUTHORIZED.toString()).build();
-            ObjectMapper objectMapper = new ObjectMapper();
+            ObjectMapper objectMapper = CommonUtil.getObjectMapper();
             HttpServletResponse response = (HttpServletResponse) servletResponse;
             response.setStatus(Response.Status.UNAUTHORIZED.getStatusCode());
             response.setCharacterEncoding(StandardCharsets.UTF_8.displayName());
