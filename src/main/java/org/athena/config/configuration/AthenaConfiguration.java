@@ -6,7 +6,6 @@ import io.dropwizard.db.DataSourceFactory;
 import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.athena.config.SnowflakeConfig;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -30,7 +29,7 @@ public class AthenaConfiguration extends Configuration {
 
     @Valid
     @NotNull
-    private SnowflakeConfig snowflake;
+    private SnowflakeConfiguration snowflake;
 
     @Valid
     @NotNull
