@@ -62,7 +62,7 @@ public class User {
     /**
      * 个人简介
      */
-    @Column(name = "profile", length = 255)
+    @Column(name = "profile")
     private String profile;
 
     /**

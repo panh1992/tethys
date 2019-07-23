@@ -23,7 +23,6 @@ import org.athena.storage.db.FileRepository;
 import org.athena.storage.resource.FileResource;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.jdbi.v3.core.Jdbi;
-import org.jdbi.v3.jpa.JpaPlugin;
 import org.quartz.SchedulerException;
 
 import javax.servlet.DispatcherType;
@@ -92,7 +91,6 @@ public final class EnvConfig {
         JdbiFactory jdbiFactory = new JdbiFactory();
         final Jdbi jdbi = jdbiFactory.build(environment, configuration.getDatabase(), "postgres");
         jdbi.installPlugin(new InstantPlugin());
-        jdbi.installPlugin(new JpaPlugin());
 
         final UserRepository userRepository = jdbi.onDemand(UserRepository.class);
         final FileRepository fileRepository = jdbi.onDemand(FileRepository.class);

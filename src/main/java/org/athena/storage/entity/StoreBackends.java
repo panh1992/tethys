@@ -44,13 +44,13 @@ public class StoreBackends {
     /**
      * 存储容器（根目录）
      */
-    @Column(name = "container", length = 255)
+    @Column(name = "container")
     private String container;
 
     /**
      * 服务端点
      */
-    @Column(name = "endpoint", length = 255)
+    @Column(name = "endpoint")
     private String endpoint;
 
     /**
@@ -80,13 +80,13 @@ public class StoreBackends {
     /**
      * 认证参数1
      */
-    @Column(name = "auth_params_1", length = 255)
+    @Column(name = "auth_params_1")
     private String authParams1;
 
     /**
      * 认证参数2
      */
-    @Column(name = "auth_params_2", length = 255)
+    @Column(name = "auth_params_2")
     private String authParams2;
 
     /**

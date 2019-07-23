@@ -8,18 +8,16 @@ import io.swagger.annotations.ApiResponses;
 import org.athena.auth.business.UserBusiness;
 import org.athena.auth.params.LoginParams;
 import org.athena.auth.params.RegisterParams;
-import org.athena.auth.resp.UserResp;
 import org.athena.common.resp.Response;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
+@Timed
 @Path("/")
 @Api(tags = "A")
 @Produces(MediaType.APPLICATION_JSON)
@@ -35,7 +33,6 @@ public class HomeResource {
     /**
      * 用户注册
      */
-    @Timed
     @POST
     @Path("register")
     @ApiOperation(value = "注册", notes = "用户使用 用户名、邮箱、密码 注册")
@@ -50,7 +47,6 @@ public class HomeResource {
     /**
      * 用户登录
      */
-    @Timed
     @POST
     @Path("login")
     @ApiOperation(value = "登录", notes = "用户使用 用户名或邮箱、密码 进行登录操作")
@@ -60,13 +56,6 @@ public class HomeResource {
     })
     public Response<String> login(@Valid LoginParams params) {
         return Response.build(userBusiness.login(params.getUserName(), params.getPassWord()), "登录成功");
-    }
-
-    @Timed
-    @GET
-    @Path("list")
-    public Response<List<UserResp>> findAll() {
-        return Response.build(userBusiness.findAll());
     }
 
 }

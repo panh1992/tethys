@@ -2,7 +2,6 @@ package org.athena.auth.business;
 
 import org.athena.auth.db.UserRepository;
 import org.athena.auth.entity.User;
-import org.athena.auth.resp.UserResp;
 import org.athena.common.exception.EntityAlreadyExistsException;
 import org.athena.common.exception.EntityNotExistException;
 import org.athena.common.exception.InternalServerError;
@@ -13,9 +12,7 @@ import org.athena.common.util.crypto.CommonUtil;
 import org.jose4j.lang.JoseException;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class UserBusiness {
 
@@ -61,15 +58,6 @@ public class UserBusiness {
         } catch (JoseException e) {
             throw InternalServerError.build("jwt token 创建失败");
         }
-    }
-
-    /**
-     * 查询所有用户
-     */
-    public List<UserResp> findAll() {
-        return userRepository.findAll().parallelStream().map(user -> UserResp.builder().userId(user.getId())
-                .userName(user.getUserName()).email(user.getEmail()).mobile(user.getMobile())
-                .createTime(user.getCreateTime()).build()).collect(Collectors.toList());
     }
 
 }
