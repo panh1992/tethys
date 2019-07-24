@@ -1,6 +1,5 @@
 package org.athena.storage.resource;
 
-import com.google.common.collect.Lists;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.athena.auth.business.UserBusiness;
 import org.athena.auth.db.UserRepository;
@@ -8,7 +7,6 @@ import org.athena.auth.entity.User;
 import org.athena.auth.params.LoginParams;
 import org.athena.auth.params.RegisterParams;
 import org.athena.auth.resource.HomeResource;
-import org.athena.auth.resp.UserResp;
 import org.athena.common.resp.Response;
 import org.athena.common.util.Constant;
 import org.athena.common.util.JWTUtil;
@@ -23,13 +21,11 @@ import org.junit.Test;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import java.time.Instant;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
@@ -88,20 +84,6 @@ public class HomeResourceTest {
 
         assertEquals(user.getId().toString(), subject);
 
-    }
-
-    @Test
-    public void findAll() {
-        List<User> result = Lists.newArrayList();
-        result.add(User.builder().mobile("122222").build());
-
-        when(userRepository.findAll()).thenReturn(result);
-
-        Response<List<UserResp>> response = resources.target("/list").request().get(Response.class);
-
-        assertEquals(1, response.getData().size());
-
-        verify(userRepository).findAll();
     }
 
 }

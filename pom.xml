@@ -28,7 +28,6 @@
         <jaxb-api.version>2.4.0-b180830.0359</jaxb-api.version>
         <guice.version>4.2.2</guice.version>
         <netty.version>4.1.34.Final</netty.version>
-        <jersey.client.version>2.29</jersey.client.version>
         <aliyun-java-sdk-core.version>4.4.0</aliyun-java-sdk-core.version>
         <aliyun-java-sdk-sts.version>3.0.1</aliyun-java-sdk-sts.version>
         <aliyun-sdk-oss.version>3.4.2</aliyun-sdk-oss.version>
@@ -97,12 +96,6 @@
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
             <version>${netty.version}</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client -->
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>${jersey.client.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.aliyun/aliyun-java-sdk-core -->
         <dependency>
