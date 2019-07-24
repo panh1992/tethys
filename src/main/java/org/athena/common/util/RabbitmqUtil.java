@@ -47,10 +47,10 @@ public final class RabbitmqUtil {
         return connection;
     }
 
-    public static void main(String[] args) throws IOException {
-        // 获取连接
-        Connection connection = null;
-
+    /**
+     * 消费
+     */
+    private static void test() throws IOException {
         // 从连接中创建通道
         Channel channel = connection.createChannel();
         // 声明队列
@@ -70,10 +70,11 @@ public final class RabbitmqUtil {
         };
         // 监听队列
         channel.basicConsume("test_simple_queue", false, consumer);
-        // send();
-        // connection.close();
     }
 
+    /**
+     * 生产
+     */
     private static void send() throws IOException, InterruptedException {
         // 获取连接
         Connection connection = null;
