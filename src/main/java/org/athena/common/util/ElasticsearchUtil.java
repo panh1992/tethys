@@ -31,7 +31,7 @@ public final class ElasticsearchUtil {
      * @param source 存储数据
      * @throws IOException 创建索引异常
      */
-    private static void index(String index, String source) throws IOException {
+    public static void index(String index, String source) throws IOException {
         IndexRequest request = new IndexRequest(index);
         request.source(source, XContentType.JSON);
         client.index(request, RequestOptions.DEFAULT);

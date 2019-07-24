@@ -26,6 +26,8 @@ public final class RabbitmqUtil {
 
     private static Logger logger = LoggerFactory.getLogger(RabbitmqUtil.class);
 
+    private static final String TEST_SIMPLE_QUEUE = "test_simple_queue";
+
     private static volatile Connection connection;
 
     /**
@@ -50,57 +52,61 @@ public final class RabbitmqUtil {
     /**
      * 消费
      */
-    private static void test() throws IOException {
-        // 从连接中创建通道
-        Channel channel = connection.createChannel();
-        // 声明队列
-        channel.queueDeclare("test_simple_queue", false, false, false, null);
-        // 创建消费者
-        Consumer consumer = new DefaultConsumer(channel) {
-            // 获取消息
-            @Override
-            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties,
-                                       byte[] body) throws IOException {
-                String msg = new String(body, "utf-8");
-                logger.info("接收到消息——" + msg);
+    public static void test() {
+        // 从连接中创建通道]
+        try (Channel channel = connection.createChannel()) {
+            // 声明队列
+            channel.queueDeclare(TEST_SIMPLE_QUEUE, false, false, false, null);
+            // 创建消费者
+            Consumer consumer = new DefaultConsumer(channel) {
+                // 获取消息
+                @Override
+                public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties,
+                                           byte[] body) throws IOException {
+                    String msg = new String(body, "utf-8");
+                    logger.info("接收到消息——{}", msg);
 
-                // 返回确认状态
-                channel.basicAck(envelope.getDeliveryTag(), false);
-            }
-        };
-        // 监听队列
-        channel.basicConsume("test_simple_queue", false, consumer);
+                    // 返回确认状态
+                    channel.basicAck(envelope.getDeliveryTag(), false);
+                }
+            };
+            // 监听队列
+            channel.basicConsume(TEST_SIMPLE_QUEUE, false, consumer);
+        } catch (IOException | TimeoutException e) {
+            logger.error("", e);
+        }
     }
 
     /**
      * 生产
      */
-    private static void send() throws IOException, InterruptedException {
-        // 获取连接
-        Connection connection = null;
+    public static void send() throws IOException, InterruptedException {
         // 从连接中创建通道
-        Channel channel = connection.createChannel();
-        // 声明一个队列
-        channel.queueDeclare("test_simple_queue", false, false, false, null);
-        // 消息内容
-        String msg = "simple queue hello!";
+        try (Channel channel = connection.createChannel()) {
+            // 声明一个队列
+            channel.queueDeclare(TEST_SIMPLE_QUEUE, false, false, false, null);
+            // 消息内容
+            String msg = "simple queue hello!";
 
-        ExecutorService service = Executors.newFixedThreadPool(24);
-        for (int i = 0; i < 1; i++) {
-            service.submit(() -> {
-                try {
-                    channel.basicPublish("", "test_simple_queue", null, msg.getBytes());
-                    logger.info("线程: {} 正发送消息", Thread.currentThread().getName());
-                } catch (IOException e) {
-                    logger.error("", e);
-                }
-            });
-        }
-        // 发送消息
-        service.shutdown();
-        if (service.awaitTermination(2, TimeUnit.DAYS)) {
-            logger.info("send success");
-            connection.close();
+            ExecutorService service = Executors.newFixedThreadPool(24);
+            for (int i = 0; i < 1; i++) {
+                service.submit(() -> {
+                    try {
+                        channel.basicPublish("", TEST_SIMPLE_QUEUE, null, msg.getBytes());
+                        logger.info("线程: {} 正发送消息", Thread.currentThread().getName());
+                    } catch (IOException e) {
+                        logger.error("", e);
+                    }
+                });
+            }
+            // 发送消息
+            service.shutdown();
+            if (service.awaitTermination(2, TimeUnit.DAYS)) {
+                logger.info("send success");
+                connection.close();
+            }
+        } catch (IOException | TimeoutException e) {
+            logger.error("", e);
         }
     }
 
