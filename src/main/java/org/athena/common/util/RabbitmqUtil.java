@@ -28,7 +28,7 @@ public final class RabbitmqUtil {
 
     private static final String TEST_SIMPLE_QUEUE = "test_simple_queue";
 
-    private static volatile Connection connection;
+    private static Connection connection;
 
     /**
      * 创建 RabbitmqConfiguration 链接
