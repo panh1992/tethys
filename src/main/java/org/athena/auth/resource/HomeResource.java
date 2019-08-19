@@ -12,6 +12,7 @@ import org.athena.auth.params.LoginParams;
 import org.athena.auth.params.RegisterParams;
 import org.athena.common.resp.Response;
 
+import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -28,11 +29,8 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class HomeResource {
 
+    @Inject
     private UserBusiness userBusiness;
-
-    public HomeResource(UserBusiness userBusiness) {
-        this.userBusiness = userBusiness;
-    }
 
     /**
      * 用户注册

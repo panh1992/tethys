@@ -1,6 +1,7 @@
 package org.athena.storage.resource;
 
 import com.codahale.metrics.annotation.Timed;
+import com.google.inject.Inject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -31,6 +32,7 @@ import java.util.List;
 @Api(tags = "B")
 public class FileResource {
 
+    @Inject
     private FileBusiness fileBusiness;
 
     public FileResource(FileBusiness fileBusiness) {

@@ -1,6 +1,8 @@
 package org.athena.auth.business;
 
-import lombok.AllArgsConstructor;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import lombok.NoArgsConstructor;
 import org.athena.auth.db.ResourceRepository;
 import org.athena.auth.db.RoleRepository;
 import org.athena.auth.db.UserRepository;
@@ -21,17 +23,22 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-@AllArgsConstructor
+@Singleton
+@NoArgsConstructor
 public class UserBusiness {
 
-    private static Logger logger = LoggerFactory.getLogger(JWTUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserBusiness.class);
 
+    @Inject
     private SnowflakeIdWorker idWorker;
 
+    @Inject
     private UserRepository userRepository;
 
+    @Inject
     private RoleRepository roleRepository;
 
+    @Inject
     private ResourceRepository resourceRepository;
 
     /**

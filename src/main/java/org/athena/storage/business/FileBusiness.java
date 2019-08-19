@@ -1,31 +1,35 @@
 package org.athena.storage.business;
 
-import lombok.extern.slf4j.Slf4j;
+import com.google.inject.Singleton;
+import lombok.NoArgsConstructor;
 import org.athena.storage.db.FileRepository;
 import org.athena.storage.entity.AthenaFile;
 import org.athena.storage.params.CreateFileParams;
 import org.athena.storage.resp.FileResp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * 文件业务处理类
  */
-@Slf4j
+@Singleton
+@NoArgsConstructor
 public class FileBusiness {
 
-    private FileRepository fileRepository;
+    private static final Logger logger = LoggerFactory.getLogger(FileBusiness.class);
 
-    public FileBusiness(FileRepository fileRepository) {
-        this.fileRepository = fileRepository;
-    }
+    @Inject
+    private FileRepository fileRepository;
 
     /**
      * 获取所有文件列表
      */
     public List<FileResp> findAll(Integer page, Integer size) {
-        log.info("sks:" + page + size);
+        logger.info("sks:" + page + size);
         List<AthenaFile> files = fileRepository.findAll();
         return files.stream().map(x -> FileResp.builder().build())
                 .collect(Collectors.toList());
@@ -37,7 +41,7 @@ public class FileBusiness {
      * @param createFileParams 创建文件参数
      */
     public void createFile(CreateFileParams createFileParams) {
-        log.info("createFile:" + createFileParams);
+        logger.info("createFile:" + createFileParams);
     }
 
 }

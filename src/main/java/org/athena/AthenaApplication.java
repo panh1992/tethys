@@ -5,15 +5,18 @@ import io.dropwizard.forms.MultiPartBundle;
 import io.dropwizard.jdbi3.bundles.JdbiExceptionsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import io.federecio.dropwizard.swagger.SwaggerBundle;
-import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 import org.athena.common.util.CommonUtil;
-import org.athena.config.configuration.AthenaConfiguration;
 import org.athena.config.EnvConfig;
-
-import java.util.Objects;
+import org.athena.config.bundle.SwaggerBundle;
+import org.athena.config.configuration.AthenaConfiguration;
+import org.athena.guice.EnvironmentModule;
+import org.athena.guice.ManagedModule;
+import org.athena.guice.RepositoryModule;
+import org.athena.guice.dropwizard.GuiceBundle;
 
 public class AthenaApplication extends Application<AthenaConfiguration> {
+
+    private static GuiceBundle<AthenaConfiguration> guiceBundle;
 
     /**
      * Athena 程序启动类
@@ -29,30 +32,28 @@ public class AthenaApplication extends Application<AthenaConfiguration> {
     @Override
     public void initialize(Bootstrap<AthenaConfiguration> bootstrap) {
 
+        guiceBundle = GuiceBundle.<AthenaConfiguration>newBuilder().addModule(new ManagedModule())
+                .addModule(new EnvironmentModule()).addModule(new RepositoryModule())
+                .enableAutoConfig(getClass().getPackage().getName())
+                .setConfigClass(AthenaConfiguration.class)
+                .build();
+
+        bootstrap.addBundle(guiceBundle);
         bootstrap.addBundle(new MultiPartBundle());
         bootstrap.addBundle(new JdbiExceptionsBundle());
-        bootstrap.addBundle(new SwaggerBundle<AthenaConfiguration>() {
-            @Override
-            protected SwaggerBundleConfiguration getSwaggerBundleConfiguration(AthenaConfiguration configuration) {
-                return configuration.getSwagger();
-            }
-        });
+        bootstrap.addBundle(new SwaggerBundle());
         bootstrap.setObjectMapper(CommonUtil.getObjectMapper());
 
     }
 
     @Override
-    public void run(AthenaConfiguration configuration, Environment environment) throws Exception {
+    public void run(AthenaConfiguration configuration, Environment environment) {
 
-        EnvConfig.registerManage(configuration, environment);
-
-        if (Objects.nonNull(configuration.getCors())) {
-            EnvConfig.registerCors(environment, configuration.getCors());
-        }
-
-        EnvConfig.registerResource(configuration, environment);
+        EnvConfig.registerCors(environment, configuration.getCors());
 
         EnvConfig.registerException(environment);
+
+        EnvConfig.registerFilter(environment, guiceBundle);
 
     }
 
