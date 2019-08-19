@@ -14,19 +14,19 @@ import java.util.Optional;
 
 public interface UserRepository {
 
-    @SqlQuery("SELECT id, username, nickname, password, email, mobile, profile, create_time FROM users "
+    @SqlQuery("SELECT id, username, nickname, password, email, mobile, profile, create_time FROM auth.user "
             + "ORDER BY create_time DESC")
     List<User> findAll();
 
-    @SqlQuery("SELECT id, username, nickname, password, email, mobile, profile, create_time FROM users "
+    @SqlQuery("SELECT id, username, nickname, password, email, mobile, profile, create_time FROM auth.user "
             + "WHERE username = :username")
     Optional<User> findByUserName(@Bind("username") String userName);
 
-    @SqlUpdate("INSERT INTO users (id, username, nickname, password, email, mobile, profile, create_time) VALUES "
+    @SqlUpdate("INSERT INTO auth.user (id, username, nickname, password, email, mobile, profile, create_time) VALUES "
             + "(:id, :userName, :nickName, :passWord, :email, :mobile, :profile, :createTime)")
     void save(@BindBean User user);
 
-    @SqlUpdate("UPDATE users SET username = 'asdfg'")
+    @SqlUpdate("UPDATE auth.user SET username = 'asdfg'")
     void updateUser();
 
     /**

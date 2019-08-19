@@ -2,6 +2,8 @@ package org.athena.storage.resource;
 
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.athena.auth.business.UserBusiness;
+import org.athena.auth.db.ResourceRepository;
+import org.athena.auth.db.RoleRepository;
 import org.athena.auth.db.UserRepository;
 import org.athena.auth.entity.User;
 import org.athena.auth.params.LoginParams;
@@ -33,11 +35,15 @@ public class HomeResourceTest {
 
     private static final UserRepository userRepository = mock(UserRepository.class);
 
+    private static final RoleRepository roleRepository = mock(RoleRepository.class);
+
+    private static final ResourceRepository resourceRepository = mock(ResourceRepository.class);
+
     private static final SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
 
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
-            .addResource(new HomeResource(new UserBusiness(idWorker, userRepository)))
+            .addResource(new HomeResource(new UserBusiness(idWorker, userRepository, roleRepository, resourceRepository)))
             .build();
 
     @Test

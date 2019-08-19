@@ -46,8 +46,6 @@ public class AthenaApplication extends Application<AthenaConfiguration> {
 
         EnvConfig.registerManage(configuration, environment);
 
-        EnvConfig.registerFilter(environment);
-
         if (Objects.nonNull(configuration.getCors())) {
             EnvConfig.registerCors(environment, configuration.getCors());
         }

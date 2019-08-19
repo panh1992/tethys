@@ -7,21 +7,16 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.Instant;
-import java.util.List;
 
 @Data
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "role")
+@Table(schema = "auth", name = "role")
 public class Role {
 
     /**
@@ -54,14 +49,5 @@ public class Role {
      */
     @Column(name = "description")
     private String description;
-
-    /**
-     * 角色下权限信息
-     */
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "role_resource_relation", schema = "public", joinColumns = {
-            @JoinColumn(name = "role_id", referencedColumnName = "id")}, inverseJoinColumns = {
-            @JoinColumn(name = "resource_id", referencedColumnName = "id")})
-    private List<Resource> resources;
 
 }

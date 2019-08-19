@@ -6,16 +6,20 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.athena.auth.business.UserBusiness;
+import org.athena.auth.entity.Role;
+import org.athena.auth.entity.User;
 import org.athena.auth.params.LoginParams;
 import org.athena.auth.params.RegisterParams;
 import org.athena.common.resp.Response;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Timed
 @Path("/")
@@ -56,6 +60,18 @@ public class HomeResource {
     })
     public Response<String> login(@Valid LoginParams params) {
         return Response.build(userBusiness.login(params.getUserName(), params.getPassWord()), "登录成功");
+    }
+
+    @GET
+    @Path("roles")
+    public Response<List<Role>> login() {
+        return Response.build(userBusiness.findAllRole(), "登录成功");
+    }
+
+    @GET
+    @Path("users")
+    public Response<List<User>> users() {
+        return Response.build(userBusiness.findAllUser(), "登录成功");
     }
 
 }

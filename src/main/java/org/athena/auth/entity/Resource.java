@@ -16,7 +16,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "resource")
+@Table(schema = "auth", name = "resource")
 public class Resource {
 
     /**
@@ -29,7 +29,7 @@ public class Resource {
     /**
      * 请求 URI
      */
-    @Column(name = "uri", length = 64)
+    @Column(name = "uri")
     private String uri;
 
     /**
