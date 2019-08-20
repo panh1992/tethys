@@ -10,18 +10,9 @@ import java.util.UUID;
  * 通用加密工具
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class CommonUtil {
+public final class BCryptUtil {
 
     private static final String SALT = BCrypt.gensalt(12);
-
-    /**
-     * 获取 uuid 字符串
-     */
-    public static String getUUID() {
-
-        return UUID.randomUUID().toString().replaceAll("-", "");
-
-    }
 
     /**
      * 使用 BCrypt 加密

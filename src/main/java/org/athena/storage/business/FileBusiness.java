@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
  * 文件业务处理类
  */
 @Singleton
-@NoArgsConstructor
 public class FileBusiness {
 
     private static final Logger logger = LoggerFactory.getLogger(FileBusiness.class);

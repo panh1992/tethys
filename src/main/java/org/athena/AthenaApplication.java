@@ -1,5 +1,6 @@
 package org.athena;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.Application;
 import io.dropwizard.forms.MultiPartBundle;
 import io.dropwizard.jdbi3.bundles.JdbiExceptionsBundle;
@@ -42,7 +43,7 @@ public class AthenaApplication extends Application<AthenaConfiguration> {
         bootstrap.addBundle(new MultiPartBundle());
         bootstrap.addBundle(new JdbiExceptionsBundle());
         bootstrap.addBundle(new SwaggerBundle());
-        bootstrap.setObjectMapper(CommonUtil.getObjectMapper());
+        bootstrap.setObjectMapper(guiceBundle.getInjector().getInstance(ObjectMapper.class));
 
     }
 

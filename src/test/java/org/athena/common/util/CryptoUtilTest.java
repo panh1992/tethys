@@ -1,6 +1,6 @@
 package org.athena.common.util;
 
-import org.athena.common.util.crypto.CommonUtil;
+import org.athena.common.util.crypto.BCryptUtil;
 import org.athena.common.util.crypto.RSAUtil;
 import org.jose4j.jwt.JwtClaims;
 import org.junit.Test;
@@ -25,20 +25,6 @@ public class CryptoUtilTest {
         System.out.println("乙亥年已过 " + nowDays + " 天");
         double n = nowDays * 1D / days;
         System.out.println("乙亥年已过百分比 " + (n * 100) + "%");
-
-    }
-
-    @Test
-    public void getUUID() throws InterruptedException {
-
-        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-
-        for (int i = 0; i < 30; i++) {
-            executor.execute(() -> System.out.println(Thread.currentThread().getName() + ": \t" + CommonUtil.getUUID()));
-        }
-
-        executor.shutdown();
-        executor.awaitTermination(60L, TimeUnit.SECONDS);
 
     }
 
@@ -94,10 +80,10 @@ public class CryptoUtilTest {
     public void testBCrypt() {
         String password = "subject";
 
-        String hash = CommonUtil.hashpw(password);
+        String hash = BCryptUtil.hashpw(password);
         System.out.println("BCrypt 加密密文:\t" + hash);
 
-        System.out.println("BCrypt 密文验证结果:\t" + CommonUtil.checkpw(password, hash));
+        System.out.println("BCrypt 密文验证结果:\t" + BCryptUtil.checkpw(password, hash));
 
     }
 

@@ -1,8 +1,8 @@
 package org.athena.auth.business;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import lombok.NoArgsConstructor;
 import org.athena.auth.db.ResourceRepository;
 import org.athena.auth.db.RoleRepository;
 import org.athena.auth.db.UserRepository;
@@ -14,7 +14,7 @@ import org.athena.common.exception.InternalServerError;
 import org.athena.common.util.Constant;
 import org.athena.common.util.JWTUtil;
 import org.athena.common.util.SnowflakeIdWorker;
-import org.athena.common.util.crypto.CommonUtil;
+import org.athena.common.util.crypto.BCryptUtil;
 import org.jose4j.lang.JoseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,13 +24,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Singleton
-@NoArgsConstructor
 public class UserBusiness {
 
     private static final Logger logger = LoggerFactory.getLogger(UserBusiness.class);
 
     @Inject
     private SnowflakeIdWorker idWorker;
+
+    @Inject
+    private ObjectMapper mapper;
 
     @Inject
     private UserRepository userRepository;
@@ -52,7 +54,7 @@ public class UserBusiness {
         if (checkUser.isPresent()) {
             throw EntityAlreadyExistsException.build("用户名已存在");
         }
-        User user = User.builder().id(idWorker.nextId()).userName(userName).passWord(CommonUtil.hashpw(password))
+        User user = User.builder().id(idWorker.nextId()).userName(userName).passWord(BCryptUtil.hashpw(password))
                 .createTime(Instant.now()).build();
         userRepository.save(user);
     }
@@ -66,7 +68,7 @@ public class UserBusiness {
      */
     public String login(String userName, String passWord) {
         Optional<User> userOptional = userRepository.findByUserName(userName);
-        if (!userOptional.isPresent() || !CommonUtil.checkpw(passWord, userOptional.get().getPassWord())) {
+        if (!userOptional.isPresent() || !BCryptUtil.checkpw(passWord, userOptional.get().getPassWord())) {
             throw EntityNotExistException.build("用户名或密码错误");
         }
         try {
