@@ -1,4 +1,4 @@
-package org.athena.config.plugin;
+package org.athena.plugin.jdbi;
 
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.spi.JdbiPlugin;

@@ -1,16 +1,16 @@
 package org.athena.config;
 
+import io.dropwizard.Configuration;
 import io.dropwizard.setup.Environment;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.athena.config.configuration.AthenaConfiguration;
 import org.athena.config.configuration.CorsConfiguration;
 import org.athena.config.exception.BusinessExceptionMapper;
 import org.athena.config.exception.ValidationExceptionMapper;
 import org.athena.filter.JWTAuthorizationFilter;
 import org.athena.filter.ResourceFilter;
-import org.athena.guice.dropwizard.GuiceBundle;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
+import ru.vyarus.dropwizard.guice.GuiceBundle;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
@@ -41,7 +41,7 @@ public final class EnvConfig {
     /**
      * 注册过滤器
      */
-    public static void registerFilter(Environment environment, GuiceBundle<AthenaConfiguration> guiceBundle) {
+    public static void registerFilter(Environment environment, GuiceBundle<Configuration> guiceBundle) {
 
 
 

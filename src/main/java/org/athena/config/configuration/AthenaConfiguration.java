@@ -3,16 +3,19 @@ package org.athena.config.configuration;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.jobs.JobConfiguration;
 import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Collections;
+import java.util.Map;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class AthenaConfiguration extends Configuration {
+public class AthenaConfiguration extends Configuration implements JobConfiguration {
 
     @Valid
     @NotNull
@@ -22,6 +25,8 @@ public class AthenaConfiguration extends Configuration {
     private SwaggerBundleConfiguration swagger;
 
     private CorsConfiguration cors;
+
+    public Map<String,String> quartz;
 
     @Valid
     @NotNull
@@ -42,5 +47,16 @@ public class AthenaConfiguration extends Configuration {
     @Valid
     @NotNull
     private ElasticsearchConfiguration elasticsearch = new ElasticsearchConfiguration();
+
+
+    @Override
+    public Map<String, String> getJobs() {
+        return Collections.emptyMap();
+    }
+
+    @Override
+    public Map<String, String> getQuartzConfiguration() {
+        return quartz;
+    }
 
 }

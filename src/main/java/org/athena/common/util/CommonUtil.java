@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import io.dropwizard.jackson.Jackson;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,8 @@ public final class CommonUtil {
     /**
      * 获取系统 jackson 配置的 ObjectMapper 信息
      */
+    @Provides
+    @Singleton
     public static ObjectMapper getObjectMapper() {
         ObjectMapper mapper = Jackson.newObjectMapper();
         // 设置null值不参与序列化(字段不被显示)

@@ -1,9 +1,11 @@
 package org.athena;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.Application;
+import io.dropwizard.Configuration;
 import io.dropwizard.forms.MultiPartBundle;
+import io.dropwizard.jdbi3.JdbiHealthCheck;
 import io.dropwizard.jdbi3.bundles.JdbiExceptionsBundle;
+import io.dropwizard.jobs.JobsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.athena.common.util.CommonUtil;
@@ -11,13 +13,15 @@ import org.athena.config.EnvConfig;
 import org.athena.config.bundle.SwaggerBundle;
 import org.athena.config.configuration.AthenaConfiguration;
 import org.athena.guice.EnvironmentModule;
-import org.athena.guice.ManagedModule;
-import org.athena.guice.RepositoryModule;
-import org.athena.guice.dropwizard.GuiceBundle;
+import org.athena.guice.JDBIFactory;
+import org.athena.task.DemoJob;
+import org.jdbi.v3.core.Jdbi;
+import ru.vyarus.dropwizard.guice.GuiceBundle;
+import ru.vyarus.guicey.jdbi3.JdbiBundle;
 
 public class AthenaApplication extends Application<AthenaConfiguration> {
 
-    private static GuiceBundle<AthenaConfiguration> guiceBundle;
+    private static GuiceBundle<Configuration> guiceBundle;
 
     /**
      * Athena 程序启动类
@@ -33,17 +37,16 @@ public class AthenaApplication extends Application<AthenaConfiguration> {
     @Override
     public void initialize(Bootstrap<AthenaConfiguration> bootstrap) {
 
-        guiceBundle = GuiceBundle.<AthenaConfiguration>newBuilder().addModule(new ManagedModule())
-                .addModule(new EnvironmentModule()).addModule(new RepositoryModule())
-                .enableAutoConfig(getClass().getPackage().getName())
-                .setConfigClass(AthenaConfiguration.class)
-                .build();
+        guiceBundle = GuiceBundle.builder().bundles(JdbiBundle.forDbi(JDBIFactory::get))
+                .modules(new EnvironmentModule()).enableAutoConfig(getClass().getPackage().getName())
+                .useWebInstallers().build();
 
         bootstrap.addBundle(guiceBundle);
+        bootstrap.addBundle(new JobsBundle(new DemoJob()));
         bootstrap.addBundle(new MultiPartBundle());
         bootstrap.addBundle(new JdbiExceptionsBundle());
         bootstrap.addBundle(new SwaggerBundle());
-        bootstrap.setObjectMapper(guiceBundle.getInjector().getInstance(ObjectMapper.class));
+        bootstrap.setObjectMapper(CommonUtil.getObjectMapper());
 
     }
 
@@ -55,6 +58,9 @@ public class AthenaApplication extends Application<AthenaConfiguration> {
         EnvConfig.registerException(environment);
 
         EnvConfig.registerFilter(environment, guiceBundle);
+
+        environment.healthChecks().register("dataBaseHealthCheck", new JdbiHealthCheck(guiceBundle
+                .getInjector().getInstance(Jdbi.class), "/* Health Check */ SELECT 1"));
 
     }
 

@@ -1,5 +1,6 @@
 package org.athena.config.managed;
 
+import com.google.inject.Inject;
 import io.dropwizard.lifecycle.Managed;
 import org.athena.config.configuration.ElasticsearchConfiguration;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -16,9 +17,7 @@ public class ElasticsearchManaged implements Managed {
 
     private ElasticsearchConfiguration config;
 
-    public ElasticsearchManaged() {
-    }
-
+    @Inject
     public ElasticsearchManaged(ElasticsearchConfiguration config) {
         this.config = config;
     }

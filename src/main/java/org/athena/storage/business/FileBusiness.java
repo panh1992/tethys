@@ -1,7 +1,6 @@
 package org.athena.storage.business;
 
 import com.google.inject.Singleton;
-import lombok.NoArgsConstructor;
 import org.athena.storage.db.FileRepository;
 import org.athena.storage.entity.AthenaFile;
 import org.athena.storage.params.CreateFileParams;

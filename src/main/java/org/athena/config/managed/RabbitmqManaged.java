@@ -1,5 +1,6 @@
 package org.athena.config.managed;
 
+import com.google.inject.Inject;
 import com.rabbitmq.client.Connection;
 import io.dropwizard.lifecycle.Managed;
 import org.athena.config.configuration.RabbitmqConfiguration;
@@ -14,6 +15,7 @@ public class RabbitmqManaged implements Managed {
 
     private RabbitmqConfiguration config;
 
+    @Inject
     public RabbitmqManaged(RabbitmqConfiguration configuration) {
         this.config = configuration;
     }

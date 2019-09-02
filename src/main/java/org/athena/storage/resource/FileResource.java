@@ -35,10 +35,6 @@ public class FileResource {
     @Inject
     private FileBusiness fileBusiness;
 
-    public FileResource(FileBusiness fileBusiness) {
-        this.fileBusiness = fileBusiness;
-    }
-
     @Timed
     @GET
     @ApiOperation(value = "文件列表", notes = "获取文件列表信息")

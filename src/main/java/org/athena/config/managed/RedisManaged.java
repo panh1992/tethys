@@ -1,7 +1,9 @@
 package org.athena.config.managed;
 
+import com.google.inject.Inject;
 import io.dropwizard.lifecycle.Managed;
 import org.athena.common.util.RedisUtil;
+import org.athena.config.configuration.AthenaConfiguration;
 import org.athena.config.configuration.RedisConfiguration;
 import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
@@ -15,8 +17,9 @@ public class RedisManaged implements Managed {
 
     private RedisConfiguration config;
 
-    public RedisManaged(RedisConfiguration config) {
-        this.config = config;
+    @Inject
+    public RedisManaged(AthenaConfiguration config) {
+        this.config = config.getRedis();
     }
 
     @Override

@@ -51,6 +51,11 @@ public class UserBusiness {
      */
     public void register(String userName, String password) {
         Optional<User> checkUser = userRepository.findByUserName(userName);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         if (checkUser.isPresent()) {
             throw EntityAlreadyExistsException.build("用户名已存在");
         }
