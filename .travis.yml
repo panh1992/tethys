@@ -8,8 +8,8 @@ cache:
     - '$HOME/.m2/repository'
 
 script:
-  - mvn clean > /dev/null
-  - mvn package > /dev/null
+  - mvn clean
+  - mvn package
   - mvn sonar:sonar -Dsonar.projectKey=panh1992_athena -Dsonar.organization=panh1992-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=a20594bf5e41f2c99d7a549b4b98467cdcd504f0
 
 install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true
