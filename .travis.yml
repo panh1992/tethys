@@ -3,6 +3,10 @@ language: java
 jdk:
   - openjdk10
 
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+
 script:
   - mvn clean > /dev/null
   - mvn package > /dev/null
