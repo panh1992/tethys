@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class ElasticsearchManaged implements Managed {
 
-    private static Logger logger = LoggerFactory.getLogger(RedisManaged.class);
+    private static Logger logger = LoggerFactory.getLogger(ElasticsearchManaged.class);
 
     private RestHighLevelClient client;
 

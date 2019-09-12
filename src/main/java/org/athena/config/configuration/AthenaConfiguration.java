@@ -26,7 +26,7 @@ public class AthenaConfiguration extends Configuration implements JobConfigurati
 
     private CorsConfiguration cors;
 
-    public Map<String,String> quartz;
+    private Map<String, String> quartz;
 
     @Valid
     @NotNull
@@ -56,7 +56,7 @@ public class AthenaConfiguration extends Configuration implements JobConfigurati
 
     @Override
     public Map<String, String> getQuartzConfiguration() {
-        return quartz;
+        return this.quartz;
     }
 
 }

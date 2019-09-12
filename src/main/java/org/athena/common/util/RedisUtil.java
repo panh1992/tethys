@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class RedisUtil {
 
-    private static volatile RedissonClient client;
+    private static RedissonClient client;
 
     /**
      * 获取 RedisClient

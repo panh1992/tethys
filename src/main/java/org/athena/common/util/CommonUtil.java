@@ -10,8 +10,8 @@ import com.google.inject.Singleton;
 import io.dropwizard.jackson.Jackson;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.athena.common.jackson.InstantDeserializer;
-import org.athena.common.jackson.InstantSerializer;
+import org.athena.plugin.jackson.InstantDeserializer;
+import org.athena.plugin.jackson.InstantSerializer;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;

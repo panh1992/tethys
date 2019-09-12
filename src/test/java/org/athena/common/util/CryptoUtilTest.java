@@ -3,30 +3,16 @@ package org.athena.common.util;
 import org.athena.common.util.crypto.BCryptUtil;
 import org.athena.common.util.crypto.RSAUtil;
 import org.jose4j.jwt.JwtClaims;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.security.KeyPair;
-import java.time.LocalDate;
+import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class CryptoUtilTest {
-
-    @Test
-    public void timeTest() {
-        LocalDate startDate = TimeUtil.parseLocalDate("2019-01-01");
-        LocalDate endDate = TimeUtil.parseLocalDate("2020-01-01");
-
-        long days = endDate.toEpochDay() - startDate.toEpochDay();
-        long nowDays = LocalDate.now().toEpochDay() - startDate.toEpochDay();
-
-        System.out.println("乙亥年一共 " + days + " 天");
-        System.out.println("乙亥年已过 " + nowDays + " 天");
-        double n = nowDays * 1D / days;
-        System.out.println("乙亥年已过百分比 " + (n * 100) + "%");
-
-    }
 
     @Test
     public void getSnowflakeId() throws InterruptedException {
@@ -35,12 +21,20 @@ public class CryptoUtilTest {
 
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-        for (int i = 0; i < 500; i++) {
-            executor.execute(() -> System.out.println(Thread.currentThread().getName() + ": \t" + idWorker.nextId()));
+        Vector<Long> vector = new Vector<>();
+        int count = 500;
+        for (int i = 0; i < count; i++) {
+            executor.execute(() -> {
+                long id = idWorker.nextId();
+                vector.add(id);
+                System.out.println(Thread.currentThread().getName() + ": \t" + id);
+            });
         }
 
         executor.shutdown();
         executor.awaitTermination(60L, TimeUnit.SECONDS);
+
+        Assert.assertEquals(vector.size(), count);
 
     }
 
@@ -57,10 +51,12 @@ public class CryptoUtilTest {
         String privateMi = RSAUtil.encryptByPrivateKey(str, privateKey);
         System.out.println("私钥加密：\t" + privateMi);
         System.out.println("公钥解密：\t" + RSAUtil.decryptByPublicKey(privateMi, publicKey));
+        Assert.assertEquals(str, RSAUtil.decryptByPublicKey(privateMi, publicKey));
 
         String publicMi = RSAUtil.encryptByPublicKey(str, publicKey);
         System.out.println("公钥加密：\t" + publicMi);
         System.out.println("私钥解密：\t" + RSAUtil.decryptByPrivateKey(publicMi, privateKey));
+        Assert.assertEquals(str, RSAUtil.decryptByPrivateKey(publicMi, privateKey));
 
     }
 
@@ -74,6 +70,8 @@ public class CryptoUtilTest {
         JwtClaims claims = JWTUtil.validation(token, 120);
         System.out.println("JwtClaims:\t" + claims.toJson());
 
+        Assert.assertEquals(str, claims.getSubject());
+
     }
 
     @Test
@@ -84,6 +82,8 @@ public class CryptoUtilTest {
         System.out.println("BCrypt 加密密文:\t" + hash);
 
         System.out.println("BCrypt 密文验证结果:\t" + BCryptUtil.checkpw(password, hash));
+
+        Assert.assertTrue(BCryptUtil.checkpw(password, hash));
 
     }
 

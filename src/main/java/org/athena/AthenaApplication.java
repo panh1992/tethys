@@ -10,7 +10,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.athena.common.util.CommonUtil;
 import org.athena.config.EnvConfig;
-import org.athena.config.bundle.SwaggerBundle;
+import org.athena.config.bundle.CustomizeSwaggerBundle;
 import org.athena.config.configuration.AthenaConfiguration;
 import org.athena.guice.EnvironmentModule;
 import org.athena.guice.JDBIFactory;
@@ -21,7 +21,7 @@ import ru.vyarus.guicey.jdbi3.JdbiBundle;
 
 public class AthenaApplication extends Application<AthenaConfiguration> {
 
-    private static GuiceBundle<Configuration> guiceBundle;
+    private GuiceBundle<Configuration> guiceBundle;
 
     /**
      * Athena 程序启动类
@@ -45,7 +45,7 @@ public class AthenaApplication extends Application<AthenaConfiguration> {
         bootstrap.addBundle(new JobsBundle(new DemoJob()));
         bootstrap.addBundle(new MultiPartBundle());
         bootstrap.addBundle(new JdbiExceptionsBundle());
-        bootstrap.addBundle(new SwaggerBundle());
+        bootstrap.addBundle(new CustomizeSwaggerBundle());
         bootstrap.setObjectMapper(CommonUtil.getObjectMapper());
 
     }
@@ -57,10 +57,10 @@ public class AthenaApplication extends Application<AthenaConfiguration> {
 
         EnvConfig.registerException(environment);
 
-        EnvConfig.registerFilter(environment, guiceBundle);
+        EnvConfig.registerFilter(environment);
 
         environment.healthChecks().register("dataBaseHealthCheck", new JdbiHealthCheck(guiceBundle
-                .getInjector().getInstance(Jdbi.class), "/* Health Check */ SELECT 1"));
+                .getInjector().getInstance(Jdbi.class), configuration.getDatabase().getValidationQuery()));
 
     }
 

@@ -4,12 +4,15 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.setup.Environment;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.athena.config.configuration.AthenaConfiguration;
 import org.athena.plugin.jdbi.InstantPlugin;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.jpa.JpaPlugin;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JDBIFactory {
 
     /**
@@ -31,6 +34,7 @@ public class JDBIFactory {
         config.setPassword(factory.getPassword());
         config.setMinimumIdle(factory.getMinSize());
         config.setMaximumPoolSize(factory.getMaxSize());
+        config.setConnectionTestQuery(factory.getValidationQuery());
         // 是否自定义配置，为true时下面两个参数才生效
         config.addDataSourceProperty("cachePrepStmts", "true");
         // 连接池大小默认25，官方推荐250-500

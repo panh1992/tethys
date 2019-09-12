@@ -23,7 +23,8 @@ public class RabbitmqManaged implements Managed {
     @Override
     public void start() throws Exception {
         logger.info("RabbitMQ - Starting...");
-        // this.connection = RabbitmqUtil.getConnection(config.getHost(), config.getUsername(), config.getPassword(), config.getVirtualHost());
+        // this.connection = RabbitmqUtil.getConnection(config.getHost(), config.getUsername(),
+        // config.getPassword(), config.getVirtualHost());
         logger.info("RabbitMQ - Start completed");
     }
 

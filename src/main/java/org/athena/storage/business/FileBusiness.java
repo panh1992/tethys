@@ -27,7 +27,7 @@ public class FileBusiness {
      * 获取所有文件列表
      */
     public List<FileResp> findAll(Integer page, Integer size) {
-        logger.info("sks:" + page + size);
+        logger.info("page: {}, size: {}", page, size);
         List<AthenaFile> files = fileRepository.findAll();
         return files.stream().map(x -> FileResp.builder().build())
                 .collect(Collectors.toList());
@@ -39,7 +39,7 @@ public class FileBusiness {
      * @param createFileParams 创建文件参数
      */
     public void createFile(CreateFileParams createFileParams) {
-        logger.info("createFile:" + createFileParams);
+        logger.info("createFile: {}", createFileParams);
     }
 
 }

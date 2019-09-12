@@ -4,8 +4,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 
-import java.util.UUID;
-
 /**
  * 通用加密工具
  */

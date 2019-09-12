@@ -20,7 +20,7 @@ public class DemoJob extends Job {
         try {
             Thread.sleep(2000L);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
         logger.info("quartz job 测试， 调度时间：{}", Instant.now());
     }

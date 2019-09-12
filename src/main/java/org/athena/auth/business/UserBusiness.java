@@ -1,16 +1,14 @@
 package org.athena.auth.business;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.athena.auth.db.ResourceRepository;
 import org.athena.auth.db.RoleRepository;
 import org.athena.auth.db.UserRepository;
 import org.athena.auth.entity.Role;
 import org.athena.auth.entity.User;
 import org.athena.common.exception.EntityAlreadyExistsException;
-import org.athena.common.exception.EntityNotExistException;
 import org.athena.common.exception.InternalServerError;
+import org.athena.common.exception.InvalidParameterException;
 import org.athena.common.util.Constant;
 import org.athena.common.util.JWTUtil;
 import org.athena.common.util.SnowflakeIdWorker;
@@ -32,16 +30,10 @@ public class UserBusiness {
     private SnowflakeIdWorker idWorker;
 
     @Inject
-    private ObjectMapper mapper;
-
-    @Inject
     private UserRepository userRepository;
 
     @Inject
     private RoleRepository roleRepository;
-
-    @Inject
-    private ResourceRepository resourceRepository;
 
     /**
      * 注册用户
@@ -51,11 +43,6 @@ public class UserBusiness {
      */
     public void register(String userName, String password) {
         Optional<User> checkUser = userRepository.findByUserName(userName);
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         if (checkUser.isPresent()) {
             throw EntityAlreadyExistsException.build("用户名已存在");
         }
@@ -74,7 +61,7 @@ public class UserBusiness {
     public String login(String userName, String passWord) {
         Optional<User> userOptional = userRepository.findByUserName(userName);
         if (!userOptional.isPresent() || !BCryptUtil.checkpw(passWord, userOptional.get().getPassWord())) {
-            throw EntityNotExistException.build("用户名或密码错误");
+            throw InvalidParameterException.build("用户名或密码错误");
         }
         try {
             return JWTUtil.createToken(userOptional.get().getId().toString(), Constant.AUTHORIZATION_DURATION);
