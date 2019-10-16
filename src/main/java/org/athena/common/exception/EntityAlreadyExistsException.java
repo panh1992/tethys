@@ -15,7 +15,7 @@ public class EntityAlreadyExistsException extends BusinessException {
     }
 
     public static EntityAlreadyExistsException build(String message) {
-        return new EntityAlreadyExistsException(Response.Status.CONFLICT, "EntityAlreadyExistsException", message);
+        return new EntityAlreadyExistsException(Response.Status.CONFLICT, "EntityAlreadyExists", message);
     }
 
     public static EntityAlreadyExistsException build(String code, String message) {

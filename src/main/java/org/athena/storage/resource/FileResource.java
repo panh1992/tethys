@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.athena.common.resp.Response;
-import org.athena.storage.business.FileBusiness;
+import org.athena.storage.business.AthenaFileBusiness;
 import org.athena.storage.params.CreateFileParams;
 import org.athena.storage.resp.FileResp;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
@@ -29,11 +29,11 @@ import java.util.List;
 @Path("/files")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Api(tags = "B")
+@Api(tags = "F 文件服务")
 public class FileResource {
 
     @Inject
-    private FileBusiness fileBusiness;
+    private AthenaFileBusiness athenaFileBusiness;
 
     @Timed
     @GET
@@ -44,7 +44,7 @@ public class FileResource {
     public Response<List<FileResp>> findAll(
             @ApiParam(value = "分页页码") @QueryParam("page") Integer page,
             @ApiParam(value = "每页数量") @QueryParam("size") Integer size) {
-        return Response.build(fileBusiness.findAll(page, size));
+        return Response.build(athenaFileBusiness.findAll(page, size));
     }
 
     @Timed
@@ -54,7 +54,7 @@ public class FileResource {
             @ApiResponse(code = 201, message = "新建成功")
     })
     public Response<List<FileResp>> create(@Valid CreateFileParams createFileParams) {
-        fileBusiness.createFile(createFileParams);
+        athenaFileBusiness.createFile(createFileParams);
         return Response.build();
     }
 

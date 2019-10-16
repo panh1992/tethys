@@ -11,17 +11,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(description = "新建文件元数据参数")
-public class CreateFileParams {
+@ApiModel(description = "新建存储空间参数")
+public class CreateSpaceParams {
 
-    @ApiModelProperty("存储空间ID")
-    private Long storeId;
-
-    @ApiModelProperty("文件路径")
-    private String filePath;
-
-    @ApiModelProperty("是否为目录")
-    private Boolean isDir;
+    @ApiModelProperty("存储空间名称")
+    private String name;
 
     @ApiModelProperty("描述信息")
     private String description;

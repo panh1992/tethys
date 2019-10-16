@@ -24,9 +24,9 @@ import java.util.List;
 
 @Timed
 @Path("/")
-@Api(tags = "A")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Api(tags = "A 通用资源")
 public class HomeResource {
 
     @Inject

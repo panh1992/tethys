@@ -15,7 +15,7 @@ public class EntityNotExistException extends BusinessException {
     }
 
     public static EntityNotExistException build(String message) {
-        return new EntityNotExistException(Response.Status.NOT_FOUND, "EntityNotExistException", message);
+        return new EntityNotExistException(Response.Status.NOT_FOUND, "EntityNotExist", message);
     }
 
     public static EntityNotExistException build(String code, String message) {

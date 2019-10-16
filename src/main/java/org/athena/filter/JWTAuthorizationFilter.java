@@ -46,7 +46,7 @@ public class JWTAuthorizationFilter implements Filter {
         try {
             claims = JWTUtil.validation(authorizationToken, Constant.AUTHORIZATION_DURATION);
             String userId = claims.getSubject();
-            SystemContext.setUserId(userId);
+            SystemContext.setUserId(Long.parseLong(userId));
             logger.info("登录用户id: {}", userId);
             filterChain.doFilter(servletRequest, servletResponse);
         } catch (InvalidJwtException | MalformedClaimException e) {

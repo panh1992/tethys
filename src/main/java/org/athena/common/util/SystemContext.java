@@ -9,24 +9,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SystemContext {
 
-    private static final ThreadLocal<String> USER_ID_LOCAL = new ThreadLocal<>();
+    private static final ThreadLocal<Long> USER_ID_LOCAL = new ThreadLocal<>();
 
     /**
      * 获取当前用户id
      */
-    public static String getUserId() {
+    public static Long getUserId() {
         return USER_ID_LOCAL.get();
     }
 
     /**
      * 设置当前用户id
      */
-    public static void setUserId(String userId) {
+    public static void setUserId(Long userId) {
         USER_ID_LOCAL.set(userId);
     }
 
     /**
-     * 清楚当前用户id
+     * 清除当前用户id
      */
     public static void removeUserId() {
         USER_ID_LOCAL.remove();

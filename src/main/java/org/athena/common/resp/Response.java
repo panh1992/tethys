@@ -12,6 +12,7 @@ public class Response<T> {
     @ApiModelProperty("编码")
     private String code = "SUCCESS";
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @ApiModelProperty("响应数据")
     private T data;
 

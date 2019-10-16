@@ -26,14 +26,14 @@ public class StoreSpaces {
      * 存储空间主键
      */
     @Id
-    @Column(name = "id", length = 32)
-    private Long id;
+    @Column(name = "store_spaces_id", length = 32)
+    private Long storeSpacesId;
 
     /**
      * 创建用户
      */
     @Column(name = "creater_id", length = 32)
-    private String createrId;
+    private Long createrId;
 
     /**
      * 数据存储空间
@@ -68,7 +68,7 @@ public class StoreSpaces {
     /**
      * 描述信息
      */
-    @Column(name = "description", length = 255)
+    @Column(name = "description")
     private String description;
 
 }
