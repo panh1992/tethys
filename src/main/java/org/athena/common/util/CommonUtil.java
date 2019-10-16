@@ -1,6 +1,5 @@
 package org.athena.common.util;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -12,6 +11,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.athena.plugin.jackson.InstantDeserializer;
 import org.athena.plugin.jackson.InstantSerializer;
+import org.athena.plugin.jackson.NumberDeserializer;
+import org.athena.plugin.jackson.NumberSerializer;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
@@ -29,17 +30,20 @@ public final class CommonUtil {
     @Singleton
     public static ObjectMapper getObjectMapper() {
         ObjectMapper mapper = Jackson.newObjectMapper();
-        // 设置null值不参与序列化(字段不被显示)
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         // 禁用空对象转换json校验
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
+        // ==========  序列化/反序列化 处理  ==============
         SimpleModule instantModule = new SimpleModule("instant");
         instantModule.addSerializer(Instant.class, InstantSerializer.INSTANCE);
         instantModule.addDeserializer(Instant.class, InstantDeserializer.INSTANCE);
-
         mapper.registerModule(instantModule);
+
+        SimpleModule numberModule = new SimpleModule("number");
+        numberModule.addSerializer(Number.class, NumberSerializer.INSTANCE);
+        instantModule.addDeserializer(Number.class, NumberDeserializer.INSTANCE);
+        mapper.registerModule(numberModule);
 
         return mapper;
     }

@@ -8,21 +8,19 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.io.IOException;
-import java.time.Instant;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class InstantDeserializer extends JsonDeserializer<Instant> {
+public class NumberDeserializer extends JsonDeserializer<Number> {
 
-    public static final InstantDeserializer INSTANCE = new InstantDeserializer();
+    public static final NumberDeserializer INSTANCE = new NumberDeserializer();
 
     @Override
-    public Instant deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException {
+    public Number deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException {
 
         if (jsonParser != null && !Strings.isNullOrEmpty(jsonParser.getText())) {
-            return Instant.parse(jsonParser.getText());
-        } else {
-            return null;
+            return Double.parseDouble(jsonParser.getText());
         }
+        return null;
 
     }
 

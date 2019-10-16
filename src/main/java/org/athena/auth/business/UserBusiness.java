@@ -67,7 +67,7 @@ public class UserBusiness {
             return JWTUtil.createToken(userOptional.get().getId().toString(), Constant.AUTHORIZATION_DURATION);
         } catch (JoseException e) {
             logger.error("JWT WEB TOKEN 创建失败, 异常信息: ", e);
-            throw InternalServerError.build("jwt token 创建失败");
+            throw InternalServerError.build("JWT TOKEN 创建失败");
         }
     }
 
