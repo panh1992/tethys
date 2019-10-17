@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @ApiModel(description = "统一响应数据实体")
-public class Response<T> {
+public class Result<T> {
 
     @ApiModelProperty("编码")
     private String code = "SUCCESS";
@@ -19,17 +19,13 @@ public class Response<T> {
     @ApiModelProperty("描述信息")
     private String message;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @ApiModelProperty("分页信息")
-    private PageResp page;
-
     /**
      * 创建成功响应结果
      */
-    public static <T> Response<T> build() {
-        Response<T> response = new Response<>();
-        response.setMessage("操作成功");
-        return response;
+    public static <T> Result<T> build() {
+        Result<T> result = new Result<>();
+        result.setMessage("操作成功");
+        return result;
     }
 
     /**
@@ -37,11 +33,11 @@ public class Response<T> {
      *
      * @param data 返回数据
      */
-    public static <T> Response<T> build(T data) {
-        Response<T> response = new Response<>();
-        response.setData(data);
-        response.setMessage("操作成功");
-        return response;
+    public static <T> Result<T> build(T data) {
+        Result<T> result = new Result<>();
+        result.setData(data);
+        result.setMessage("操作成功");
+        return result;
     }
 
     /**
@@ -50,11 +46,11 @@ public class Response<T> {
      * @param data    返回数据
      * @param message 描述信息
      */
-    public static <T> Response<T> build(T data, String message) {
-        Response<T> response = new Response<>();
-        response.setData(data);
-        response.setMessage(message);
-        return response;
+    public static <T> Result<T> build(T data, String message) {
+        Result<T> result = new Result<>();
+        result.setData(data);
+        result.setMessage(message);
+        return result;
     }
 
     /**
@@ -64,12 +60,12 @@ public class Response<T> {
      * @param data    返回数据
      * @param message 描述信息
      */
-    public static <T> Response<T> build(String code, T data, String message) {
-        Response<T> response = new Response<>();
-        response.setCode(code);
-        response.setData(data);
-        response.setMessage(message);
-        return response;
+    public static <T> Result<T> build(String code, T data, String message) {
+        Result<T> result = new Result<>();
+        result.setCode(code);
+        result.setData(data);
+        result.setMessage(message);
+        return result;
     }
 
 }

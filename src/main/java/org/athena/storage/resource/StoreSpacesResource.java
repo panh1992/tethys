@@ -4,19 +4,23 @@ import com.codahale.metrics.annotation.Timed;
 import com.google.inject.Inject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.athena.common.resp.Response;
+import org.athena.common.util.QueryUtil;
 import org.athena.common.util.SystemContext;
 import org.athena.storage.business.StoreSpacesBusiness;
 import org.athena.storage.params.CreateSpaceParams;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * 文件资源 处理文件元数据
@@ -36,9 +40,23 @@ public class StoreSpacesResource {
     @ApiResponses({
             @ApiResponse(code = 201, message = "新建成功")
     })
-    public Response<Void> create(@Valid CreateSpaceParams params) {
+    public Response create(@Valid CreateSpaceParams params) {
         storeSpacesBusiness.createSpace(SystemContext.getUserId(), params.getName(), params.getDescription());
-        return Response.build();
+        return Response.status(Response.Status.CREATED).build();
+    }
+
+    @Timed
+    @GET
+    @ApiOperation(value = "查询存储空间", notes = "查询存储空间")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "获取存储空间成功")
+    })
+    public Response find(
+            @ApiParam(value = "存储空间名称") @QueryParam("name") String name,
+            @ApiParam(value = "分页页码") @QueryParam("limit") Long limit,
+            @ApiParam(value = "每页数量") @QueryParam("offset") Long offset) {
+        return Response.ok(storeSpacesBusiness.find(SystemContext.getUserId(), name, QueryUtil.limit(limit),
+                QueryUtil.offset(offset))).build();
     }
 
 }

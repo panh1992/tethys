@@ -32,8 +32,8 @@ public class StoreSpaces {
     /**
      * 创建用户
      */
-    @Column(name = "creater_id", length = 32)
-    private Long createrId;
+    @Column(name = "creator_id", length = 32)
+    private Long creatorId;
 
     /**
      * 数据存储空间

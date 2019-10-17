@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.athena.common.resp.Response;
+import org.athena.common.resp.Result;
 import org.athena.storage.business.AthenaFileBusiness;
 import org.athena.storage.params.CreateFileParams;
 import org.athena.storage.resp.FileResp;
@@ -41,10 +41,10 @@ public class FileResource {
     @ApiResponses({
             @ApiResponse(code = 200, message = "获取文件列表成功")
     })
-    public Response<List<FileResp>> findAll(
+    public Result<List<FileResp>> findAll(
             @ApiParam(value = "分页页码") @QueryParam("page") Integer page,
             @ApiParam(value = "每页数量") @QueryParam("size") Integer size) {
-        return Response.build(athenaFileBusiness.findAll(page, size));
+        return Result.build(athenaFileBusiness.findAll(page, size));
     }
 
     @Timed
@@ -53,16 +53,16 @@ public class FileResource {
     @ApiResponses({
             @ApiResponse(code = 201, message = "新建成功")
     })
-    public Response<List<FileResp>> create(@Valid CreateFileParams createFileParams) {
+    public Result<List<FileResp>> create(@Valid CreateFileParams createFileParams) {
         athenaFileBusiness.createFile(createFileParams);
-        return Response.build();
+        return Result.build();
     }
 
     @Timed
     @POST
     @Path("/upload")
     @ApiOperation(value = "文件列表", notes = "获取文件列表信息")
-    public Response<List<FileResp>> upload(final FormDataMultiPart multiPart) {
+    public Result<List<FileResp>> upload(final FormDataMultiPart multiPart) {
         return null;
     }
 

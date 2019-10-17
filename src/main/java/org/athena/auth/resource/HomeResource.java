@@ -10,7 +10,7 @@ import org.athena.auth.entity.Role;
 import org.athena.auth.entity.User;
 import org.athena.auth.params.LoginParams;
 import org.athena.auth.params.RegisterParams;
-import org.athena.common.resp.Response;
+import org.athena.common.resp.Result;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -41,9 +41,9 @@ public class HomeResource {
     @ApiResponses({
             @ApiResponse(code = 200, message = "注册成功")
     })
-    public Response register(@Valid RegisterParams params) {
+    public Result register(@Valid RegisterParams params) {
         userBusiness.register(params.getUserName(), params.getPassWord());
-        return Response.build();
+        return Result.build();
     }
 
     /**
@@ -56,20 +56,20 @@ public class HomeResource {
             @ApiResponse(code = 200, message = "登录成功"),
             @ApiResponse(code = 404, message = "用户名或密码错误")
     })
-    public Response<String> login(@Valid LoginParams params) {
-        return Response.build(userBusiness.login(params.getUserName(), params.getPassWord()), "登录成功");
+    public Result<String> login(@Valid LoginParams params) {
+        return Result.build(userBusiness.login(params.getUserName(), params.getPassWord()), "登录成功");
     }
 
     @GET
     @Path("roles")
-    public Response<List<Role>> login() {
-        return Response.build(userBusiness.findAllRole(), "登录成功");
+    public Result<List<Role>> login() {
+        return Result.build(userBusiness.findAllRole(), "登录成功");
     }
 
     @GET
     @Path("users")
-    public Response<List<User>> users() {
-        return Response.build(userBusiness.findAllUser(), "登录成功");
+    public Result<List<User>> users() {
+        return Result.build(userBusiness.findAllUser(), "登录成功");
     }
 
 }

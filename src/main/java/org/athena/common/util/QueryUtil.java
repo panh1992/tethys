@@ -6,7 +6,19 @@ import lombok.NoArgsConstructor;
 import java.util.Objects;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class PageUtil {
+public final class QueryUtil {
+
+    public static Long limit(Long limit) {
+        return Objects.isNull(limit) || limit < 0 ? 0 : limit;
+    }
+
+    public static Long offset(Long offset) {
+        return Objects.isNull(offset) || offset < 0 ? 20 : offset;
+    }
+
+    public static String like(String search) {
+        return "%".concat(search).concat("%");
+    }
 
     /**
      * 判断是否进行分页处理
