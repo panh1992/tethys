@@ -19,15 +19,15 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "store_spaces")
-public class StoreSpaces {
+@Table(name = "store_space")
+public class StoreSpace {
 
     /**
      * 存储空间主键
      */
     @Id
-    @Column(name = "store_spaces_id", length = 32)
-    private Long storeSpacesId;
+    @Column(name = "store_space_id", length = 32)
+    private Long storeSpaceId;
 
     /**
      * 创建用户
@@ -36,16 +36,16 @@ public class StoreSpaces {
     private Long creatorId;
 
     /**
-     * 数据存储空间
+     * 存储空间名称
      */
-    @Column(name = "store_space", length = 128)
-    private String storeSpace;
+    @Column(name = "name", length = 128)
+    private String name;
 
     /**
      * 存储空间大小
      */
-    @Column(name = "store_size")
-    private Long storeSize;
+    @Column(name = "size")
+    private Long size;
 
     /**
      * 是否删除

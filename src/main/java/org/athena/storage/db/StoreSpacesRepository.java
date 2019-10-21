@@ -1,35 +1,35 @@
 package org.athena.storage.db;
 
-import org.athena.storage.entity.StoreSpaces;
+import org.athena.storage.entity.StoreSpace;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 import ru.vyarus.guicey.jdbi3.installer.repository.JdbiRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 @JdbiRepository
 public interface StoreSpacesRepository {
 
-    @SqlQuery("SELECT * FROM store_spaces WHERE store_spaces_id = :store_spaces_id")
-    Optional<StoreSpaces> findByStoreSpacesId(@Bind("store_spaces_id") Long storeId);
+    @SqlQuery("SELECT * FROM store_space WHERE store_space_id = :store_space_id")
+    Optional<StoreSpace> findByStoreSpaceId(@Bind("store_space_id") Long storeId);
 
-    @SqlQuery("SELECT * FROM store_spaces WHERE store_space = :store_space")
-    Optional<StoreSpaces> findByStoreSpace(@Bind("store_space") String storeSpace);
+    @SqlQuery("SELECT * FROM store_space WHERE name = :name")
+    Optional<StoreSpace> findByName(@Bind("store_space") String name);
 
-    @SqlQuery("SELECT * FROM store_spaces WHERE creator_id = :creator_id AND store_space LIKE :store_space "
-            + "limit :limit offset :offset")
-    List<StoreSpaces> findByCreatorIdAndNameLike(@Bind("creator_id") Long userId, @Bind("store_space") String name,
-                                                 @Bind("limit") Long limit, @Bind("offset") Long offset);
+    @SqlQuery("SELECT * FROM store_space WHERE store_space_id = :store_space_id AND creator_id = :creator_id")
+    Optional<StoreSpace> findByStoreSpaceIdAndCreatorId(@Bind("store_space_id") Long storeSpaceId,
+                                                        @Bind("creator_id") Long userId);
 
-    @SqlQuery("SELECT COUNT(1) FROM store_spaces WHERE creator_id = :creator_id AND store_space LIKE :store_space")
-    long countByCreatorIdAndNameLike(@Bind("creator_id") Long userId, @Bind("store_space") String name);
+    @SqlUpdate("INSERT INTO store_space (store_space_id, creator_id, name, size, is_deleted, create_time, "
+            + "modify_time, description) VALUES (:storeSpaceId, :creatorId, :name, :size, :deleted, :createTime,"
+            + " :modifyTime, :description)")
+    void save(@BindBean StoreSpace storeSpace);
 
-    @SqlUpdate("INSERT INTO store_spaces (store_spaces_id, creator_id, store_space, store_size, is_deleted, "
-            + "create_time, modify_time, description) VALUES (:storeSpacesId, :createrId, :storeSpace, :storeSize, "
-            + ":deleted, :createTime, :modifyTime, :description)")
-    void save(@BindBean StoreSpaces storeSpaces);
+    @SqlUpdate("UPDATE store_space SET creator_id = :creatorId, name = :name, size = :size,"
+            + " is_deleted = :deleted, create_time = :createTime, modify_time = :modifyTime,"
+            + " description = :description WHERE store_space_id = :storeSpaceId")
+    void update(@BindBean StoreSpace storeSpace);
 
 }

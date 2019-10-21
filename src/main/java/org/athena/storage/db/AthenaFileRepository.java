@@ -9,7 +9,7 @@ import java.util.List;
 @JdbiRepository
 public interface AthenaFileRepository {
 
-    @SqlQuery("SELECT * FROM files")
+    @SqlQuery("SELECT * FROM athena_file")
     List<AthenaFile> findAll();
 
 }

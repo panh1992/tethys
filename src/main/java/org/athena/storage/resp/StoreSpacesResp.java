@@ -22,11 +22,11 @@ public class StoreSpacesResp {
     @ApiModelProperty("创建用户主键")
     private Long creatorId;
 
-    @ApiModelProperty("数据存储空间名称")
-    private String storeSpace;
+    @ApiModelProperty("存储空间名称")
+    private String name;
 
     @ApiModelProperty("存储空间大小")
-    private Long storeSize;
+    private Long size;
 
     @ApiModelProperty("是否删除")
     private Boolean deleted;

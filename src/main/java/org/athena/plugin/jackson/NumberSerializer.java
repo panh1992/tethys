@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class NumberSerializer extends JsonSerializer<Number> {
@@ -16,7 +17,11 @@ public class NumberSerializer extends JsonSerializer<Number> {
 
     @Override
     public void serialize(Number number, JsonGenerator generator, SerializerProvider serializers) throws IOException {
-        generator.writeString(BigDecimal.valueOf(number.doubleValue()).toPlainString());
+        if (number instanceof Long) {
+            generator.writeString(BigInteger.valueOf(number.longValue()).toString());
+        } else {
+            generator.writeString(BigDecimal.valueOf(number.doubleValue()).toPlainString());
+        }
     }
 
 }

@@ -5,10 +5,10 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.athena.common.exception.EntityAlreadyExistsException;
 import org.athena.common.resp.PageResp;
-import org.athena.common.util.QueryUtil;
 import org.athena.common.util.SnowflakeIdWorker;
 import org.athena.storage.db.StoreSpacesRepository;
-import org.athena.storage.entity.StoreSpaces;
+import org.athena.storage.db.queries.StoreSpacesQueries;
+import org.athena.storage.entity.StoreSpace;
 import org.athena.storage.resp.StoreSpacesResp;
 import org.jdbi.v3.core.transaction.TransactionIsolationLevel;
 import ru.vyarus.guicey.jdbi3.tx.InTransaction;
@@ -30,19 +30,22 @@ public class StoreSpacesBusiness {
     @Inject
     private StoreSpacesRepository storeSpacesRepository;
 
+    @Inject
+    private StoreSpacesQueries storeSpacesQueries;
+
     /**
      * 创建存储空间
      */
     @InTransaction(TransactionIsolationLevel.REPEATABLE_READ)
-    public void createSpace(Long userId, String name, String description) {
-        Optional<StoreSpaces> optional = storeSpacesRepository.findByStoreSpace(name);
+    public void create(Long userId, String name, String description) {
+        Optional<StoreSpace> optional = storeSpacesRepository.findByName(name);
         if (optional.isPresent()) {
             throw EntityAlreadyExistsException.build("存储空间已存在，请重试");
         }
-        StoreSpaces storeSpaces = StoreSpaces.builder().creatorId(userId).storeSpace(name).description(description)
-                .storeSize(0L).deleted(Boolean.FALSE).storeSpacesId(idWorker.nextId())
+        StoreSpace storeSpace = StoreSpace.builder().creatorId(userId).name(name).description(description)
+                .size(0L).deleted(Boolean.FALSE).storeSpaceId(idWorker.nextId())
                 .createTime(Instant.now()).build();
-        storeSpacesRepository.save(storeSpaces);
+        storeSpacesRepository.save(storeSpace);
     }
 
     /**
@@ -50,17 +53,32 @@ public class StoreSpacesBusiness {
      */
     @InTransaction(readOnly = true)
     public PageResp find(Long userId, String name, Long limit, Long offset) {
-        List<StoreSpaces> list = storeSpacesRepository.findByCreatorIdAndNameLike(userId, QueryUtil.like(name),
-                limit, offset);
+        List<StoreSpace> list = storeSpacesQueries.findByCreatorIdAndNameLike(userId, name, limit, offset);
         if (list.isEmpty()) {
             return PageResp.of(Lists.newArrayList(), limit, offset);
         }
-        long total = storeSpacesRepository.countByCreatorIdAndNameLike(userId, QueryUtil.like(name));
-        return PageResp.of(list.stream().map(x -> StoreSpacesResp.builder().storeSpacesId(x.getStoreSpacesId())
-                        .storeSpace(x.getStoreSpace()).storeSize(x.getStoreSize()).creatorId(x.getCreatorId())
+        long total = storeSpacesQueries.countByCreatorIdAndNameLike(userId, name);
+        return PageResp.of(list.stream().map(x -> StoreSpacesResp.builder().storeSpacesId(x.getStoreSpaceId())
+                        .name(x.getName()).size(x.getSize()).creatorId(x.getCreatorId())
                         .description(x.getDescription()).deleted(x.getDeleted()).createTime(x.getCreateTime())
                         .modifyTime(x.getModifyTime()).build()).collect(Collectors.toList()),
                 limit, offset, total);
+    }
+
+    /**
+     * 更新存储空间
+     */
+    @InTransaction(TransactionIsolationLevel.REPEATABLE_READ)
+    public void update(Long userId, Long storeSpaceId, String name, String description) {
+        Optional<StoreSpace> optional = storeSpacesRepository.findByStoreSpaceIdAndCreatorId(userId, storeSpaceId);
+        if (!optional.isPresent()) {
+            throw EntityAlreadyExistsException.build("此用户下不存在该存储空间，请重试");
+        }
+        StoreSpace storeSpace = optional.get();
+        storeSpace.setName(name);
+        storeSpace.setDescription(description);
+        storeSpace.setModifyTime(Instant.now());
+        storeSpacesRepository.update(storeSpace);
     }
 
 }

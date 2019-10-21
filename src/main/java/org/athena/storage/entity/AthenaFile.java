@@ -19,33 +19,33 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "files")
+@Table(name = "athena_file")
 public class AthenaFile {
 
     /**
      * 文件主键
      */
     @Id
-    @Column(name = "id", length = 32)
-    private Long id;
+    @Column(name = "file_id")
+    private Long fileId;
 
     /**
      * 存储空间
      */
-    @Column(name = "store_id", length = 32)
-    private String storeId;
+    @Column(name = "store_space_id")
+    private Long storeSpaceId;
 
     /**
      * 创建用户
      */
-    @Column(name = "creater_id", length = 32)
-    private String createrId;
+    @Column(name = "creator_id")
+    private Long creatorId;
 
     /**
      * 文件所属存储空间名称
      */
-    @Column(name = "store_space", length = 128)
-    private String storeSpace;
+    @Column(name = "store_space_name", length = 128)
+    private String storeSpaceName;
 
     /**
      * 文件名
@@ -62,8 +62,8 @@ public class AthenaFile {
     /**
      * 存储来源
      */
-    @Column(name = "source_id", length = 32)
-    private String sourceId;
+    @Column(name = "source_id")
+    private Long sourceId;
 
     /**
      * 存储来源类型  upload   mount   system    task

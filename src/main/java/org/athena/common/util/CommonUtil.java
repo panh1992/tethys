@@ -11,7 +11,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.athena.plugin.jackson.InstantDeserializer;
 import org.athena.plugin.jackson.InstantSerializer;
-import org.athena.plugin.jackson.NumberDeserializer;
 import org.athena.plugin.jackson.NumberSerializer;
 
 import java.nio.charset.StandardCharsets;
@@ -42,7 +41,6 @@ public final class CommonUtil {
 
         SimpleModule numberModule = new SimpleModule("number");
         numberModule.addSerializer(Number.class, NumberSerializer.INSTANCE);
-        instantModule.addDeserializer(Number.class, NumberDeserializer.INSTANCE);
         mapper.registerModule(numberModule);
 
         return mapper;

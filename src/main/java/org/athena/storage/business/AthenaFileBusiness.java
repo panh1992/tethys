@@ -5,7 +5,7 @@ import org.athena.common.exception.EntityNotExistException;
 import org.athena.storage.db.AthenaFileRepository;
 import org.athena.storage.db.StoreSpacesRepository;
 import org.athena.storage.entity.AthenaFile;
-import org.athena.storage.entity.StoreSpaces;
+import org.athena.storage.entity.StoreSpace;
 import org.athena.storage.params.CreateFileParams;
 import org.athena.storage.resp.FileResp;
 import org.jdbi.v3.core.transaction.TransactionIsolationLevel;
@@ -49,7 +49,7 @@ public class AthenaFileBusiness {
      */
     @InTransaction(value = TransactionIsolationLevel.REPEATABLE_READ)
     public void createFile(CreateFileParams params) {
-        Optional<StoreSpaces> optional = storeSpacesRepository.findByStoreSpacesId(params.getStoreId());
+        Optional<StoreSpace> optional = storeSpacesRepository.findByStoreSpaceId(params.getStoreId());
         if (!optional.isPresent()) {
             throw EntityNotExistException.build("存储空间不存在");
         }
