@@ -7,25 +7,22 @@ import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 import ru.vyarus.guicey.jdbi3.installer.repository.JdbiRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 @JdbiRepository
 public interface UserRepository {
 
-    @SqlQuery("SELECT id, username, nickname, password, email, mobile, profile, create_time FROM auth.user "
-            + "ORDER BY create_time DESC")
-    List<User> findAll();
+    @SqlQuery("SELECT * FROM auth.user WHERE username = :username")
+    Optional<User> findByUserName(@Bind("username") String username);
 
-    @SqlQuery("SELECT id, username, nickname, password, email, mobile, profile, create_time FROM auth.user "
-            + "WHERE username = :username")
-    Optional<User> findByUserName(@Bind("username") String userName);
+    @SqlQuery("SELECT * FROM auth.user WHERE user_id = :userId")
+    Optional<User> findByUserId(@Bind("userId") Long userId);
 
-    @SqlUpdate("INSERT INTO auth.user (id, username, nickname, password, email, mobile, profile, create_time) VALUES "
-            + "(:id, :userName, :nickName, :passWord, :email, :mobile, :profile, :createTime)")
+    @SqlUpdate("INSERT INTO auth.user (user_id, username, nickname, password, email, mobile, profile, create_time) "
+            + "VALUES (:userId, :userName, :nickName, :passWord, :email, :mobile, :profile, :createTime)")
     void save(@BindBean User user);
 
-    @SqlUpdate("UPDATE auth.user SET username = 'asdfg'")
-    void updateUser();
-
+    @SqlUpdate("UPDATE auth.user SET username = :userName, nickname = :nickName, password = :passWord, email = :email,"
+            + " mobile = :mobile, profile = :profile, create_time = :createTime WHERE user_id = :userId")
+    void update(@BindBean User user);
 }

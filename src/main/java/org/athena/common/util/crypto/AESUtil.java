@@ -9,8 +9,10 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -23,7 +25,9 @@ public final class AESUtil {
 
     private static final String KEY_ALGORITHM = "AES";
 
-    private static final String DEFAULT_CIPHER_ALGORITHM = "AES/GCM/NoPadding"; //默认的加密算法
+    private static final String DEFAULT_CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding"; //默认的加密算法
+
+    private static final String SIGN_ALGORITHMS = "SHA1PRNG"; // 签名算法
 
     /**
      * AES 加密操作
@@ -33,10 +37,12 @@ public final class AESUtil {
      * @return 返回Base64转码后的加密数据
      */
     public static String encrypt(String content, String password) throws NoSuchPaddingException,
-            NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+            NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException,
+            InvalidAlgorithmParameterException {
 
         Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
-        cipher.init(Cipher.ENCRYPT_MODE, getSecretKey(password));
+        cipher.init(Cipher.ENCRYPT_MODE, getSecretKey(password),
+                new IvParameterSpec(password.substring(0, 16).getBytes(StandardCharsets.UTF_8)));
         return Base64.getEncoder().encodeToString(cipher.doFinal(content.getBytes(StandardCharsets.UTF_8)));
     }
 
@@ -48,9 +54,11 @@ public final class AESUtil {
      * @return 解密后的明文
      */
     public static String decrypt(String content, String password) throws NoSuchPaddingException,
-            NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+            NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException,
+            InvalidAlgorithmParameterException {
         Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
-        cipher.init(Cipher.DECRYPT_MODE, getSecretKey(password));
+        cipher.init(Cipher.DECRYPT_MODE, getSecretKey(password),
+                new IvParameterSpec(password.substring(0, 16).getBytes(StandardCharsets.UTF_8)));
         return new String(cipher.doFinal(Base64.getDecoder().decode(content)), StandardCharsets.UTF_8);
     }
 
@@ -59,11 +67,13 @@ public final class AESUtil {
      */
     private static SecretKeySpec getSecretKey(final String password) throws NoSuchAlgorithmException {
         //返回生成指定算法密钥生成器的 KeyGenerator 对象
-        KeyGenerator kg = KeyGenerator.getInstance(KEY_ALGORITHM);
+        KeyGenerator generator = KeyGenerator.getInstance(KEY_ALGORITHM);
+        SecureRandom random = SecureRandom.getInstance(SIGN_ALGORITHMS);
+        random.setSeed(password.getBytes(StandardCharsets.UTF_8));
         //AES 要求密钥长度为 128
-        kg.init(KEY_SIZE, new SecureRandom(password.getBytes(StandardCharsets.UTF_8)));
+        generator.init(KEY_SIZE, random);
         //生成一个密钥
-        SecretKey secretKey = kg.generateKey();
+        SecretKey secretKey = generator.generateKey();
         // 转换为AES专用密钥
         return new SecretKeySpec(secretKey.getEncoded(), KEY_ALGORITHM);
     }

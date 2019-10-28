@@ -7,8 +7,6 @@ import lombok.Data;
 @Builder
 public class OSSCredential implements Credential {
 
-    private String type;
-
     private String endpoint;
 
     private String accessKeyId;

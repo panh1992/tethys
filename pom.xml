@@ -17,6 +17,7 @@
         <start.class>org.athena.AthenaApplication</start.class>
         <!-- 项目依赖项 -->
         <dropwizard.version>1.3.7</dropwizard.version>
+        <dropwizard-jobs-guice.version>4.0.0-RELEASE</dropwizard-jobs-guice.version>
         <dropwizard.swagger.version>1.3.7-1</dropwizard.swagger.version>
         <guicey.version>0.7.0</guicey.version>
         <jdbi3.version>3.5.1</jdbi3.version>
@@ -35,6 +36,7 @@
         <aliyun-sdk-oss.version>3.4.2</aliyun-sdk-oss.version>
         <quartz.version>2.3.0</quartz.version>
         <lombok.version>1.18.4</lombok.version>
+        <easypoi.version>4.1.1</easypoi.version>
         <!-- maven 插件 -->
         <checkstyle.version>3.0.0</checkstyle.version>
         <findbugs.version>3.0.5</findbugs.version>
@@ -60,33 +62,28 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/cn.afterturn/easypoi -->
+            <dependency>
+                <groupId>cn.afterturn</groupId>
+                <artifactId>easypoi</artifactId>
+                <version>${easypoi.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/io.dropwizard/dropwizard-testing -->
-        <dependency>
-            <groupId>io.dropwizard</groupId>
-            <artifactId>dropwizard-testing</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/io.github.dropwizard-jobs/dropwizard-jobs-guice -->
-        <dependency>
-            <groupId>io.github.dropwizard-jobs</groupId>
-            <artifactId>dropwizard-jobs-guice</artifactId>
-            <version>4.0.0-RELEASE</version>
-            <exclusions>
-                <!-- https://mvnrepository.com/artifact/com.mchange/c3p0 -->
-                <exclusion>
-                    <groupId>com.mchange</groupId>
-                    <artifactId>c3p0</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.dropwizard/dropwizard-testing -->
+        <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-testing</artifactId>
             <scope>test</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.smoketurner/dropwizard-swagger -->
@@ -119,6 +116,19 @@
         <dependency>
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-auth</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.github.dropwizard-jobs/dropwizard-jobs-guice -->
+        <dependency>
+            <groupId>io.github.dropwizard-jobs</groupId>
+            <artifactId>dropwizard-jobs-guice</artifactId>
+            <version>${dropwizard-jobs-guice.version}</version>
+            <exclusions>
+                <!-- https://mvnrepository.com/artifact/com.mchange/c3p0 -->
+                <exclusion>
+                    <groupId>com.mchange</groupId>
+                    <artifactId>c3p0</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
         <dependency>
@@ -216,6 +226,11 @@
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
             <version>${jbcrypt.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/cn.afterturn/easypoi-base -->
+        <dependency>
+            <groupId>cn.afterturn</groupId>
+            <artifactId>easypoi-base</artifactId>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>

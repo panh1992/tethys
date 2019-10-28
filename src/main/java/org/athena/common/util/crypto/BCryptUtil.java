@@ -17,7 +17,7 @@ public final class BCryptUtil {
      *
      * @param candidate 明文
      */
-    public static String hashpw(String candidate) {
+    public static String hashPassWord(String candidate) {
 
         return BCrypt.hashpw(candidate, SALT);
 
@@ -29,7 +29,7 @@ public final class BCryptUtil {
      * @param candidate 明文
      * @param hashed    密文
      */
-    public static boolean checkpw(String candidate, String hashed) {
+    public static boolean checkPassWord(String candidate, String hashed) {
 
         return BCrypt.checkpw(candidate, hashed);
 

@@ -1,12 +1,19 @@
 package org.athena.common.util;
 
+import org.athena.common.util.crypto.AESUtil;
 import org.athena.common.util.crypto.BCryptUtil;
 import org.athena.common.util.crypto.RSAUtil;
 import org.jose4j.jwt.JwtClaims;
 import org.junit.Assert;
 import org.junit.Test;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
 import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -78,12 +85,27 @@ public class CryptoUtilTest {
     public void testBCrypt() {
         String password = "subject";
 
-        String hash = BCryptUtil.hashpw(password);
+        String hash = BCryptUtil.hashPassWord(password);
         System.out.println("BCrypt 加密密文:\t" + hash);
 
-        System.out.println("BCrypt 密文验证结果:\t" + BCryptUtil.checkpw(password, hash));
+        System.out.println("BCrypt 密文验证结果:\t" + BCryptUtil.checkPassWord(password, hash));
 
-        Assert.assertTrue(BCryptUtil.checkpw(password, hash));
+        Assert.assertTrue(BCryptUtil.checkPassWord(password, hash));
+
+    }
+
+    @Test
+    public void testAES() throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException,
+            NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException {
+        String password = "trTyHFtBM5Fm-l1svoKUig";
+        String str = "AES 加密 测试数据 ～·`！@#¥%……&*（）!@#$%^&*(()。。";
+
+        String hash = AESUtil.encrypt(str, password);
+        System.out.println("AES 加密密文:\t" + hash);
+
+        String str2 = AESUtil.decrypt(hash, password);
+        System.out.println("AES 密文验证结果:\t" + str2);
+        Assert.assertEquals(str, str2);
 
     }
 

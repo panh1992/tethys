@@ -26,8 +26,8 @@ public class User {
      * 用户主键
      */
     @Id
-    @Column(name = "id", length = 32)
-    private Long id;
+    @Column(name = "user_id", length = 32)
+    private Long userId;
 
     /**
      * 用户名称

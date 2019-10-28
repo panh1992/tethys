@@ -5,8 +5,6 @@ package org.athena.storage.sdk.credential;
  */
 public interface Credential {
 
-    String getType();
-
     String getEndpoint();
 
     String getAccessKeyId();

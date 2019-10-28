@@ -53,7 +53,7 @@ public class FileResource {
     @ApiResponses({
             @ApiResponse(code = 201, message = "新建成功")
     })
-    public Result<List<FileResp>> create(@Valid CreateFileParams createFileParams) {
+    public Result<Void> create(@Valid CreateFileParams createFileParams) {
         athenaFileBusiness.createFile(createFileParams);
         return Result.build();
     }
@@ -62,7 +62,7 @@ public class FileResource {
     @POST
     @Path("/upload")
     @ApiOperation(value = "文件列表", notes = "获取文件列表信息")
-    public Result<List<FileResp>> upload(final FormDataMultiPart multiPart) {
+    public Result<Void> upload(final FormDataMultiPart multiPart) {
         return null;
     }
 
