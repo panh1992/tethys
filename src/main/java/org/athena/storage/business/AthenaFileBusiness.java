@@ -1,20 +1,31 @@
 package org.athena.storage.business;
 
 import com.google.inject.Singleton;
+import org.athena.common.exception.EntityAlreadyExistsException;
 import org.athena.common.exception.EntityNotExistException;
+import org.athena.common.exception.InternalServerError;
+import org.athena.common.exception.InvalidParameterException;
+import org.athena.common.resp.PageResp;
+import org.athena.common.util.PathUtil;
+import org.athena.common.util.SnowflakeIdWorker;
+import org.athena.common.util.SystemContext;
 import org.athena.storage.db.AthenaFileRepository;
+import org.athena.storage.db.PathTreeRepository;
 import org.athena.storage.db.StoreSpacesRepository;
 import org.athena.storage.entity.AthenaFile;
 import org.athena.storage.entity.StoreSpace;
-import org.athena.storage.params.CreateFileParams;
+import org.athena.storage.resp.FileInfoResp;
 import org.athena.storage.resp.FileResp;
+import org.athena.storage.sdk.util.FileStatus;
 import org.jdbi.v3.core.transaction.TransactionIsolationLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.guicey.jdbi3.tx.InTransaction;
 
 import javax.inject.Inject;
+import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -27,32 +38,128 @@ public class AthenaFileBusiness {
     private static final Logger logger = LoggerFactory.getLogger(AthenaFileBusiness.class);
 
     @Inject
-    private AthenaFileRepository athenaFileRepository;
+    private SnowflakeIdWorker idWorker;
+
+    @Inject
+    private StoreSpacesBusiness storeSpacesBusiness;
 
     @Inject
     private StoreSpacesRepository storeSpacesRepository;
 
+    @Inject
+    private AthenaFileRepository athenaFileRepository;
+
+    @Inject
+    private PathTreeRepository pathTreeRepository;
+
     /**
-     * 获取所有文件列表
+     * 获取下级文件列表
      */
-    public List<FileResp> findAll(Integer page, Integer size) {
-        logger.info("page: {}, size: {}", page, size);
-        List<AthenaFile> files = athenaFileRepository.findAll();
-        return files.stream().map(x -> FileResp.builder().build())
-                .collect(Collectors.toList());
+    @InTransaction(value = TransactionIsolationLevel.REPEATABLE_READ, readOnly = true)
+    public PageResp findNextAll(Long userId, Long storeSpaceId, Long fileId, Long limit, Long offset) {
+
+        Optional<StoreSpace> optionalStoreSpace = storeSpacesRepository
+                .findByStoreSpaceIdAndCreatorId(storeSpaceId, userId);
+        if (!optionalStoreSpace.isPresent()) {
+            throw EntityNotExistException.build("不存在此存储空间, 请校验");
+        }
+        StoreSpace storeSpace = storeSpacesBusiness.getStoreSpace(userId, storeSpaceId);
+        if (Objects.isNull(fileId)) {
+            AthenaFile ancestorFile = this.getAncestorFile(storeSpace.getStoreSpaceId(), storeSpace.getName());
+            fileId = ancestorFile.getFileId();
+        }
+        List<AthenaFile> files = athenaFileRepository.findByNextFile(fileId, limit, offset);
+        Long total = athenaFileRepository.countByNextFile(fileId);
+        return PageResp.of(files.stream().map(x -> FileResp.builder().fileId(x.getFileId()).fileName(x.getFileName())
+                        .fileSize(x.getFileSize()).format(x.getFormat()).storeSpace(x.getStoreSpaceName())
+                        .status(x.getStatus()).isDir(x.getDir()).checkSum(x.getCheckSum())
+                        .description(x.getDescription()).createTime(x.getCreateTime()).build())
+                        .collect(Collectors.toList()),
+                limit, offset, total);
+    }
+
+    /**
+     * 获取用户下文件详细信息
+     */
+    @InTransaction(value = TransactionIsolationLevel.REPEATABLE_READ, readOnly = true)
+    public FileResp get(Long userId, Long fileId) {
+        Optional<AthenaFile> optionalAthenaFile = athenaFileRepository.findByCreatorIdAndFileId(userId, fileId);
+        if (!optionalAthenaFile.isPresent()) {
+            throw EntityNotExistException.build("用户下不存在此文件");
+        }
+        AthenaFile file = optionalAthenaFile.get();
+        return FileInfoResp.infoBuilder().fileId(file.getFileId()).fileName(file.getFileName())
+                .fileSize(file.getFileSize()).isDir(file.getDir()).status(file.getStatus())
+                .filePath(athenaFileRepository.findFilePath(file.getStoreSpaceId(), file.getFileId()))
+                .checkSum(file.getCheckSum()).format(file.getFormat()).createTime(file.getCreateTime())
+                .description(file.getDescription()).storeSpace(file.getStoreSpaceName()).build();
     }
 
     /**
      * 创建文件元数据
-     *
-     * @param params 创建文件参数
      */
     @InTransaction(value = TransactionIsolationLevel.REPEATABLE_READ)
-    public void createFile(CreateFileParams params) {
-        Optional<StoreSpace> optional = storeSpacesRepository.findByStoreSpaceId(params.getStoreId());
-        if (!optional.isPresent()) {
+    public void create(Long storeSpaceId, String filePath, boolean isDir, String description) {
+        if (!PathUtil.isPath(filePath, isDir)) {
+            throw InvalidParameterException.build("文件路径不合法, 请检查");
+        }
+        Optional<StoreSpace> optionalStoreSpace = storeSpacesRepository
+                .findByStoreSpaceIdAndCreatorId(storeSpaceId, SystemContext.getUserId());
+        if (!optionalStoreSpace.isPresent()) {
             throw EntityNotExistException.build("存储空间不存在");
         }
+        List<String> fileNames = PathUtil.getFileNames(filePath);
+        Optional<AthenaFile> checkFile = athenaFileRepository.findByStoreSpaceIdAndDescendantFileNameAndDepth(
+                storeSpaceId, fileNames.get(fileNames.size() - 1), fileNames.size() + 1);
+        if (checkFile.isPresent()) {
+            throw EntityAlreadyExistsException.build("文件已存在, 请校验");
+        }
+        StoreSpace storeSpace = optionalStoreSpace.get();
+        AthenaFile athenaFile = this.getAncestorFile(storeSpace.getStoreSpaceId(), storeSpace.getName());
+        Long ancestorFileId = athenaFile.getFileId();
+        for (int depth = 1; depth < fileNames.size(); depth++) {
+            String fileName = fileNames.get(depth);
+            // 如果文件存在跳过, 不存在创建
+            Optional<AthenaFile> optionalFile = athenaFileRepository
+                    .findByStoreSpaceIdAndDescendantFileNameAndDepth(storeSpaceId, fileName, depth + 1);
+            if (optionalFile.isPresent()) {
+                ancestorFileId = optionalFile.get().getFileId();
+                continue;
+            }
+            AthenaFile file = AthenaFile.builder().fileId(idWorker.nextId()).fileName(fileName).description(description)
+                    .storeSpaceId(storeSpace.getStoreSpaceId()).storeSpaceName(storeSpace.getName())
+                    .status(depth != fileNames.size() ? FileStatus.AVAILABLE.name() : FileStatus.NEW.name())
+                    .dir(depth != fileNames.size() || isDir).creatorId(SystemContext.getUserId())
+                    .createTime(Instant.now()).build();
+            athenaFileRepository.save(file);
+            pathTreeRepository.insetTree(ancestorFileId, file.getFileId());
+        }
+    }
+
+    /**
+     * 创建祖先文件目录
+     */
+    void createAncestorFile(Long userId, Long storeSpaceId, String storeSpaceName) {
+        Long ancestorFileId = idWorker.nextId();
+        AthenaFile file = AthenaFile.builder().fileId(ancestorFileId).fileName(storeSpaceName).dir(Boolean.TRUE)
+                .status(FileStatus.AVAILABLE.name()).creatorId(userId).storeSpaceId(storeSpaceId)
+                .storeSpaceName(storeSpaceName).description(storeSpaceName + "  存储空间根目录")
+                .createTime(Instant.now()).build();
+        athenaFileRepository.save(file);
+        pathTreeRepository.insetTree(ancestorFileId, file.getFileId());
+    }
+
+    /**
+     * 获取存储空间对应的祖先文件
+     */
+    private AthenaFile getAncestorFile(Long storeSpaceId, String storeSpaceName) {
+        Optional<AthenaFile> optionalAncestorFile = athenaFileRepository
+                .findByStoreSpaceIdAndFileNameAndDepth(storeSpaceId, storeSpaceName, 0);
+        if (!optionalAncestorFile.isPresent()) {
+            logger.error("存储空间: {}, 获取祖先文件失败", storeSpaceName);
+            throw InternalServerError.build("存储空间: " + storeSpaceName + ", 获取祖先文件失败");
+        }
+        return optionalAncestorFile.get();
     }
 
 }

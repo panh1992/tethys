@@ -28,7 +28,7 @@ public class StoreSpacesQueries {
             params.put("offset", offset);
             String nameQuery = "";
             if (!Strings.isNullOrEmpty(name)) {
-                nameQuery = " AND nam LIKE :name ";
+                nameQuery = " AND name LIKE :name ";
                 params.put("name", QueryUtil.like(name));
             }
             String sql = String.join(nameQuery, "SELECT * FROM store_space WHERE creator_id = :creator_id ",

@@ -19,15 +19,15 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "store_backends")
-public class StoreBackends {
+@Table(name = "store_backend")
+public class StoreBackend {
 
     /**
      * 存储后端主键
      */
     @Id
-    @Column(name = "id", length = 32)
-    private Long id;
+    @Column(name = "store_backend_id", length = 32)
+    private Long storeBackendId;
 
     /**
      * 存储后端名称

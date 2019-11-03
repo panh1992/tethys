@@ -15,7 +15,7 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(description = "登录参数")
-public class LoginParams {
+public class LoginRegisterParams {
 
     @NotNull(message = "用户名不允许为空")
     @Pattern(regexp = "^[a-zA-Z0-9_-]{4,16}$", message = "用户名为 4～16 个英文字母和数字组合")

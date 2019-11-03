@@ -57,7 +57,7 @@ public class UserBusiness {
      * @param passWord 密码
      * @return jwt Token
      */
-    @InTransaction(readOnly = true)
+    @InTransaction(value = TransactionIsolationLevel.REPEATABLE_READ, readOnly = true)
     public String login(String userName, String passWord) {
         Optional<User> userOptional = userRepository.findByUserName(userName);
         if (!userOptional.isPresent() || !BCryptUtil.checkPassWord(passWord, userOptional.get().getPassWord())) {
@@ -74,7 +74,7 @@ public class UserBusiness {
     /**
      * 获取用户信息
      */
-    @InTransaction(readOnly = true)
+    @InTransaction(value = TransactionIsolationLevel.REPEATABLE_READ, readOnly = true)
     public UserResp get(Long userId) {
         Optional<User> optional = userRepository.findByUserId(userId);
         if (!optional.isPresent()) {
@@ -84,6 +84,23 @@ public class UserBusiness {
         return UserResp.builder().userId(userId).userName(user.getUserName()).nickName(user.getNickName())
                 .mobile(user.getMobile()).email(user.getEmail()).profile(user.getProfile())
                 .createTime(user.getCreateTime()).build();
+    }
+
+    /**
+     * 修改用户信息
+     */
+    @InTransaction(TransactionIsolationLevel.REPEATABLE_READ)
+    public void update(Long userId, String nickName, String email, String mobile, String profile) {
+        Optional<User> optional = userRepository.findByUserId(userId);
+        if (!optional.isPresent()) {
+            throw EntityNotExistException.build("此用户未找到, 请重试");
+        }
+        User user = optional.get();
+        user.setNickName(nickName);
+        user.setEmail(email);
+        user.setMobile(mobile);
+        user.setProfile(profile);
+        userRepository.update(user);
     }
 
 }

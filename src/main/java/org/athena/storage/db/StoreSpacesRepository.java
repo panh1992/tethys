@@ -16,7 +16,7 @@ public interface StoreSpacesRepository {
     Optional<StoreSpace> findByStoreSpaceId(@Bind("store_space_id") Long storeId);
 
     @SqlQuery("SELECT * FROM store_space WHERE name = :name")
-    Optional<StoreSpace> findByName(@Bind("store_space") String name);
+    Optional<StoreSpace> findByName(@Bind("name") String name);
 
     @SqlQuery("SELECT * FROM store_space WHERE store_space_id = :store_space_id AND creator_id = :creator_id")
     Optional<StoreSpace> findByStoreSpaceIdAndCreatorId(@Bind("store_space_id") Long storeSpaceId,

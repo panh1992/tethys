@@ -25,4 +25,5 @@ public interface UserRepository {
     @SqlUpdate("UPDATE auth.user SET username = :userName, nickname = :nickName, password = :passWord, email = :email,"
             + " mobile = :mobile, profile = :profile, create_time = :createTime WHERE user_id = :userId")
     void update(@BindBean User user);
+
 }

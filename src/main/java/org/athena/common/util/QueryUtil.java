@@ -9,11 +9,11 @@ import java.util.Objects;
 public final class QueryUtil {
 
     public static Long limit(Long limit) {
-        return Objects.isNull(limit) || limit < 0 ? 0 : limit;
+        return Objects.isNull(limit) || limit < 0 ? Long.valueOf(20) : limit;
     }
 
     public static Long offset(Long offset) {
-        return Objects.isNull(offset) || offset < 0 ? 20 : offset;
+        return Objects.isNull(offset) || offset < 0 ? Long.valueOf(0) : offset;
     }
 
     public static String like(String search) {

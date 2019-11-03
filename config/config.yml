@@ -40,6 +40,8 @@ logging:
     # "com.example.dw.Thing": DEBUG
     "org.reflections":
       level: OFF
+    "org.athena":
+      level: DEBUG
 
 quartz:
   #Configure Server Scheduler Properties

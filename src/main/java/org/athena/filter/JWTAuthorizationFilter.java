@@ -32,6 +32,10 @@ public class JWTAuthorizationFilter implements Filter {
 
     private static Logger logger = LoggerFactory.getLogger(JWTAuthorizationFilter.class);
 
+    private static final String LOGIN_URL = "/login";
+
+    private static final String REGISTER_URL = "/register";
+
     @Override
     public void init(FilterConfig filterConfig) {
         logger.info("JWTAuthorizationFilter 开始");
@@ -42,18 +46,22 @@ public class JWTAuthorizationFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String authorizationToken = request.getHeader(Constant.AUTHORIZATION_HEADER);
+        if (LOGIN_URL.equals(request.getRequestURI()) || REGISTER_URL.equals(request.getRequestURI())) {
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
         JwtClaims claims;
         try {
             claims = JWTUtil.validation(authorizationToken, Constant.AUTHORIZATION_DURATION);
             String userId = claims.getSubject();
             SystemContext.setUserId(Long.parseLong(userId));
-            logger.info("登录用户id: {}", userId);
+            logger.debug("登录用户id: {}", userId);
             filterChain.doFilter(servletRequest, servletResponse);
         } catch (InvalidJwtException | MalformedClaimException e) {
             logger.error("认证信息解析失败, Authorization token: {}, Exception Message: {}",
                     authorizationToken, e.getMessage());
             ErrorResp errorResp = ErrorResp.builder().code(Response.Status.UNAUTHORIZED.toString())
-                    .message(Response.Status.UNAUTHORIZED.toString()).build();
+                    .message("认证失败, 请重试").build();
             ObjectMapper objectMapper = CommonUtil.getObjectMapper();
             HttpServletResponse response = (HttpServletResponse) servletResponse;
             response.setStatus(Response.Status.UNAUTHORIZED.getStatusCode());

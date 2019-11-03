@@ -42,12 +42,15 @@ public final class EnvConfig {
     public static void registerFilter(Environment environment) {
 
 
+        FilterRegistration.Dynamic authorizationFilter = environment.servlets()
+                .addFilter("Authorization", JWTAuthorizationFilter.class);
+        authorizationFilter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true,
+                "/*");
 
-        environment.servlets().addFilter("Authorization", JWTAuthorizationFilter.class)
-                .addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/list");
-
-        environment.servlets().addFilter("Resource", ResourceFilter.class)
-                .addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/list");
+        FilterRegistration.Dynamic resourceFilter = environment.servlets()
+                .addFilter("Resource", ResourceFilter.class);
+        resourceFilter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true,
+                "/*");
 
     }
 

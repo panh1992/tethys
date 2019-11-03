@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
@@ -22,28 +21,21 @@ import javax.persistence.Table;
 public class PathTree {
 
     /**
-     * 文件关系主键
-     */
-    @Id
-    @Column(name = "id", length = 32)
-    private Long id;
-
-    /**
      * 祖先文件
      */
-    @Column(name = "ancestor_id", length = 32)
+    @Column(name = "ancestor_id")
     private String ancestorId;
 
     /**
      * 子孙文件
      */
-    @Column(name = "descendant_id", length = 32)
+    @Column(name = "descendant_id")
     private String descendantId;
 
     /**
      * 相对层级
      */
     @Column(name = "depth")
-    private Boolean depth;
+    private Integer depth;
 
 }

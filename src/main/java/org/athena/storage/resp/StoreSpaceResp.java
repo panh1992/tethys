@@ -13,8 +13,8 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(description = "文件列表响应实体")
-public class StoreSpacesResp {
+@ApiModel(description = "存储空间响应实体")
+public class StoreSpaceResp {
 
     @ApiModelProperty("存储空间主键")
     private Long storeSpacesId;
@@ -33,9 +33,6 @@ public class StoreSpacesResp {
 
     @ApiModelProperty("创建时间")
     private Instant createTime;
-
-    @ApiModelProperty("修改时间")
-    private Instant modifyTime;
 
     @ApiModelProperty("描述信息")
     private String description;

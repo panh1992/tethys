@@ -11,11 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(description = "新建 存储空间参数")
-public class SpaceParams {
-
-    @ApiModelProperty("存储空间名称")
-    private String name;
+@ApiModel(description = "修改 存储空间参数")
+public class SpaceUpdateParams {
 
     @ApiModelProperty("描述信息")
     private String description;

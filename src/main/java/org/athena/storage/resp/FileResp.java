@@ -1,6 +1,5 @@
 package org.athena.storage.resp;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -26,7 +25,6 @@ public class FileResp {
     @ApiModelProperty("文件名")
     private String fileName;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @ApiModelProperty("用户角度文件大小 单位 byte")
     private Long fileSize;
 
@@ -44,9 +42,6 @@ public class FileResp {
 
     @ApiModelProperty("创建时间")
     private Instant createTime;
-
-    @ApiModelProperty("修改时间")
-    private Instant modifyTime;
 
     @ApiModelProperty("描述信息")
     private String description;

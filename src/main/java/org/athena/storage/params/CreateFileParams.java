@@ -1,11 +1,14 @@
 package org.athena.storage.params;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Objects;
 
 @Data
 @Builder
@@ -15,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class CreateFileParams {
 
     @ApiModelProperty("存储空间ID")
-    private Long storeId;
+    private Long storeSpaceId;
 
     @ApiModelProperty("文件路径")
     private String filePath;
@@ -25,5 +28,10 @@ public class CreateFileParams {
 
     @ApiModelProperty("描述信息")
     private String description;
+
+    @JsonSetter
+    public void setDir(Boolean dir) {
+        isDir = Objects.isNull(isDir) ? Boolean.FALSE : isDir;
+    }
 
 }

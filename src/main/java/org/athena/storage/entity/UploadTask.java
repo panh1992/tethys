@@ -12,34 +12,34 @@ import javax.persistence.Table;
 import java.time.Instant;
 
 /**
- * 文件上传任务
+ * 上传任务
  */
 @Data
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "upload_tasks")
-public class UploadTasks {
+@Table(name = "upload_task")
+public class UploadTask {
 
     /**
      * 上传任务主键
      */
     @Id
-    @Column(name = "id", length = 32)
-    private Long id;
+    @Column(name = "upload_task_id", length = 32)
+    private Long uploadTaskId;
 
     /**
      * 存储空间
      */
-    @Column(name = "store_id", length = 32)
-    private String storeId;
+    @Column(name = "store_space_id", length = 32)
+    private String storeSpaceId;
 
     /**
      * 创建用户
      */
-    @Column(name = "creater_id", length = 32)
-    private String createrId;
+    @Column(name = "creator_id", length = 32)
+    private String creatorId;
 
     /**
      * 数据上传任务的状态   start   success  failed

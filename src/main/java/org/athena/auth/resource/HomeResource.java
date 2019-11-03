@@ -1,13 +1,13 @@
 package org.athena.auth.resource;
 
 import com.codahale.metrics.annotation.Timed;
+import com.google.inject.Singleton;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.athena.auth.business.UserBusiness;
-import org.athena.auth.params.LoginParams;
-import org.athena.auth.params.RegisterParams;
+import org.athena.auth.params.LoginRegisterParams;
 import org.athena.common.resp.Result;
 
 import javax.inject.Inject;
@@ -19,6 +19,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Timed
+@Singleton
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -37,7 +38,7 @@ public class HomeResource {
     @ApiResponses({
             @ApiResponse(code = 200, message = "注册成功")
     })
-    public Result register(@Valid RegisterParams params) {
+    public Result register(@Valid LoginRegisterParams params) {
         userBusiness.register(params.getUserName(), params.getPassWord());
         return Result.build();
     }
@@ -49,10 +50,10 @@ public class HomeResource {
     @Path("login")
     @ApiOperation(value = "登录", notes = "用户使用 用户名或邮箱、密码 进行登录操作")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "登录成功"),
+            @ApiResponse(code = 200, message = "登录成功", response = String.class),
             @ApiResponse(code = 404, message = "用户名或密码错误")
     })
-    public Result<String> login(@Valid LoginParams params) {
+    public Result<String> login(@Valid LoginRegisterParams params) {
         return Result.build(userBusiness.login(params.getUserName(), params.getPassWord()), "登录成功");
     }
 

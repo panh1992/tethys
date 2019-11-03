@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import java.time.Instant;
 
 /**
- * 文件多级存储
+ * 多级存储
  */
 @Data
 @Entity
@@ -26,8 +26,8 @@ public class MultipolarStore {
      * 多级存储主键
      */
     @Id
-    @Column(name = "id", length = 32)
-    private Long id;
+    @Column(name = "multipolar_store_id", length = 32)
+    private Long multipolarStoreId;
 
     /**
      * 文件

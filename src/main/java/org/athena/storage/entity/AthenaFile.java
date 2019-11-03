@@ -90,7 +90,7 @@ public class AthenaFile {
     private String format;
 
     /**
-     * 文件状态      new   uploading   available   failed   deleted
+     * 文件状态   new   uploading   available   failed   deleted
      */
     @Column(name = "status", length = 32)
     private String status;
