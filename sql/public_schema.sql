@@ -12,7 +12,7 @@
  Target Server Version : 110002
  File Encoding         : 65001
 
- Date: 29/10/2019 16:20:45
+ Date: 03/11/2019 20:00:00
 */
 
 
@@ -21,26 +21,26 @@
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."athena_file";
 CREATE TABLE "public"."athena_file" (
-                                        "athena_file_id" int8 NOT NULL,
-                                        "store_id"       int8,
-                                        "creator_id"     int8,
-                                        "store_space"    varchar(128) COLLATE "pg_catalog"."default",
-                                        "file_name"      varchar(255) COLLATE "pg_catalog"."default",
-                                        "file_size"      int8,
-                                        "source_id"      int8,
-                                        "source_type"    varchar(32) COLLATE "pg_catalog"."default",
-                                        "is_dir"         bool,
-                                        "check_sum"      varchar(255) COLLATE "pg_catalog"."default",
-                                        "format"         varchar(32) COLLATE "pg_catalog"."default",
-                                        "status"         varchar(16) COLLATE "pg_catalog"."default",
-                                        "create_time"    timestamptz(6),
-                                        "modify_time"    timestamptz(6),
-                                        "description"    varchar(255) COLLATE "pg_catalog"."default"
+  "file_id" int8 NOT NULL,
+  "store_space_id" int8,
+  "creator_id" int8,
+  "store_space" varchar(128) COLLATE "pg_catalog"."default",
+  "file_name" varchar(255) COLLATE "pg_catalog"."default",
+  "file_size" int8,
+  "source_id" int8,
+  "source_type" varchar(32) COLLATE "pg_catalog"."default",
+  "is_dir" bool,
+  "check_sum" varchar(255) COLLATE "pg_catalog"."default",
+  "format" varchar(32) COLLATE "pg_catalog"."default",
+  "status" varchar(16) COLLATE "pg_catalog"."default",
+  "create_time" timestamptz(6),
+  "modify_time" timestamptz(6),
+  "description" varchar(255) COLLATE "pg_catalog"."default"
 )
 ;
 ALTER TABLE "public"."athena_file" OWNER TO "test";
-COMMENT ON COLUMN "public"."athena_file"."athena_file_id" IS '文件主键';
-COMMENT ON COLUMN "public"."athena_file"."store_id" IS '存储空间';
+COMMENT ON COLUMN "public"."athena_file"."file_id" IS '文件主键';
+COMMENT ON COLUMN "public"."athena_file"."store_space_id" IS '存储空间';
 COMMENT ON COLUMN "public"."athena_file"."creator_id" IS '创建用户';
 COMMENT ON COLUMN "public"."athena_file"."store_space" IS '文件所属存储空间名称';
 COMMENT ON COLUMN "public"."athena_file"."file_name" IS '文件名';
@@ -61,15 +61,15 @@ COMMENT ON TABLE "public"."athena_file" IS '文件表';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."multipolar_store";
 CREATE TABLE "public"."multipolar_store" (
-                                             "multipolar_store_id" int8 NOT NULL,
-                                             "file_id"             int8,
-                                             "status"              int4,
-                                             "level"               int4,
-                                             "is_active"           bool,
-                                             "store_path"          text COLLATE "pg_catalog"."default",
-                                             "store_size"          int8,
-                                             "create_time"         timestamptz(6),
-                                             "modify_time"         timestamptz(6)
+  "multipolar_store_id" int8 NOT NULL,
+  "file_id" int8,
+  "status" int4,
+  "level" int4,
+  "is_active" bool,
+  "store_path" text COLLATE "pg_catalog"."default",
+  "store_size" int8,
+  "create_time" timestamptz(6),
+  "modify_time" timestamptz(6)
 )
 ;
 ALTER TABLE "public"."multipolar_store" OWNER TO "test";
@@ -89,10 +89,9 @@ COMMENT ON TABLE "public"."multipolar_store" IS '文件的多级存储';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."path_tree";
 CREATE TABLE "public"."path_tree" (
-                                      "path_tree_id"  int8 NOT NULL,
-                                      "ancestor_id"   int8,
-                                      "descendant_id" int8,
-                                      "depth"         int8
+  "ancestor_id" int8,
+  "descendant_id" int8,
+  "depth" int8
 )
 ;
 ALTER TABLE "public"."path_tree" OWNER TO "test";
@@ -105,9 +104,8 @@ COMMENT ON TABLE "public"."path_tree" IS '文件树形关系 （采用闭包表�
 -- Table structure for store_backend
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."store_backend";
-CREATE TABLE "public"."store_backend"
-(
-    "store_backend_id" int8 NOT NULL,
+CREATE TABLE "public"."store_backend" (
+  "store_backend_id" int8 NOT NULL,
   "name" varchar(128) COLLATE "pg_catalog"."default",
   "protocol" varchar(128) COLLATE "pg_catalog"."default",
   "container" varchar(255) COLLATE "pg_catalog"."default",
@@ -125,8 +123,7 @@ CREATE TABLE "public"."store_backend"
   "description" varchar(255) COLLATE "pg_catalog"."default"
 )
 ;
-ALTER TABLE "public"."store_backend"
-    OWNER TO "test";
+ALTER TABLE "public"."store_backend" OWNER TO "test";
 COMMENT ON COLUMN "public"."store_backend"."store_backend_id" IS '存储后端主键';
 COMMENT ON COLUMN "public"."store_backend"."name" IS '存储后端名称';
 COMMENT ON COLUMN "public"."store_backend"."protocol" IS '存储协议';
@@ -177,10 +174,9 @@ COMMENT ON TABLE "public"."store_space" IS '数据存储空间';
 -- Table structure for upload_task
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."upload_task";
-CREATE TABLE "public"."upload_task"
-(
-    "upload_task_id" int8 NOT NULL,
-    "store_space_id" int8,
+CREATE TABLE "public"."upload_task" (
+  "upload_task_id" int8 NOT NULL,
+  "store_space_id" int8,
   "creator_id" int8,
   "status" int4,
   "create_time" timestamptz(6),
@@ -189,8 +185,7 @@ CREATE TABLE "public"."upload_task"
   "is_deleted" bool
 )
 ;
-ALTER TABLE "public"."upload_task"
-    OWNER TO "test";
+ALTER TABLE "public"."upload_task" OWNER TO "test";
 COMMENT ON COLUMN "public"."upload_task"."upload_task_id" IS '上传任务主键';
 COMMENT ON COLUMN "public"."upload_task"."store_space_id" IS '存储空间';
 COMMENT ON COLUMN "public"."upload_task"."creator_id" IS '创建用户';
@@ -205,20 +200,19 @@ COMMENT ON TABLE "public"."upload_task" IS '文件上传任务';
 -- Indexes structure for table athena_file
 -- ----------------------------
 CREATE INDEX "files_creater_id_idx" ON "public"."athena_file" USING btree (
-  "creater_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+  "creator_id" "pg_catalog"."int8_ops" ASC NULLS LAST
 );
 CREATE INDEX "files_source_id_idx" ON "public"."athena_file" USING btree (
   "source_id" "pg_catalog"."int8_ops" ASC NULLS LAST
 );
 CREATE INDEX "files_store_id_idx" ON "public"."athena_file" USING btree (
-  "store_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+  "store_space_id" "pg_catalog"."int8_ops" ASC NULLS LAST
 );
 
 -- ----------------------------
 -- Primary Key structure for table athena_file
 -- ----------------------------
-ALTER TABLE "public"."athena_file"
-    ADD CONSTRAINT "files_pkey" PRIMARY KEY ("athena_file_id");
+ALTER TABLE "public"."athena_file" ADD CONSTRAINT "files_pkey" PRIMARY KEY ("file_id");
 
 -- ----------------------------
 -- Indexes structure for table multipolar_store
@@ -230,8 +224,7 @@ CREATE INDEX "multipolar_store_file_id_idx" ON "public"."multipolar_store" USING
 -- ----------------------------
 -- Primary Key structure for table multipolar_store
 -- ----------------------------
-ALTER TABLE "public"."multipolar_store"
-    ADD CONSTRAINT "multipolar_store_pkey" PRIMARY KEY ("multipolar_store_id");
+ALTER TABLE "public"."multipolar_store" ADD CONSTRAINT "multipolar_store_pkey" PRIMARY KEY ("multipolar_store_id");
 
 -- ----------------------------
 -- Indexes structure for table path_tree
@@ -244,16 +237,9 @@ CREATE INDEX "path_tree_descendant_id_idx" ON "public"."path_tree" USING btree (
 );
 
 -- ----------------------------
--- Primary Key structure for table path_tree
--- ----------------------------
-ALTER TABLE "public"."path_tree"
-    ADD CONSTRAINT "path_tree_pkey" PRIMARY KEY ("path_tree_id");
-
--- ----------------------------
 -- Primary Key structure for table store_backend
 -- ----------------------------
-ALTER TABLE "public"."store_backend"
-    ADD CONSTRAINT "store_backends_pkey" PRIMARY KEY ("store_backend_id");
+ALTER TABLE "public"."store_backend" ADD CONSTRAINT "store_backends_pkey" PRIMARY KEY ("store_backend_id");
 
 -- ----------------------------
 -- Indexes structure for table store_space
@@ -274,12 +260,10 @@ CREATE INDEX "upload_tasks_creater_id_idx" ON "public"."upload_task" USING btree
   "creator_id" "pg_catalog"."int8_ops" ASC NULLS LAST
 );
 CREATE INDEX "upload_tasks_store_id_idx" ON "public"."upload_task" USING btree (
-                                                                                "store_space_id" "pg_catalog"."int8_ops"
-                                                                                ASC NULLS LAST
+  "store_space_id" "pg_catalog"."int8_ops" ASC NULLS LAST
 );
 
 -- ----------------------------
 -- Primary Key structure for table upload_task
 -- ----------------------------
-ALTER TABLE "public"."upload_task"
-    ADD CONSTRAINT "upload_tasks_pkey" PRIMARY KEY ("upload_task_id");
+ALTER TABLE "public"."upload_task" ADD CONSTRAINT "upload_tasks_pkey" PRIMARY KEY ("upload_task_id");

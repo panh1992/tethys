@@ -12,7 +12,7 @@
  Target Server Version : 110002
  File Encoding         : 65001
 
- Date: 29/10/2019 16:20:17
+ Date: 03/11/2019 19:59:41
 */
 
 
@@ -21,13 +21,13 @@
 -- ----------------------------
 DROP TABLE IF EXISTS "auth"."resource";
 CREATE TABLE "auth"."resource" (
-                                   "resource_id" int8                                        NOT NULL,
-                                   "uri"         varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
-                                   "method"      varchar(64) COLLATE "pg_catalog"."default"  NOT NULL,
-                                   "create_time" timestamptz(6)                              NOT NULL,
-                                   "modify_time" timestamptz(6),
-                                   "permission"  varchar(128) COLLATE "pg_catalog"."default",
-                                   "description" varchar(255) COLLATE "pg_catalog"."default"
+  "resource_id" int8 NOT NULL,
+  "uri" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
+  "method" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "create_time" timestamptz(6) NOT NULL,
+  "modify_time" timestamptz(6),
+  "permission" varchar(128) COLLATE "pg_catalog"."default",
+  "description" varchar(255) COLLATE "pg_catalog"."default"
 )
 ;
 ALTER TABLE "auth"."resource" OWNER TO "test";
@@ -45,11 +45,11 @@ COMMENT ON TABLE "auth"."resource" IS '资源表';
 -- ----------------------------
 DROP TABLE IF EXISTS "auth"."role";
 CREATE TABLE "auth"."role" (
-                               "role_id"     int8                                       NOT NULL,
-                               "name"        varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-                               "create_time" timestamptz(6)                             NOT NULL,
-                               "modify_time" timestamptz(6),
-                               "description" varchar(255) COLLATE "pg_catalog"."default"
+  "role_id" int8 NOT NULL,
+  "name" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "create_time" timestamptz(6) NOT NULL,
+  "modify_time" timestamptz(6),
+  "description" varchar(255) COLLATE "pg_catalog"."default"
 )
 ;
 ALTER TABLE "auth"."role" OWNER TO "test";
@@ -79,14 +79,14 @@ COMMENT ON TABLE "auth"."role_resource_relation" IS '角色与资源关系表';
 -- ----------------------------
 DROP TABLE IF EXISTS "auth"."user";
 CREATE TABLE "auth"."user" (
-                               "user_id"     int8 NOT NULL,
-                               "username"    varchar(64) COLLATE "pg_catalog"."default",
-                               "nickname"    varchar(64) COLLATE "pg_catalog"."default",
-                               "password"    varchar(128) COLLATE "pg_catalog"."default",
-                               "email"       varchar(128) COLLATE "pg_catalog"."default",
-                               "mobile"      varchar(32) COLLATE "pg_catalog"."default",
-                               "profile"     varchar(255) COLLATE "pg_catalog"."default",
-                               "create_time" timestamptz(6)
+  "user_id" int8 NOT NULL,
+  "username" varchar(64) COLLATE "pg_catalog"."default",
+  "nickname" varchar(64) COLLATE "pg_catalog"."default",
+  "password" varchar(128) COLLATE "pg_catalog"."default",
+  "email" varchar(128) COLLATE "pg_catalog"."default",
+  "mobile" varchar(32) COLLATE "pg_catalog"."default",
+  "profile" varchar(255) COLLATE "pg_catalog"."default",
+  "create_time" timestamptz(6)
 )
 ;
 ALTER TABLE "auth"."user" OWNER TO "test";
@@ -103,14 +103,12 @@ COMMENT ON TABLE "auth"."user" IS '用户表';
 -- ----------------------------
 -- Primary Key structure for table resource
 -- ----------------------------
-ALTER TABLE "auth"."resource"
-    ADD CONSTRAINT "resource_pkey" PRIMARY KEY ("resource_id");
+ALTER TABLE "auth"."resource" ADD CONSTRAINT "resource_pkey" PRIMARY KEY ("resource_id");
 
 -- ----------------------------
 -- Primary Key structure for table role
 -- ----------------------------
-ALTER TABLE "auth"."role"
-    ADD CONSTRAINT "role_pkey" PRIMARY KEY ("role_id");
+ALTER TABLE "auth"."role" ADD CONSTRAINT "role_pkey" PRIMARY KEY ("role_id");
 
 -- ----------------------------
 -- Indexes structure for table role_resource_relation
@@ -125,5 +123,4 @@ CREATE INDEX "role_resource_relation_role_id_idx" ON "auth"."role_resource_relat
 -- ----------------------------
 -- Primary Key structure for table user
 -- ----------------------------
-ALTER TABLE "auth"."user"
-    ADD CONSTRAINT "users_pkey" PRIMARY KEY ("user_id");
+ALTER TABLE "auth"."user" ADD CONSTRAINT "users_pkey" PRIMARY KEY ("user_id");
