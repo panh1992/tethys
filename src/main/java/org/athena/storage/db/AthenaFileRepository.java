@@ -15,14 +15,14 @@ public interface AthenaFileRepository {
 
     @SqlQuery("SELECT descendant.* FROM athena_file AS ancestor INNER JOIN path_tree ON ancestor.file_id = ancestor_id"
             + " INNER JOIN athena_file AS descendant ON descendant_id = descendant.file_id WHERE ancestor.file_id = "
-            + ":fileId AND path_tree.depth = 1 limit :limit offset :offset")
-    List<AthenaFile> findByNextFile(@Bind("fileId") Long fileId, @Bind("limit") Long limit,
-                                    @Bind("offset") Long offset);
+            + ":fileId AND path_tree.depth = :depth limit :limit offset :offset")
+    List<AthenaFile> findByDescendantFileAndDepth(@Bind("fileId") Long fileId, @Bind("depth") Long depth,
+                                                  @Bind("limit") Long limit, @Bind("offset") Long offset);
 
     @SqlQuery("SELECT count(1) FROM athena_file AS ancestor INNER JOIN path_tree ON ancestor.file_id = ancestor_id"
             + " INNER JOIN athena_file AS descendant ON descendant_id = descendant.file_id WHERE "
-            + "ancestor.file_id = :fileId AND path_tree.depth = 1")
-    Long countByNextFile(@Bind("fileId") Long fileId);
+            + "ancestor.file_id = :fileId AND path_tree.depth = :depth")
+    Long countByDescendantFileAndDepth(@Bind("fileId") Long fileId, @Bind("depth") Long depth);
 
     @SqlQuery("SELECT ancestor.* FROM athena_file AS ancestor INNER JOIN path_tree ON ancestor.file_id = "
             + "ancestor_id INNER JOIN athena_file AS descendant ON descendant_id = descendant.file_id WHERE "
@@ -30,7 +30,7 @@ public interface AthenaFileRepository {
     Optional<AthenaFile> findByStoreSpaceIdAndFileNameAndDepth(
             @Bind("storeSpaceId") Long storeSpaceId, @Bind("name") String name, @Bind("depth") int depth);
 
-    @SqlQuery("SELECT ancestor.* FROM athena_file AS ancestor INNER JOIN path_tree ON ancestor.file_id = ancestor_id "
+    @SqlQuery("SELECT descendant.* FROM athena_file AS ancestor INNER JOIN path_tree ON ancestor.file_id = ancestor_id "
             + "INNER JOIN athena_file AS descendant ON descendant_id = descendant.file_id WHERE "
             + "ancestor.store_space_id = :storeSpaceId and descendant.file_name = :name AND depth = :depth")
     Optional<AthenaFile> findByStoreSpaceIdAndDescendantFileNameAndDepth(

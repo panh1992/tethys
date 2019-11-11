@@ -71,7 +71,7 @@ public class StoreSpacesBusiness {
     }
 
     /**
-     * 更新存储空间
+     * 更新存储空间备注
      */
     @InTransaction(TransactionIsolationLevel.REPEATABLE_READ)
     public void update(Long userId, Long storeSpaceId, String description) {

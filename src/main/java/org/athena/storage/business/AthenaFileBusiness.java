@@ -68,8 +68,8 @@ public class AthenaFileBusiness {
             AthenaFile ancestorFile = this.getAncestorFile(storeSpace.getStoreSpaceId(), storeSpace.getName());
             fileId = ancestorFile.getFileId();
         }
-        List<AthenaFile> files = athenaFileRepository.findByNextFile(fileId, limit, offset);
-        Long total = athenaFileRepository.countByNextFile(fileId);
+        List<AthenaFile> files = athenaFileRepository.findByDescendantFileAndDepth(fileId, 1L, limit, offset);
+        Long total = athenaFileRepository.countByDescendantFileAndDepth(fileId, 1L);
         return PageResp.of(files.stream().map(x -> FileResp.builder().fileId(x.getFileId()).fileName(x.getFileName())
                         .fileSize(x.getFileSize()).format(x.getFormat()).storeSpace(x.getStoreSpaceName())
                         .status(x.getStatus()).isDir(x.getDir()).checkSum(x.getCheckSum())
@@ -83,11 +83,9 @@ public class AthenaFileBusiness {
      */
     @InTransaction(value = TransactionIsolationLevel.REPEATABLE_READ, readOnly = true)
     public FileResp get(Long userId, Long fileId) {
-        Optional<AthenaFile> optionalAthenaFile = athenaFileRepository.findByCreatorIdAndFileId(userId, fileId);
-        if (!optionalAthenaFile.isPresent()) {
-            throw EntityNotExistException.build("用户下不存在此文件");
-        }
-        AthenaFile file = optionalAthenaFile.get();
+
+        AthenaFile file = this.getAthenaFile(userId, fileId);
+
         return FileInfoResp.infoBuilder().fileId(file.getFileId()).fileName(file.getFileName())
                 .fileSize(file.getFileSize()).isDir(file.getDir()).status(file.getStatus())
                 .filePath(athenaFileRepository.findFilePath(file.getStoreSpaceId(), file.getFileId()))
@@ -121,19 +119,42 @@ public class AthenaFileBusiness {
             String fileName = fileNames.get(depth);
             // 如果文件存在跳过, 不存在创建
             Optional<AthenaFile> optionalFile = athenaFileRepository
-                    .findByStoreSpaceIdAndDescendantFileNameAndDepth(storeSpaceId, fileName, depth + 1);
+                    .findByStoreSpaceIdAndDescendantFileNameAndDepth(storeSpaceId, fileName, depth);
             if (optionalFile.isPresent()) {
                 ancestorFileId = optionalFile.get().getFileId();
                 continue;
             }
+            boolean dir = (depth + 1) != fileNames.size() || isDir;
             AthenaFile file = AthenaFile.builder().fileId(idWorker.nextId()).fileName(fileName).description(description)
                     .storeSpaceId(storeSpace.getStoreSpaceId()).storeSpaceName(storeSpace.getName())
-                    .status(depth != fileNames.size() ? FileStatus.AVAILABLE.name() : FileStatus.NEW.name())
-                    .dir(depth != fileNames.size() || isDir).creatorId(SystemContext.getUserId())
+                    .status(dir ? FileStatus.AVAILABLE.name() : FileStatus.NEW.name()).dir(dir)
+                    .format(dir ? null : PathUtil.getExtName(fileName)).creatorId(SystemContext.getUserId())
                     .createTime(Instant.now()).build();
             athenaFileRepository.save(file);
             pathTreeRepository.insetTree(ancestorFileId, file.getFileId());
+            ancestorFileId = file.getFileId();
         }
+    }
+
+    /**
+     * 移动某用户下的文件
+     */
+    @InTransaction(TransactionIsolationLevel.REPEATABLE_READ)
+    public void move(Long userId, Long fileId, Long fileDirId) {
+        if (fileId.compareTo(fileDirId) == 0) {
+            throw InvalidParameterException.build("要移动文件与目标文件为同一文件，请重试");
+        }
+        AthenaFile file = this.getAthenaFile(userId, fileId);
+        AthenaFile athenaFile = this.getAncestorFile(file.getStoreSpaceId(), file.getStoreSpaceName());
+        if (athenaFile.getFileId().equals(file.getFileId())) {
+            throw InvalidParameterException.build("根目录不允许移动");
+        }
+        AthenaFile dir = this.getAthenaFile(userId, fileDirId);
+        if (!dir.getDir()) {
+            throw InvalidParameterException.build("目标文件不是目录，不允许移动，请校验");
+        }
+
+
     }
 
     /**
@@ -160,6 +181,17 @@ public class AthenaFileBusiness {
             throw InternalServerError.build("存储空间: " + storeSpaceName + ", 获取祖先文件失败");
         }
         return optionalAncestorFile.get();
+    }
+
+    /**
+     * 获取某用户下的文件
+     */
+    private AthenaFile getAthenaFile(Long userId, Long fileId) {
+        Optional<AthenaFile> optionalAthenaFile = athenaFileRepository.findByCreatorIdAndFileId(userId, fileId);
+        if (!optionalAthenaFile.isPresent()) {
+            throw EntityNotExistException.build("不存在此文件，请校验");
+        }
+        return optionalAthenaFile.get();
     }
 
 }

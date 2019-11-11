@@ -19,8 +19,8 @@ import org.athena.storage.resp.StoreSpaceResp;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -74,11 +74,11 @@ public class StoreSpacesResource {
         return Response.ok(storeSpacesBusiness.get(SystemContext.getUserId(), storeSpaceId)).build();
     }
 
-    @ApiOperation(value = "修改存储空间", notes = "修改存储空间")
+    @ApiOperation(value = "修改存储空间备注", notes = "修改存储空间备注")
     @ApiResponses({
             @ApiResponse(code = 200, message = "修改成功")
     })
-    @PUT
+    @PATCH
     @Path("/{store_space_id}")
     public Response update(@ApiParam(value = "存储空间主键", required = true) @PathParam("store_space_id") Long storeSpaceId,
                            @ApiParam(value = "参数", required = true) @Valid SpaceUpdateParams params) {

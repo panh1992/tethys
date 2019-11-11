@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public final class PathUtil {
 
     private static final String STORAGE_PREFIX = "athena:/";
+
     private static Logger logger = LoggerFactory.getLogger(PathUtil.class);
 
     /**
@@ -33,6 +34,17 @@ public final class PathUtil {
     public static List<String> getFileNames(String path) {
         return Arrays.stream(path.replaceFirst(STORAGE_PREFIX, "").split("/"))
                 .filter(x -> !Strings.isNullOrEmpty(x)).collect(Collectors.toList());
+    }
+
+    /**
+     * 根据文件名获取文件扩展名
+     */
+    public static String getExtName(String fileName) {
+
+        int index = fileName.lastIndexOf(".");
+
+        return index == -1 ? null : fileName.substring(index + 1);
+
     }
 
 }

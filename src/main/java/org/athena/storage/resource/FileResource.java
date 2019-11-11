@@ -20,6 +20,7 @@ import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -77,6 +78,21 @@ public class FileResource {
     public Response create(@Valid CreateFileParams params) {
         athenaFileBusiness.create(params.getStoreSpaceId(), params.getFilePath(), params.getIsDir(),
                 params.getDescription());
+        return Response.status(Response.Status.CREATED).entity(Result.build()).build();
+    }
+
+    /**
+     * 新建文件元数据信息
+     */
+    @ApiOperation(value = "新建文件", notes = "新建文件元数据信息")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "新建成功")
+    })
+    @PATCH
+    @Path("/{file_id}")
+    public Response move(@ApiParam("文件主键") @PathParam("file_id") Long fileId,
+                         @ApiParam("文件主键") @QueryParam("file_id") Long fileDirId) {
+        athenaFileBusiness.move(SystemContext.getUserId(), fileId, fileDirId);
         return Response.status(Response.Status.CREATED).entity(Result.build()).build();
     }
 
