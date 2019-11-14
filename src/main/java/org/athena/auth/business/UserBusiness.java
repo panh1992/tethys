@@ -13,6 +13,7 @@ import org.athena.common.util.Constant;
 import org.athena.common.util.JWTUtil;
 import org.athena.common.util.SnowflakeIdWorker;
 import org.athena.common.util.crypto.BCryptUtil;
+import org.athena.storage.business.StoreSpacesBusiness;
 import org.jdbi.v3.core.transaction.TransactionIsolationLevel;
 import org.jose4j.lang.JoseException;
 import org.slf4j.Logger;
@@ -29,6 +30,9 @@ public class UserBusiness {
 
     @Inject
     private SnowflakeIdWorker idWorker;
+
+    @Inject
+    private StoreSpacesBusiness storeSpacesBusiness;
 
     @Inject
     private UserRepository userRepository;
@@ -48,6 +52,7 @@ public class UserBusiness {
         User user = User.builder().userId(idWorker.nextId()).userName(userName)
                 .passWord(BCryptUtil.hashPassWord(password)).createTime(Instant.now()).build();
         userRepository.save(user);
+        storeSpacesBusiness.create(user.getUserId(), userName, null);
     }
 
     /**

@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -63,7 +64,7 @@ public final class RabbitmqUtil {
                 @Override
                 public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties,
                                            byte[] body) throws IOException {
-                    String msg = new String(body, "utf-8");
+                    String msg = new String(body, StandardCharsets.UTF_8);
                     logger.info("接收到消息——{}", msg);
 
                     // 返回确认状态

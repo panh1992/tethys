@@ -161,13 +161,12 @@ public class AthenaFileBusiness {
      * 创建祖先文件目录
      */
     void createAncestorFile(Long userId, Long storeSpaceId, String storeSpaceName) {
-        Long ancestorFileId = idWorker.nextId();
-        AthenaFile file = AthenaFile.builder().fileId(ancestorFileId).fileName(storeSpaceName).dir(Boolean.TRUE)
+        AthenaFile ancestorFile = AthenaFile.builder().fileId(idWorker.nextId()).fileName(storeSpaceName)
                 .status(FileStatus.AVAILABLE.name()).creatorId(userId).storeSpaceId(storeSpaceId)
                 .storeSpaceName(storeSpaceName).description(storeSpaceName + "  存储空间根目录")
-                .createTime(Instant.now()).build();
-        athenaFileRepository.save(file);
-        pathTreeRepository.insetTree(ancestorFileId, file.getFileId());
+                .dir(Boolean.TRUE).createTime(Instant.now()).build();
+        athenaFileRepository.save(ancestorFile);
+        pathTreeRepository.insetTree(ancestorFile.getFileId(), ancestorFile.getFileId());
     }
 
     /**
