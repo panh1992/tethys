@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import ru.vyarus.guicey.jdbi3.tx.InTransaction;
 
 import javax.inject.Inject;
+import javax.ws.rs.core.Response;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
@@ -137,27 +138,6 @@ public class AthenaFileBusiness {
     }
 
     /**
-     * 移动某用户下的文件
-     */
-    @InTransaction(TransactionIsolationLevel.REPEATABLE_READ)
-    public void move(Long userId, Long fileId, Long fileDirId) {
-        if (fileId.compareTo(fileDirId) == 0) {
-            throw InvalidParameterException.build("要移动文件与目标文件为同一文件，请重试");
-        }
-        AthenaFile file = this.getAthenaFile(userId, fileId);
-        AthenaFile athenaFile = this.getAncestorFile(file.getStoreSpaceId(), file.getStoreSpaceName());
-        if (athenaFile.getFileId().equals(file.getFileId())) {
-            throw InvalidParameterException.build("根目录不允许移动");
-        }
-        AthenaFile dir = this.getAthenaFile(userId, fileDirId);
-        if (!dir.getDir()) {
-            throw InvalidParameterException.build("目标文件不是目录，不允许移动，请校验");
-        }
-
-
-    }
-
-    /**
      * 创建祖先文件目录
      */
     void createAncestorFile(Long userId, Long storeSpaceId, String storeSpaceName) {
@@ -191,6 +171,45 @@ public class AthenaFileBusiness {
             throw EntityNotExistException.build("不存在此文件，请校验");
         }
         return optionalAthenaFile.get();
+    }
+
+    /**
+     * 移动某用户下的文件
+     */
+    @InTransaction(TransactionIsolationLevel.REPEATABLE_READ)
+    public void move(Long userId, Long fileId, Long fileDirId) {
+        if (fileId.compareTo(fileDirId) == 0) {
+            throw InvalidParameterException.build("要移动文件与目标文件为同一文件，请重试");
+        }
+        AthenaFile file = this.getAthenaFile(userId, fileId);
+        AthenaFile athenaFile = this.getAncestorFile(file.getStoreSpaceId(), file.getStoreSpaceName());
+        if (athenaFile.getFileId().equals(file.getFileId())) {
+            throw InvalidParameterException.build("根目录不允许移动");
+        }
+        AthenaFile dir = this.getAthenaFile(userId, fileDirId);
+        if (!dir.getDir()) {
+            throw InvalidParameterException.build("目标文件不是目录，不允许移动，请校验");
+        }
+        // TODO: 实现数据修改
+
+    }
+
+    /**
+     * 删除某用户下文件
+     *
+     * @param isDel 是否强制删除
+     */
+    public void remove(Long userId, Long fileId, Boolean isDel) {
+        AthenaFile file = this.getAthenaFile(userId, fileId);
+        AthenaFile athenaFile = this.getAncestorFile(file.getStoreSpaceId(), file.getStoreSpaceName());
+        if (athenaFile.getFileId().equals(file.getFileId())) {
+            throw InvalidParameterException.build("根目录不允许删除");
+        }
+        // 如果文件为目录且不强制删除, 校验目录下是否有文件
+        if (file.getDir() && !isDel && athenaFileRepository.countByDescendantFileAndDepth(fileId, 1L) > 0) {
+            throw InvalidParameterException.build(Response.Status.CONFLICT, "删除失败, 该目录下存在文件");
+        }
+        athenaFileRepository.removeAthenaFile(fileId, userId, FileStatus.DELETED.name());
     }
 
 }

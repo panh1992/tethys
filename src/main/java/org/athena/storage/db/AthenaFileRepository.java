@@ -45,6 +45,11 @@ public interface AthenaFileRepository {
     @SqlQuery("SELECT * FROM athena_file WHERE file_id = :fileId AND creator_id = :userId")
     Optional<AthenaFile> findByCreatorIdAndFileId(@Bind("userId") Long userId, @Bind("fileId") Long fileId);
 
+    @SqlUpdate("UPDATE athena_file SET status = :status FROM path_tree WHERE file_id = descendant_id and ancestor_id ="
+            + " :fileId and creator_id = :creator_id")
+    void removeAthenaFile(@Bind("creator_id") Long creatorId, @Bind("fileId") Long fileId,
+                          @Bind("status") String status);
+
     @SqlUpdate("INSERT INTO athena_file (file_id, store_space_id, creator_id, store_space, file_name, file_size, "
             + "source_id, source_type, is_dir, check_sum, format, status, create_time, modify_time, description) "
             + "VALUES (:fileId, :storeSpaceId, :creatorId, :storeSpaceName, :fileName, :fileSize, :sourceId, "

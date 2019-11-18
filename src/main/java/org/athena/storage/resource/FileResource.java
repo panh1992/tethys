@@ -19,6 +19,7 @@ import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
@@ -28,6 +29,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Objects;
 
 /**
  * 文件资源 处理文件元数据
@@ -59,7 +61,7 @@ public class FileResource {
 
     @ApiOperation(value = "获取文件信息", notes = "获取文件详细信息")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "获取文件列表成功", response = FileInfoResp.class)
+            @ApiResponse(code = 200, message = "获取文件信息成功", response = FileInfoResp.class)
     })
     @GET
     @Path("/{file_id}")
@@ -82,18 +84,35 @@ public class FileResource {
     }
 
     /**
-     * 新建文件元数据信息
+     * 移动文件
      */
-    @ApiOperation(value = "新建文件", notes = "新建文件元数据信息")
+    @ApiOperation(value = "移动文件", notes = "移动文件元数据信息")
     @ApiResponses({
-            @ApiResponse(code = 201, message = "新建成功")
+            @ApiResponse(code = 201, message = "移动成功")
     })
     @PATCH
     @Path("/{file_id}")
     public Response move(@ApiParam("文件主键") @PathParam("file_id") Long fileId,
                          @ApiParam("文件主键") @QueryParam("file_id") Long fileDirId) {
         athenaFileBusiness.move(SystemContext.getUserId(), fileId, fileDirId);
-        return Response.status(Response.Status.CREATED).entity(Result.build()).build();
+        return Response.ok(Result.build()).build();
+    }
+
+    /**
+     * 删除文件
+     */
+    @ApiOperation(value = "删除文件", notes = "删除文件元数据信息")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "删除成功"),
+            @ApiResponse(code = 400, message = "根目录不允许删除"),
+            @ApiResponse(code = 409, message = "删除失败, 该目录下存在文件")
+    })
+    @DELETE
+    @Path("/{file_id}")
+    public Response remove(@ApiParam("文件主键") @PathParam("file_id") Long fileId,
+                           @ApiParam("是否强制删除") @PathParam("delete") Boolean delete) {
+        athenaFileBusiness.remove(SystemContext.getUserId(), fileId, Objects.isNull(delete) ? null : delete);
+        return Response.ok(Result.build()).build();
     }
 
     @ApiOperation(value = "文件列表", notes = "获取文件列表信息")

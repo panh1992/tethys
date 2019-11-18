@@ -22,6 +22,10 @@ public class InvalidParameterException extends BusinessException {
         return new InvalidParameterException(Response.Status.BAD_REQUEST, "InvalidParameter", message);
     }
 
+    public static InvalidParameterException build(Response.Status status, String message) {
+        return new InvalidParameterException(status, "InvalidParameter", message);
+    }
+
     public static InvalidParameterException build(String code, String message) {
         return new InvalidParameterException(Response.Status.BAD_REQUEST, code, message);
     }

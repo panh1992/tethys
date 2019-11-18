@@ -12,7 +12,7 @@ import org.athena.netty.handler.TextWebSocketFrameHandler;
 public class WebSocketChannelInitializer extends ChannelInitializer<SocketChannel> {
 
     @Override
-    protected void initChannel(SocketChannel socketChannel) throws Exception {
+    protected void initChannel(SocketChannel socketChannel) {
         // 获取对应管道
         ChannelPipeline pipeline = socketChannel.pipeline();
         // HttpServerCodec: 针对http协议进行编解码

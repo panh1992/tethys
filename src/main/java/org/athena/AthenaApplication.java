@@ -57,7 +57,7 @@ public class AthenaApplication extends Application<AthenaConfiguration> {
 
         EnvConfig.registerException(environment);
 
-        EnvConfig.registerFilter(environment);
+        EnvConfig.registerFilter(environment, guiceBundle.getInjector().getInstance(Jdbi.class));
 
         environment.healthChecks().register("dataBaseHealthCheck", new JdbiHealthCheck(guiceBundle
                 .getInjector().getInstance(Jdbi.class), configuration.getDatabase().getValidationQuery()));

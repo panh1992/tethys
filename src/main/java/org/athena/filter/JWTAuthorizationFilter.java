@@ -32,10 +32,6 @@ public class JWTAuthorizationFilter implements Filter {
 
     private static Logger logger = LoggerFactory.getLogger(JWTAuthorizationFilter.class);
 
-    private static final String LOGIN_URL = "/login";
-
-    private static final String REGISTER_URL = "/register";
-
     @Override
     public void init(FilterConfig filterConfig) {
         logger.info("JWTAuthorizationFilter 开始");
@@ -46,10 +42,6 @@ public class JWTAuthorizationFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String authorizationToken = request.getHeader(Constant.AUTHORIZATION_HEADER);
-        if (LOGIN_URL.equals(request.getRequestURI()) || REGISTER_URL.equals(request.getRequestURI())) {
-            filterChain.doFilter(servletRequest, servletResponse);
-            return;
-        }
         JwtClaims claims;
         try {
             claims = JWTUtil.validation(authorizationToken, Constant.AUTHORIZATION_DURATION);

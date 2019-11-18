@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
- * 资源过滤器，用于资源、权限校验
+ * 资源过滤器，用于资源、操作审计、 操作
  */
 public class ResourceFilter implements Filter {
 
