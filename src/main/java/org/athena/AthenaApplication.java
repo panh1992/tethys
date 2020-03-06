@@ -3,7 +3,6 @@ package org.athena;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.forms.MultiPartBundle;
-import io.dropwizard.jdbi3.JdbiHealthCheck;
 import io.dropwizard.jdbi3.bundles.JdbiExceptionsBundle;
 import io.dropwizard.jobs.JobsBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -15,7 +14,6 @@ import org.athena.config.configuration.AthenaConfiguration;
 import org.athena.guice.EnvironmentModule;
 import org.athena.guice.JDBIFactory;
 import org.athena.task.DemoJob;
-import org.jdbi.v3.core.Jdbi;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.guicey.jdbi3.JdbiBundle;
 
@@ -57,10 +55,9 @@ public class AthenaApplication extends Application<AthenaConfiguration> {
 
         EnvConfig.registerException(environment);
 
-        EnvConfig.registerFilter(environment, guiceBundle.getInjector().getInstance(Jdbi.class));
+        EnvConfig.registerHealthCheck(environment, configuration, guiceBundle);
 
-        environment.healthChecks().register("dataBaseHealthCheck", new JdbiHealthCheck(guiceBundle
-                .getInjector().getInstance(Jdbi.class), configuration.getDatabase().getValidationQuery()));
+        EnvConfig.registerAuthorization(environment, guiceBundle);
 
     }
 

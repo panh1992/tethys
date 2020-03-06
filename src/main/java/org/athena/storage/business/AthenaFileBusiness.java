@@ -8,7 +8,6 @@ import org.athena.common.exception.InvalidParameterException;
 import org.athena.common.resp.PageResp;
 import org.athena.common.util.PathUtil;
 import org.athena.common.util.SnowflakeIdWorker;
-import org.athena.common.util.SystemContext;
 import org.athena.storage.db.AthenaFileRepository;
 import org.athena.storage.db.PathTreeRepository;
 import org.athena.storage.db.StoreSpacesRepository;
@@ -98,12 +97,12 @@ public class AthenaFileBusiness {
      * 创建文件元数据
      */
     @InTransaction(value = TransactionIsolationLevel.REPEATABLE_READ)
-    public void create(Long storeSpaceId, String filePath, boolean isDir, String description) {
+    public void create(Long userId, Long storeSpaceId, String filePath, boolean isDir, String description) {
         if (!PathUtil.isPath(filePath, isDir)) {
             throw InvalidParameterException.build("文件路径不合法, 请检查");
         }
         Optional<StoreSpace> optionalStoreSpace = storeSpacesRepository
-                .findByStoreSpaceIdAndCreatorId(storeSpaceId, SystemContext.getUserId());
+                .findByStoreSpaceIdAndCreatorId(storeSpaceId, userId);
         if (!optionalStoreSpace.isPresent()) {
             throw EntityNotExistException.build("存储空间不存在");
         }
@@ -128,11 +127,10 @@ public class AthenaFileBusiness {
             boolean dir = (depth + 1) != fileNames.size() || isDir;
             AthenaFile file = AthenaFile.builder().fileId(idWorker.nextId()).fileName(fileName).description(description)
                     .storeSpaceId(storeSpace.getStoreSpaceId()).storeSpaceName(storeSpace.getName())
-                    .status(dir ? FileStatus.AVAILABLE.name() : FileStatus.NEW.name()).dir(dir)
-                    .format(dir ? null : PathUtil.getExtName(fileName)).creatorId(SystemContext.getUserId())
-                    .createTime(Instant.now()).build();
+                    .status(dir ? FileStatus.AVAILABLE.name() : FileStatus.NEW.name()).dir(dir).creatorId(userId)
+                    .format(dir ? null : PathUtil.getExtName(fileName)).createTime(Instant.now()).build();
             athenaFileRepository.save(file);
-            pathTreeRepository.insetTree(ancestorFileId, file.getFileId());
+            pathTreeRepository.save(ancestorFileId, file.getFileId());
             ancestorFileId = file.getFileId();
         }
     }
@@ -146,7 +144,7 @@ public class AthenaFileBusiness {
                 .storeSpaceName(storeSpaceName).description(storeSpaceName + "  存储空间根目录")
                 .dir(Boolean.TRUE).createTime(Instant.now()).build();
         athenaFileRepository.save(ancestorFile);
-        pathTreeRepository.insetTree(ancestorFile.getFileId(), ancestorFile.getFileId());
+        pathTreeRepository.save(ancestorFile.getFileId(), ancestorFile.getFileId());
     }
 
     /**

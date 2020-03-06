@@ -1,30 +1,37 @@
 package org.athena.config;
 
+import io.dropwizard.Configuration;
+import io.dropwizard.auth.AuthValueFactoryProvider;
+import io.dropwizard.jdbi3.JdbiHealthCheck;
 import io.dropwizard.setup.Environment;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.athena.account.business.ResourceBusiness;
+import org.athena.account.business.RoleBusiness;
+import org.athena.account.business.UserBusiness;
+import org.athena.auth.AthenaDynamicFeature;
+import org.athena.auth.jwt.JWTAuthenticator;
+import org.athena.auth.jwt.JWTAuthorizer;
+import org.athena.auth.jwt.JWTCredentialAuthFilter;
+import org.athena.auth.RolesAllowedDynamicFeature;
+import org.athena.auth.UserInfo;
+import org.athena.config.configuration.AthenaConfiguration;
 import org.athena.config.configuration.CorsConfiguration;
 import org.athena.config.exception.BusinessExceptionMapper;
 import org.athena.config.exception.ValidationExceptionMapper;
-import org.athena.filter.JWTAuthorizationFilter;
-import org.athena.filter.ResourceFilter;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.jdbi.v3.core.Jdbi;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ru.vyarus.dropwizard.guice.GuiceBundle;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 import java.util.EnumSet;
-import java.util.Map;
 
 /**
  * 环境配置类
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class EnvConfig {
-
-    private static Logger logger = LoggerFactory.getLogger(EnvConfig.class);
 
     /**
      * 开启 CORS 跨域
@@ -43,30 +50,6 @@ public final class EnvConfig {
     }
 
     /**
-     * 注册过滤器
-     */
-    public static void registerFilter(Environment environment, Jdbi jdbi) {
-
-        Map<String, Object> map = jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM store_space")
-                .mapToMap().findOnly());
-
-        // TODO: 进行权限控制
-        logger.info("权限信息：{}", map);
-
-        FilterRegistration.Dynamic authorizationFilter = environment.servlets()
-                .addFilter("Authorization", JWTAuthorizationFilter.class);
-        authorizationFilter.setInitParameter("", "");
-        authorizationFilter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true,
-                "/spaces", "/spaces/*", "/files", "/files/*");
-
-        FilterRegistration.Dynamic resourceFilter = environment.servlets()
-                .addFilter("Resource", ResourceFilter.class);
-        resourceFilter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true,
-                "/*");
-
-    }
-
-    /**
      * 注册异常处理类
      */
     public static void registerException(Environment environment) {
@@ -74,6 +57,38 @@ public final class EnvConfig {
         environment.jersey().register(new BusinessExceptionMapper(environment.metrics()));
 
         environment.jersey().register(new ValidationExceptionMapper());
+
+    }
+
+    /**
+     * 注册认证鉴权处理
+     */
+    public static void registerAuthorization(Environment environment, GuiceBundle<Configuration> guiceBundle) {
+
+        UserBusiness userBusiness = guiceBundle.getInjector().getInstance(UserBusiness.class);
+        ResourceBusiness resourceBusiness = guiceBundle.getInjector().getInstance(ResourceBusiness.class);
+        // 添加鉴权校验
+        environment.jersey().register(new AthenaDynamicFeature(JWTCredentialAuthFilter.builder()
+                .jwtAuthenticator(new JWTAuthenticator(userBusiness)).jwtAuthorizer(new JWTAuthorizer(userBusiness))
+                .resourceBusiness(resourceBusiness).excludeUri(new String[]{"/swagger", "/login", "/register"})
+                .build()));
+
+        // 添加权限校验
+        environment.jersey().register(new RolesAllowedDynamicFeature(guiceBundle.getInjector()
+                .getInstance(RoleBusiness.class), resourceBusiness));
+        // If you want to use @Auth to inject a custom Principal type into your resource
+        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(UserInfo.class));
+
+    }
+
+    /**
+     * 注册健康检查
+     */
+    public static void registerHealthCheck(Environment environment, AthenaConfiguration configuration,
+                                           GuiceBundle<Configuration> guiceBundle) {
+
+        environment.healthChecks().register("dataBaseHealthCheck", new JdbiHealthCheck(guiceBundle
+                .getInjector().getInstance(Jdbi.class), configuration.getDatabase().getValidationQuery()));
 
     }
 

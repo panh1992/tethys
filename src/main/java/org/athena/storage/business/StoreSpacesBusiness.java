@@ -57,12 +57,12 @@ public class StoreSpacesBusiness {
      * 获取存储空间
      */
     @InTransaction(value = TransactionIsolationLevel.REPEATABLE_READ, readOnly = true)
-    public PageResp find(Long userId, String name, Long limit, Long offset) {
+    public PageResp<StoreSpaceResp> find(Long userId, String name, Long limit, Long offset) {
         List<StoreSpace> list = storeSpacesQueries.findByCreatorIdAndNameLike(userId, name, limit, offset);
         if (list.isEmpty()) {
             return PageResp.of(Lists.newArrayList(), limit, offset);
         }
-        long total = storeSpacesQueries.countByCreatorIdAndNameLike(userId, name);
+        Long total = storeSpacesQueries.countByCreatorIdAndNameLike(userId, name);
         return PageResp.of(list.stream().map(x -> StoreSpaceResp.builder().storeSpacesId(x.getStoreSpaceId())
                         .name(x.getName()).size(x.getSize()).creatorId(x.getCreatorId())
                         .description(x.getDescription()).deleted(x.getDeleted()).createTime(x.getCreateTime())

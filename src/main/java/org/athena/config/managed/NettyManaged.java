@@ -14,13 +14,7 @@ public class NettyManaged implements Managed {
     @Override
     public void start() throws Exception {
         logger.info("Netty - Starting...");
-        new Thread(() -> {
-            try {
-                server.start();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        new Thread(() -> server.start()).start();
 
         logger.info("Netty - Start completed");
     }

@@ -21,6 +21,11 @@ public class Server {
     // 从线程组, 主线程组下发任务, 进行任务处理
     private static EventLoopGroup workerGroup;
 
+    public static void main(String[] args) {
+        Server server = new Server(8090);
+        server.start();
+    }
+
     /**
      * 构建netty服务
      *
@@ -35,7 +40,7 @@ public class Server {
     /**
      * netty 服务启动方法
      */
-    public void start() throws InterruptedException {
+    public void start() {
 
         // 创建 netty 服务器启动类
         ServerBootstrap serverBootstrap = new ServerBootstrap();

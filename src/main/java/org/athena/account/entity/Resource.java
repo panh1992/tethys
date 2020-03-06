@@ -1,4 +1,4 @@
-package org.athena.storage.entity;
+package org.athena.account.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,47 +11,44 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.Instant;
 
-/**
- * 存储空间
- */
 @Data
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "store_space")
-public class StoreSpace {
+@Table(schema = "auth", name = "resource")
+public class Resource {
 
     /**
-     * 存储空间主键
+     * 资源主键
      */
     @Id
-    @Column(name = "store_space_id")
-    private Long storeSpaceId;
+    @Column(name = "resource_id")
+    private Long resourceId;
 
     /**
-     * 创建用户
+     * 请求 URI
      */
-    @Column(name = "creator_id")
-    private Long creatorId;
+    @Column(name = "uri")
+    private String uri;
 
     /**
-     * 存储空间名称
+     * 请求 Method
+     */
+    @Column(name = "method")
+    private String method;
+
+    /**
+     * 资源名称
      */
     @Column(name = "name")
     private String name;
 
     /**
-     * 存储空间大小
+     * 所属模块
      */
-    @Column(name = "size")
-    private Long size;
-
-    /**
-     * 是否删除
-     */
-    @Column(name = "is_deleted")
-    private Boolean deleted;
+    @Column(name = "module")
+    private String module;
 
     /**
      * 创建时间
@@ -60,13 +57,19 @@ public class StoreSpace {
     private Instant createTime;
 
     /**
-     * 修改时间
+     * 更新时间
      */
     @Column(name = "modify_time")
     private Instant modifyTime;
 
     /**
-     * 描述信息
+     * 资源标识
+     */
+    @Column(name = "permission")
+    private String permission;
+
+    /**
+     * 权限描述
      */
     @Column(name = "description")
     private String description;

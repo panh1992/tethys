@@ -48,7 +48,6 @@ public class AthenaConfiguration extends Configuration implements JobConfigurati
     @NotNull
     private ElasticsearchConfiguration elasticsearch = new ElasticsearchConfiguration();
 
-
     @Override
     public Map<String, String> getJobs() {
         return Collections.emptyMap();

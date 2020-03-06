@@ -26,19 +26,19 @@ public class StoreBackend {
      * 存储后端主键
      */
     @Id
-    @Column(name = "store_backend_id", length = 32)
+    @Column(name = "store_backend_id")
     private Long storeBackendId;
 
     /**
      * 存储后端名称
      */
-    @Column(name = "name", length = 128)
+    @Column(name = "name")
     private String name;
 
     /**
      * 存储协议
      */
-    @Column(name = "protocol", length = 128)
+    @Column(name = "protocol")
     private String protocol;
 
     /**

@@ -3,14 +3,15 @@ package org.athena.storage.resource;
 import com.codahale.metrics.annotation.Timed;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import io.dropwizard.auth.Auth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.athena.auth.UserInfo;
 import org.athena.common.resp.Result;
 import org.athena.common.util.QueryUtil;
-import org.athena.common.util.SystemContext;
 import org.athena.storage.business.AthenaFileBusiness;
 import org.athena.storage.params.CreateFileParams;
 import org.athena.storage.resp.FileInfoResp;
@@ -50,12 +51,12 @@ public class FileResource {
             @ApiResponse(code = 200, message = "获取文件列表成功", response = FileResp.class, responseContainer = "List")
     })
     @GET
-    public Response findNextAll(
+    public Response findNextAll(@Auth UserInfo userInfo,
             @ApiParam(value = "存储空间主键, 不传取默认存储空间") @QueryParam("store_space_id") Long storeSpaceId,
             @ApiParam(value = "文件主键, 不传取存储空间根文件") @QueryParam("file_id") Long fileId,
             @ApiParam(value = "限制几条记录", required = true) @QueryParam("limit") Long limit,
             @ApiParam(value = "从第几条记录开始", required = true) @QueryParam("offset") Long offset) {
-        return Response.ok(Result.build(athenaFileBusiness.findNextAll(SystemContext.getUserId(), storeSpaceId, fileId,
+        return Response.ok(Result.build(athenaFileBusiness.findNextAll(userInfo.getUserId(), storeSpaceId, fileId,
                 QueryUtil.limit(limit), QueryUtil.offset(offset)))).build();
     }
 
@@ -65,8 +66,8 @@ public class FileResource {
     })
     @GET
     @Path("/{file_id}")
-    public Response get(@ApiParam("文件主键") @PathParam("file_id") Long fileId) {
-        return Response.ok(Result.build(athenaFileBusiness.get(SystemContext.getUserId(), fileId))).build();
+    public Response get(@Auth UserInfo userInfo, @ApiParam("文件主键") @PathParam("file_id") Long fileId) {
+        return Response.ok(Result.build(athenaFileBusiness.get(userInfo.getUserId(), fileId))).build();
     }
 
     /**
@@ -77,9 +78,9 @@ public class FileResource {
             @ApiResponse(code = 201, message = "新建成功")
     })
     @POST
-    public Response create(@Valid CreateFileParams params) {
-        athenaFileBusiness.create(params.getStoreSpaceId(), params.getFilePath(), params.getIsDir(),
-                params.getDescription());
+    public Response create(@Auth UserInfo userInfo, @Valid CreateFileParams params) {
+        athenaFileBusiness.create(userInfo.getUserId(), params.getStoreSpaceId(), params.getFilePath(),
+                params.getIsDir(), params.getDescription());
         return Response.status(Response.Status.CREATED).entity(Result.build()).build();
     }
 
@@ -92,9 +93,9 @@ public class FileResource {
     })
     @PATCH
     @Path("/{file_id}")
-    public Response move(@ApiParam("文件主键") @PathParam("file_id") Long fileId,
+    public Response move(@Auth UserInfo userInfo, @ApiParam("文件主键") @PathParam("file_id") Long fileId,
                          @ApiParam("文件主键") @QueryParam("file_id") Long fileDirId) {
-        athenaFileBusiness.move(SystemContext.getUserId(), fileId, fileDirId);
+        athenaFileBusiness.move(userInfo.getUserId(), fileId, fileDirId);
         return Response.ok(Result.build()).build();
     }
 
@@ -109,9 +110,9 @@ public class FileResource {
     })
     @DELETE
     @Path("/{file_id}")
-    public Response remove(@ApiParam("文件主键") @PathParam("file_id") Long fileId,
+    public Response remove(@Auth UserInfo userInfo, @ApiParam("文件主键") @PathParam("file_id") Long fileId,
                            @ApiParam("是否强制删除") @PathParam("delete") Boolean delete) {
-        athenaFileBusiness.remove(SystemContext.getUserId(), fileId, Objects.isNull(delete) ? null : delete);
+        athenaFileBusiness.remove(userInfo.getUserId(), fileId, Objects.isNull(delete) ? null : delete);
         return Response.ok(Result.build()).build();
     }
 

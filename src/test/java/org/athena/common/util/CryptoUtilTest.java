@@ -1,5 +1,6 @@
 package org.athena.common.util;
 
+import org.athena.auth.jwt.JWTUtil;
 import org.athena.common.util.crypto.AESUtil;
 import org.athena.common.util.crypto.BCryptUtil;
 import org.athena.common.util.crypto.RSAUtil;

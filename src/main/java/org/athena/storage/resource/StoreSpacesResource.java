@@ -3,14 +3,15 @@ package org.athena.storage.resource;
 import com.codahale.metrics.annotation.Timed;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import io.dropwizard.auth.Auth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.athena.auth.UserInfo;
 import org.athena.common.resp.Result;
 import org.athena.common.util.QueryUtil;
-import org.athena.common.util.SystemContext;
 import org.athena.storage.business.StoreSpacesBusiness;
 import org.athena.storage.params.SpaceParams;
 import org.athena.storage.params.SpaceUpdateParams;
@@ -47,8 +48,9 @@ public class StoreSpacesResource {
             @ApiResponse(code = 201, message = "新建成功")
     })
     @POST
-    public Response create(@ApiParam(value = "参数", required = true) @Valid SpaceParams params) {
-        storeSpacesBusiness.create(SystemContext.getUserId(), params.getName(), params.getDescription());
+    public Response create(@Auth UserInfo userInfo,
+                           @ApiParam(value = "参数", required = true) @Valid SpaceParams params) {
+        storeSpacesBusiness.create(userInfo.getUserId(), params.getName(), params.getDescription());
         return Response.status(Response.Status.CREATED).entity(Result.build()).build();
     }
 
@@ -57,10 +59,11 @@ public class StoreSpacesResource {
             @ApiResponse(code = 200, message = "获取存储空间成功", response = StoreSpaceResp.class)
     })
     @GET
-    public Response find(@ApiParam(value = "存储空间名称") @QueryParam("name") String name,
+    public Response find(@Auth UserInfo userInfo,
+                         @ApiParam(value = "存储空间名称") @QueryParam("name") String name,
                          @ApiParam(value = "限制几条记录", required = true) @QueryParam("limit") Long limit,
                          @ApiParam(value = "从第几条记录开始", required = true) @QueryParam("offset") Long offset) {
-        return Response.ok(storeSpacesBusiness.find(SystemContext.getUserId(), name, QueryUtil.limit(limit),
+        return Response.ok(storeSpacesBusiness.find(userInfo.getUserId(), name, QueryUtil.limit(limit),
                 QueryUtil.offset(offset))).build();
     }
 
@@ -70,8 +73,9 @@ public class StoreSpacesResource {
     })
     @GET
     @Path("/{store_space_id}")
-    public Response get(@ApiParam(value = "存储空间主键", required = true) @PathParam("store_space_id") Long storeSpaceId) {
-        return Response.ok(storeSpacesBusiness.get(SystemContext.getUserId(), storeSpaceId)).build();
+    public Response get(@Auth UserInfo userInfo,
+                        @ApiParam(value = "存储空间主键", required = true) @PathParam("store_space_id") Long storeSpaceId) {
+        return Response.ok(storeSpacesBusiness.get(userInfo.getUserId(), storeSpaceId)).build();
     }
 
     @ApiOperation(value = "修改存储空间备注", notes = "修改存储空间备注")
@@ -80,9 +84,10 @@ public class StoreSpacesResource {
     })
     @PATCH
     @Path("/{store_space_id}")
-    public Response update(@ApiParam(value = "存储空间主键", required = true) @PathParam("store_space_id") Long storeSpaceId,
+    public Response update(@Auth UserInfo userInfo,
+                           @ApiParam(value = "存储空间主键", required = true) @PathParam("store_space_id") Long storeSpaceId,
                            @ApiParam(value = "参数", required = true) @Valid SpaceUpdateParams params) {
-        storeSpacesBusiness.update(SystemContext.getUserId(), storeSpaceId, params.getDescription());
+        storeSpacesBusiness.update(userInfo.getUserId(), storeSpaceId, params.getDescription());
         return Response.ok().entity(Result.build()).build();
     }
 

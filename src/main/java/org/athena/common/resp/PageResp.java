@@ -35,11 +35,11 @@ public class PageResp<T> {
         this.totalElements = total;
     }
 
-    public static <T> PageResp of(List<T> content, long limit, long offset, long total) {
+    public static <T> PageResp<T> of(List<T> content, long limit, long offset, long total) {
         return new PageResp(content, limit, offset, total);
     }
 
-    public static <T> PageResp of(List<T> content, long limit, long offset) {
+    public static <T> PageResp<T> of(List<T> content, long limit, long offset) {
         return new PageResp(content, limit, offset, 0L);
     }
 

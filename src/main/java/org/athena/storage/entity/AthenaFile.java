@@ -44,7 +44,7 @@ public class AthenaFile {
     /**
      * 文件所属存储空间名称
      */
-    @Column(name = "store_space_name", length = 128)
+    @Column(name = "store_space_name")
     private String storeSpaceName;
 
     /**
@@ -68,7 +68,7 @@ public class AthenaFile {
     /**
      * 存储来源类型  upload   mount   system    task
      */
-    @Column(name = "source_type", length = 32)
+    @Column(name = "source_type")
     private String sourceType;
 
     /**
@@ -86,13 +86,13 @@ public class AthenaFile {
     /**
      * 文件格式      以文件扩展名为依据
      */
-    @Column(name = "format", length = 32)
+    @Column(name = "format")
     private String format;
 
     /**
      * 文件状态   new   uploading   available   failed   deleted
      */
-    @Column(name = "status", length = 32)
+    @Column(name = "status")
     private String status;
 
     /**

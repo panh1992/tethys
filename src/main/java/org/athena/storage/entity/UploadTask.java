@@ -26,19 +26,19 @@ public class UploadTask {
      * 上传任务主键
      */
     @Id
-    @Column(name = "upload_task_id", length = 32)
+    @Column(name = "upload_task_id")
     private Long uploadTaskId;
 
     /**
      * 存储空间
      */
-    @Column(name = "store_space_id", length = 32)
+    @Column(name = "store_space_id")
     private String storeSpaceId;
 
     /**
      * 创建用户
      */
-    @Column(name = "creator_id", length = 32)
+    @Column(name = "creator_id")
     private String creatorId;
 
     /**

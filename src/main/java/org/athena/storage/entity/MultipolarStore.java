@@ -26,13 +26,13 @@ public class MultipolarStore {
      * 多级存储主键
      */
     @Id
-    @Column(name = "multipolar_store_id", length = 32)
+    @Column(name = "multipolar_store_id")
     private Long multipolarStoreId;
 
     /**
      * 文件
      */
-    @Column(name = "file_id", length = 32)
+    @Column(name = "file_id")
     private String fileId;
 
     /**
